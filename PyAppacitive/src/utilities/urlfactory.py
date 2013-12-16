@@ -38,8 +38,8 @@ def __object_update_url(type, object_id):
     return '{0}/object/{1}/{2}'.format(base_url, type, object_id)
 
 
-def __object_find_all_url(type):
-    return '{0}/object/{1}/find/all'.format(base_url, type)
+def __object_find_all_url(type, query):
+    return '{0}/object/{1}/find/all?{2}'.format(base_url, type, str(query))
 
 user_urls = {
     "create":"user/create",

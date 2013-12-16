@@ -1,11 +1,16 @@
 __author__ = 'sathley'
 
 import json
-
-
+from query import AppacitiveQuery
 from object import AppacitiveObject
 
-resp = AppacitiveObject.multi_delete('restaurant',['45530091000825605','45530370168455584'])
+query = AppacitiveQuery()
+query.page_number = 1
+query.page_size = 20
+query.fields_to_return = ['__id', '__name','__revision']
+query.order_by = 'name'
+query.filter = 'qweqweqweqweqwe'
+resp = AppacitiveObject().find('restaurant',query)
 
 print resp
 #json_str = '''{

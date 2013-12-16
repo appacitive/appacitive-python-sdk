@@ -180,6 +180,19 @@ class AppacitiveObject(Entity):
         return return_objs
 
     @staticmethod
-    def find(object_type, **kwargs):
-        pass
+    def find(object_type, query):
 
+        if object_type is None:
+            raise ValidationException('Type is missing.')
+
+        url = urlfactory.object_urls["find_all"](object_type, query)
+        headers = urlfactory.get_headers()
+        response = http.get(url, headers)
+        if response['status']['code'] != '200':
+            return None
+        return_objs = []
+        for obj in response['objects']:
+            obj1 = AppacitiveObject()
+            obj1.__set_self(obj)
+            return_objs.append(obj1)
+        return return_objs
