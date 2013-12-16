@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b458740-5936-4395-81bc-134e5359c3e9" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/PyAppacitive/src/email.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/entity.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/entity.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/utilities/http.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/utilities/http.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/object.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/object.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/utilities/settings.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/utilities/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/tests.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/tests.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="appacitive-python-sdk.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,7 +16,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/appacitive-python-sdk$entity.coverage" NAME="entity Coverage Results" MODIFIED="1387199266149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/src" />
-    <SUITE FILE_PATH="coverage/appacitive-python-sdk$tests.coverage" NAME="tests Coverage Results" MODIFIED="1387200343681" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/src" />
+    <SUITE FILE_PATH="coverage/appacitive-python-sdk$tests.coverage" NAME="tests Coverage Results" MODIFIED="1387200683582" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/src" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -45,10 +39,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="object.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="object.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyAppacitive/src/object.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="0" selection-start="4544" selection-end="4544" vertical-scroll-proportion="1.267423" vertical-offset="628" max-vertical-offset="1965">
+            <state line="21" column="192" selection-start="741" selection-end="741" vertical-scroll-proportion="0.0" vertical-offset="990" max-vertical-offset="1965">
               <folding />
             </state>
           </provider>
@@ -63,10 +57,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tests.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="tests.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyAppacitive/src/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="36" selection-start="610" selection-end="610" vertical-scroll-proportion="0.0" vertical-offset="12" max-vertical-offset="945">
+            <state line="24" column="0" selection-start="472" selection-end="472" vertical-scroll-proportion="0.54545456" vertical-offset="0" max-vertical-offset="945">
               <folding>
                 <element signature="e#24#35#0" expanded="true" />
               </folding>
@@ -105,8 +99,8 @@
         <option value="$PROJECT_DIR$/PyAppacitive/src/utilities/http.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/utilities/settings.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py" />
-        <option value="$PROJECT_DIR$/PyAppacitive/src/object.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/entity.py" />
+        <option value="$PROJECT_DIR$/PyAppacitive/src/object.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/tests.py" />
       </list>
     </option>
@@ -517,18 +511,18 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329718" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16495956" sideWeight="0.67083335" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.284375" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16495956" sideWeight="0.715625" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.284375" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32916668" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916668" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -544,13 +538,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/PyAppacitive/src/tests.py</url>
-          <line>16</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
@@ -647,15 +634,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="36" selection-start="610" selection-end="610" vertical-scroll-proportion="0.0" vertical-offset="12" max-vertical-offset="945">
-          <folding>
-            <element signature="e#24#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyAppacitive/src/entity.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="64" column="57" selection-start="2032" selection-end="2032" vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="1110">
@@ -665,8 +643,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyAppacitive/src/object.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="0" selection-start="4544" selection-end="4544" vertical-scroll-proportion="1.267423" vertical-offset="628" max-vertical-offset="1965">
+        <state line="21" column="192" selection-start="741" selection-end="741" vertical-scroll-proportion="0.0" vertical-offset="990" max-vertical-offset="1965">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="0" selection-start="472" selection-end="472" vertical-scroll-proportion="0.54545456" vertical-offset="0" max-vertical-offset="945">
+          <folding>
+            <element signature="e#24#35#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -15,29 +15,29 @@ class AppacitiveObject(Entity):
         self.type = None
         self.type_id = 0
 
-    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties']
+    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
 
-    @staticmethod
-    def get_object(obj):
-        system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties']
-        return_object = AppacitiveObject()
-        return_object.id = int(obj['__id']) if '__id' in obj else 0
-        return_object.type = obj['__type'] if '__type' in obj else None
-        return_object.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
-        return_object.created_by = obj['__createdby'] if '__createdby' in obj else None
-        return_object.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
-        return_object.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
-        return_object.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
-        return_object._tags = obj['__tags'] if '__tags' in obj else None
-        return_object._attributes = obj['__attributes'] if '__attributes' in obj else None
-        return_object.revision = obj['__revision'] if '__revision' in obj else None
-        for k, v in obj.iteritems():
-            if k not in system_properties:
-                return_object._properties[k] = v
-        return return_object
+    #@staticmethod
+    #def get_object(obj):
+    #    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+    #    return_object = AppacitiveObject()
+    #    return_object.id = int(obj['__id']) if '__id' in obj else 0
+    #    return_object.type = obj['__type'] if '__type' in obj else None
+    #    return_object.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
+    #    return_object.created_by = obj['__createdby'] if '__createdby' in obj else None
+    #    return_object.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
+    #    return_object.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
+    #    return_object.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
+    #    return_object._tags = obj['__tags'] if '__tags' in obj else None
+    #    return_object._attributes = obj['__attributes'] if '__attributes' in obj else None
+    #    return_object.revision = int(obj['__revision']) if '__revision' in obj else None
+    #    for k, v in obj.iteritems():
+    #        if k not in system_properties:
+    #            return_object._properties[k] = v
+    #    return return_object
 
     def __set_self(self, obj):
-        system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties']
+        system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
         self.id = int(obj['__id']) if '__id' in obj else 0
         self.type = obj['__type'] if '__type' in obj else None
         self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
@@ -47,7 +47,7 @@ class AppacitiveObject(Entity):
         self.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
         self._tags = obj['__tags'] if '__tags' in obj else None
         self._attributes = obj['__attributes'] if '__attributes' in obj else None
-        self.revision = obj['__revision'] if '__revision' in obj else None
+        self.revision = int(obj['__revision']) if '__revision' in obj else None
         for k, v in obj.iteritems():
             if k not in system_properties:
                 self._properties[k] = v

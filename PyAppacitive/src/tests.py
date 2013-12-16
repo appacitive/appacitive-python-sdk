@@ -25,8 +25,8 @@ res.remove_property('p1')
 
 print res.get_update_command()
 
-#print res.get_json()
-#print res.delete()
+print res.get_json()
+print res.delete()
 
 #json_str = '''{
 #	"object": {
