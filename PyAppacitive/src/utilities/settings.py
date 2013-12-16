@@ -2,8 +2,8 @@ __author__ = 'sushant'
 
 
 # primary settings
-api_key = "< enter your api key here >"
-environment = "< sandbox or live >"
+api_key = "dwcVt/FRIOIoa+TyLK4AQXmlJkE0RW6QNriSMnbQI4s="
+environment = "sandbox"
 api_base_url = "https://apis.appacitive.com/v1.0"
 
 # email settings
