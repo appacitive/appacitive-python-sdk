@@ -15,11 +15,13 @@ class AppacitiveObject(Entity):
         self.type = None
         self.type_id = 0
 
-    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
+                         '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
 
     #@staticmethod
     #def get_object(obj):
-    #    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+    #    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby',
+    # '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
     #    return_object = AppacitiveObject()
     #    return_object.id = int(obj['__id']) if '__id' in obj else 0
     #    return_object.type = obj['__type'] if '__type' in obj else None
@@ -37,7 +39,10 @@ class AppacitiveObject(Entity):
     #    return return_object
 
     def __set_self(self, obj):
-        system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+
+        system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
+                             '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+
         self.id = int(obj['__id']) if '__id' in obj else 0
         self.type = obj['__type'] if '__type' in obj else None
         self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
@@ -85,7 +90,7 @@ class AppacitiveObject(Entity):
             raise ValidationException('Provide at least one among type name or type id.')
 
         if self.id <=0:
-            raise ValidationException('Object id is missing')
+            raise ValidationException('Object id is missing.')
 
         url = urlfactory.object_urls["delete"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
@@ -96,8 +101,8 @@ class AppacitiveObject(Entity):
         if self.type is None and self.type_id <= 0:
             raise ValidationException('Provide at least one among type name or type id.')
 
-        if self.id <=0:
-            raise ValidationException('Object id is missing')
+        if self.id <= 0:
+            raise ValidationException('Object id is missing.')
 
         url = urlfactory.object_urls["delete_with_connection"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
@@ -110,7 +115,7 @@ class AppacitiveObject(Entity):
             raise ValidationException('Type is missing.')
 
         if object_ids is None:
-            raise ValidationException('Object ids are missing')
+            raise ValidationException('Object ids are missing.')
 
         url = urlfactory.object_urls["multidelete"](object_type)
         headers = urlfactory.get_headers()
@@ -126,8 +131,8 @@ class AppacitiveObject(Entity):
         if self.type is None and self.type_id <= 0:
             raise ValidationException('Provide at least one among type name or type id.')
 
-        if self.id <=0:
-            raise ValidationException('Object id is missing')
+        if self.id <= 0:
+            raise ValidationException('Object id is missing.')
         url = urlfactory.object_urls["update"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
@@ -137,10 +142,10 @@ class AppacitiveObject(Entity):
     def get(object_type, object_id):
 
         if object_type is None:
-            raise ValidationException('Type is missing')
+            raise ValidationException('Type is missing.')
 
         if object_id is None:
-            raise ValidationException('Object id is missing')
+            raise ValidationException('Object id is missing.')
 
         url = urlfactory.object_urls["get"](object_type, object_id)
         headers = urlfactory.get_headers()
@@ -156,10 +161,10 @@ class AppacitiveObject(Entity):
     def multi_get(object_type, object_ids):
 
         if object_type is None:
-            raise ValidationException('Type is missing')
+            raise ValidationException('Type is missing.')
 
         if object_ids is None:
-            raise ValidationException('Object ids are missing')
+            raise ValidationException('Object ids are missing.')
 
         url = urlfactory.object_urls["multiget"](object_type, object_ids)
         headers = urlfactory.get_headers()
@@ -173,4 +178,8 @@ class AppacitiveObject(Entity):
             obj1.__set_self(obj)
             return_objs.append(obj1)
         return return_objs
+
+    @staticmethod
+    def find(object_type, **kwargs):
+        pass
 

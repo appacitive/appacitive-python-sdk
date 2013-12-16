@@ -18,6 +18,7 @@ class Entity(object):
         self.utc_last_updated_date = None
         self.last_modified_by = None
 
+        # update observers
         self.__properties_changed = {}
         self.__attributes_changed = {}
         self.__tags_added = []
