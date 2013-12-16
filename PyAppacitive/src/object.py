@@ -91,6 +91,36 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         return http.delete(url, headers)
 
+    def delete_with_connections(self):
+
+        if self.type is None and self.type_id <= 0:
+            raise ValidationException('Provide at least one among type name or type id.')
+
+        if self.id <=0:
+            raise ValidationException('Object id is missing')
+
+        url = urlfactory.object_urls["delete_with_connection"](self.type if self.type is not None else self.type_id, self.id)
+        headers = urlfactory.get_headers()
+        return http.delete(url, headers)
+
+    @staticmethod
+    def multi_delete(object_type, object_ids):
+
+        if object_type is None :
+            raise ValidationException('Type is missing.')
+
+        if object_ids is None:
+            raise ValidationException('Object ids are missing')
+
+        url = urlfactory.object_urls["multidelete"](object_type)
+        headers = urlfactory.get_headers()
+
+        payload = {"idlist": []}
+        for object_id in object_ids:
+            payload["idlist"].append(str(object_id))
+
+        return http.post(url, headers, json.dumps(payload))
+
     def update(self):
 
         if self.type is None and self.type_id <= 0:
@@ -122,4 +152,25 @@ class AppacitiveObject(Entity):
         return_obj.__set_self(response['object'])
         return return_obj
 
+    @staticmethod
+    def multi_get(object_type, object_ids):
+
+        if object_type is None:
+            raise ValidationException('Type is missing')
+
+        if object_ids is None:
+            raise ValidationException('Object ids are missing')
+
+        url = urlfactory.object_urls["multiget"](object_type, object_ids)
+        headers = urlfactory.get_headers()
+        response = http.get(url, headers)
+        if response['status']['code'] != '200':
+            return None
+
+        return_objs = []
+        for obj in response['objects']:
+            obj1 = AppacitiveObject()
+            obj1.__set_self(obj)
+            return_objs.append(obj1)
+        return return_objs
 

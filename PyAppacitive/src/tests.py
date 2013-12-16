@@ -5,29 +5,9 @@ import json
 
 from object import AppacitiveObject
 
-restaurant = AppacitiveObject()
-restaurant.type = 'restaurant'
-restaurant.set_property('name', 'yoyo')
+resp = AppacitiveObject.multi_delete('restaurant',['45530091000825605','45530370168455584'])
 
-restaurant.create()
-print restaurant.get_json()
-
-res = AppacitiveObject.get('restaurant', restaurant.id)
-
-res.set_attribute('a1','a2')
-res.set_attribute('a3','a4')
-res.add_tag('1')
-res.add_tag('2')
-res.remove_tag('3')
-res.remove_tag('4')
-res.set_property('p1', 'v1')
-res.remove_property('p1')
-
-print res.get_update_command()
-
-print res.get_json()
-print res.delete()
-
+print resp
 #json_str = '''{
 #	"object": {
 #		"__id": "45519880301184560",
