@@ -5,6 +5,7 @@ from PyAppacitive.src.query import operator, filter, value
 import datetime
 import nose
 
+
 def simple_filter_query_test():
 
     print isinstance(10.10, int)

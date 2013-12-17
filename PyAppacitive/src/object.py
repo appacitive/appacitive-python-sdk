@@ -7,20 +7,37 @@ from error import *
 from utilities import urlfactory, http, settings
 import json
 
+object_system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
+                            '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+
 
 class AppacitiveObject(Entity):
-    def __init__(self):
+
+    def __init__(self, obj=None):
         super(AppacitiveObject, self).__init__()
         self.type = None
         self.type_id = 0
 
-    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
-                         '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+        if obj is not None:
+
+            self.id = int(obj['__id']) if '__id' in obj else 0
+            self.type = obj['__type'] if '__type' in obj else None
+            self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
+            self.created_by = obj['__createdby'] if '__createdby' in obj else None
+            self.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
+            self.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
+            self.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
+            self._tags = obj['__tags'] if '__tags' in obj else None
+            self._attributes = obj['__attributes'] if '__attributes' in obj else None
+            self.revision = int(obj['__revision']) if '__revision' in obj else None
+            for k, v in obj.iteritems():
+                if k not in object_system_properties:
+                    self._properties[k] = v
 
     def __set_self(self, obj):
 
-        system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
-                             '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+        if obj is None:
+            pass
 
         self.id = int(obj['__id']) if '__id' in obj else 0
         self.type = obj['__type'] if '__type' in obj else None
@@ -33,7 +50,7 @@ class AppacitiveObject(Entity):
         self._attributes = obj['__attributes'] if '__attributes' in obj else None
         self.revision = int(obj['__revision']) if '__revision' in obj else None
         for k, v in obj.iteritems():
-            if k not in system_properties:
+            if k not in object_system_properties:
                 self._properties[k] = v
 
     def get_json(self):
@@ -57,6 +74,7 @@ class AppacitiveObject(Entity):
 
         if self.type is None and self.type_id <= 0:
             raise ValidationError('Provide at least one among type name or type id.')
+
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
         resp = http.put(url, headers, self.get_json())
@@ -68,7 +86,7 @@ class AppacitiveObject(Entity):
         if self.type is None and self.type_id <= 0:
             raise ValidationError('Provide at least one among type name or type id.')
 
-        if self.id <=0:
+        if self.id <= 0:
             raise ValidationError('Object id is missing.')
 
         url = urlfactory.object_urls["delete"](self.type if self.type is not None else self.type_id, self.id)
@@ -83,14 +101,15 @@ class AppacitiveObject(Entity):
         if self.id <= 0:
             raise ValidationError('Object id is missing.')
 
-        url = urlfactory.object_urls["delete_with_connection"](self.type if self.type is not None else self.type_id, self.id)
+        url = urlfactory.object_urls["delete_with_connection"](self.type if self.type is not None else self.type_id,
+                                                               self.id)
         headers = urlfactory.get_headers()
         return http.delete(url, headers)
 
     @classmethod
     def multi_delete(cls, object_type, object_ids):
 
-        if object_type is None :
+        if object_type is None:
             raise ValidationError('Type is missing.')
 
         if object_ids is None:
@@ -115,7 +134,9 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["update"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
-        return http.post(url, headers, payload)
+        resp = http.post(url, headers, payload)
+        if resp['status']['code'] == '200':
+            self.__set_self(resp['object'])
 
     @classmethod
     def get(cls, object_type, object_id):
@@ -132,9 +153,10 @@ class AppacitiveObject(Entity):
         if response['status']['code'] != '200':
             return None
 
-        return_obj = AppacitiveObject()
-        return_obj.__set_self(response['object'])
-        return return_obj
+        return cls(response['object'])
+        #return_obj = AppacitiveObject()
+        #return_obj.__set_self(response['object'])
+        #return return_obj
 
     @classmethod
     def multi_get(cls, object_type, object_ids):
@@ -151,10 +173,16 @@ class AppacitiveObject(Entity):
         if response['status']['code'] != '200':
             return None
 
+        #return_objs = []
+        #for obj in response['objects']:
+        #    obj1 = AppacitiveObject()
+        #    obj1.__set_self(obj)
+        #    return_objs.append(obj1)
+        #return return_objs
+
         return_objs = []
         for obj in response['objects']:
-            obj1 = AppacitiveObject()
-            obj1.__set_self(obj)
+            obj1 = cls(obj)
             return_objs.append(obj1)
         return return_objs
 
@@ -169,9 +197,15 @@ class AppacitiveObject(Entity):
         response = http.get(url, headers)
         if response['status']['code'] != '200':
             return None
+            #return_objs = []
+        #for obj in response['objects']:
+        #    obj1 = AppacitiveObject()
+        #    obj1.__set_self(obj)
+        #    return_objs.append(obj1)
+        #return return_objs
+
         return_objs = []
         for obj in response['objects']:
-            obj1 = AppacitiveObject()
-            obj1.__set_self(obj)
+            obj1 = cls(obj)
             return_objs.append(obj1)
         return return_objs
