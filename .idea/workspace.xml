@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b458740-5936-4395-81bc-134e5359c3e9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/connection.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/connection.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/object.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/object.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/tests.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/tests.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py" afterPath="$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py" />
     </list>
     <ignored path="appacitive-python-sdk.iws" />
@@ -17,7 +16,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/appacitive-python-sdk$entity.coverage" NAME="entity Coverage Results" MODIFIED="1387199266149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/src" />
-    <SUITE FILE_PATH="coverage/appacitive-python-sdk$tests.coverage" NAME="tests Coverage Results" MODIFIED="1387299500593" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/src" />
+    <SUITE FILE_PATH="coverage/appacitive-python-sdk$tests.coverage" NAME="tests Coverage Results" MODIFIED="1387300672825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/src" />
     <SUITE FILE_PATH="coverage/appacitive-python-sdk$Unittests_in_quesydsltests.coverage" NAME="Unittests in quesydsltests Coverage Results" MODIFIED="1387288945067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/tests" />
     <SUITE FILE_PATH="coverage/appacitive-python-sdk$quesydsltests.coverage" NAME="quesydsltests Coverage Results" MODIFIED="1387290335209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyAppacitive/tests" />
   </component>
@@ -33,12 +32,84 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="connection.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="0" selection-start="193" selection-end="404" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="appacitive_email.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/appacitive_email.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="47" column="0" selection-start="1395" selection-end="1395" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1005">
+              <folding>
+                <element signature="e#24#72#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file:///usr/lib/python2.7/json/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="232" column="0" selection-start="8817" selection-end="8817" vertical-scroll-proportion="0.0" vertical-offset="3261" max-vertical-offset="5190">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tests.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/tests.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="0" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
+              <folding>
+                <element signature="e#24#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="object.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/object.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="70" column="25" selection-start="3235" selection-end="3240" vertical-scroll-proportion="0.0" vertical-offset="316" max-vertical-offset="2460">
+              <folding>
+                <element signature="e#453#1549#0" expanded="false" />
+                <element signature="e#1591#2548#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="http.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/http.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="0" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urlfactory.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="97" column="0" selection-start="2837" selection-end="2837" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
+              <folding>
+                <element signature="e#261#284#0" expanded="false" />
+                <element signature="e#1321#1348#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="connection.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyAppacitive/src/connection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="313" column="66" selection-start="13617" selection-end="13617" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="930">
+            <state line="6" column="11" selection-start="71" selection-end="131" vertical-scroll-proportion="0.1465798" vertical-offset="0" max-vertical-offset="930">
               <folding>
-                <element signature="e#25#50#0" expanded="true" />
                 <element signature="e#560#3367#0" expanded="false" />
                 <element signature="e#3427#4117#0" expanded="false" />
                 <element signature="e#4152#5376#0" expanded="false" />
@@ -53,57 +124,6 @@
                 <element signature="e#12307#12873#0" expanded="false" />
                 <element signature="e#12961#13532#0" expanded="false" />
                 <element signature="e#13627#14093#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urlfactory.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="123" column="23" selection-start="3679" selection-end="3697" vertical-scroll-proportion="0.0" vertical-offset="1351" max-vertical-offset="1995">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="http.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/http.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/pysdk/lib/python2.7/site-packages/requests/api.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="119" column="0" selection-start="4289" selection-end="4289" vertical-scroll-proportion="0.0" vertical-offset="1276" max-vertical-offset="1890">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tests.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/tests.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="34" selection-start="473" selection-end="473" vertical-scroll-proportion="0.4397394" vertical-offset="0" max-vertical-offset="614">
-              <folding>
-                <element signature="e#24#35#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="object.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyAppacitive/src/object.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="83" column="21" selection-start="3721" selection-end="3721" vertical-scroll-proportion="0.0" vertical-offset="1621" max-vertical-offset="2235">
-              <folding>
-                <element signature="e#453#1549#0" expanded="false" />
-                <element signature="e#1591#2548#0" expanded="false" />
-                <element signature="e#2583#3248#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -127,7 +147,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/PyAppacitive/src/search.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/entity.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/tests/objecttests.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
@@ -139,10 +158,11 @@
         <option value="$PROJECT_DIR$/PyAppacitive/src/query/value.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/query/filter.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/tests/quesydsltests.py" />
-        <option value="$PROJECT_DIR$/PyAppacitive/src/tests.py" />
-        <option value="$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/object.py" />
         <option value="$PROJECT_DIR$/PyAppacitive/src/connection.py" />
+        <option value="$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py" />
+        <option value="$PROJECT_DIR$/PyAppacitive/src/appacitive_email.py" />
+        <option value="$PROJECT_DIR$/PyAppacitive/src/tests.py" />
       </list>
     </option>
   </component>
@@ -649,81 +669,20 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/PyAppacitive/src/tests.py</url>
+          <line>8</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="44" />
+      <option name="time" value="45" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/error.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/tests/objecttests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="933">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/query/query.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="31" selection-start="1887" selection-end="1887" vertical-scroll-proportion="1.2431118" vertical-offset="58" max-vertical-offset="990">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/query/value.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="125" column="0" selection-start="3764" selection-end="3764" vertical-scroll-proportion="0.0" vertical-offset="1333" max-vertical-offset="1980">
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/query/operator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/query/filter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="0" selection-start="4077" selection-end="4077" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="465">
-          <folding>
-            <element signature="e#400#3179#0" expanded="false" />
-            <element signature="e#4111#4670#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="31" selection-start="307" selection-end="307" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/entity.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="28" selection-start="131" selection-end="131" vertical-scroll-proportion="0.12861736" vertical-offset="0" max-vertical-offset="1215">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/json/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="327" column="0" selection-start="13535" selection-end="13535" vertical-scroll-proportion="0.0" vertical-offset="4530" max-vertical-offset="5190">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyAppacitive/tests/quesydsltests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="7" column="0" selection-start="169" selection-end="169" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
@@ -738,29 +697,111 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py">
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/device.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="23" selection-start="3679" selection-end="3697" vertical-scroll-proportion="0.0" vertical-offset="1351" max-vertical-offset="1995">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="105">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/entity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="28" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0" vertical-offset="41" max-vertical-offset="1215">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/error.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="614">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/search.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="614">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/user.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="614">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/push.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="614">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="193" selection-end="404" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/http.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PyAppacitive/src/object.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="21" selection-start="3721" selection-end="3721" vertical-scroll-proportion="0.0" vertical-offset="1621" max-vertical-offset="2235">
+        <state line="70" column="25" selection-start="3235" selection-end="3240" vertical-scroll-proportion="0.0" vertical-offset="316" max-vertical-offset="2460">
           <folding>
             <element signature="e#453#1549#0" expanded="false" />
             <element signature="e#1591#2548#0" expanded="false" />
-            <element signature="e#2583#3248#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="0" selection-start="153" selection-end="153" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
+          <folding>
+            <element signature="e#24#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/json/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="232" column="0" selection-start="8817" selection-end="8817" vertical-scroll-proportion="0.0" vertical-offset="3261" max-vertical-offset="5190">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/appacitive_email.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="0" selection-start="1395" selection-end="1395" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1005">
+          <folding>
+            <element signature="e#24#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/urlfactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="97" column="0" selection-start="2837" selection-end="2837" vertical-scroll-proportion="0.0" vertical-offset="318" max-vertical-offset="975">
+          <folding>
+            <element signature="e#261#284#0" expanded="false" />
+            <element signature="e#1321#1348#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PyAppacitive/src/connection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="313" column="66" selection-start="13617" selection-end="13617" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="930">
+        <state line="6" column="11" selection-start="71" selection-end="131" vertical-scroll-proportion="0.1465798" vertical-offset="0" max-vertical-offset="930">
           <folding>
-            <element signature="e#25#50#0" expanded="true" />
             <element signature="e#560#3367#0" expanded="false" />
             <element signature="e#3427#4117#0" expanded="false" />
             <element signature="e#4152#5376#0" expanded="false" />
@@ -775,22 +816,6 @@
             <element signature="e#12307#12873#0" expanded="false" />
             <element signature="e#12961#13532#0" expanded="false" />
             <element signature="e#13627#14093#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/utilities/http.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PyAppacitive/src/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="34" selection-start="473" selection-end="473" vertical-scroll-proportion="0.4397394" vertical-offset="0" max-vertical-offset="614">
-          <folding>
-            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -96,6 +96,10 @@ def __connection_find_interconnects_url():
 
 #endregion
 
+
+def __email_send_url():
+    return '{0}/email/send'.format(base_url)
+
 user_urls = {
     "create": "user/create",
 }
@@ -122,6 +126,10 @@ connection_urls = {
     "find_for_objects": __connection_find_for_objects_url,
     "find_for_objects_and_relation": __connection_find_for_objects_and_relation_url,
     "find_interconnects": __connection_find_interconnects_url
+}
+
+email_urls = {
+    "send": __email_send_url
 }
 
 
