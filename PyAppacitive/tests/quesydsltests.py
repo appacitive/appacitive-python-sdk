@@ -18,7 +18,7 @@ def simple_filter_query_test():
     q.page_size = 200
 
 
-    filter1 = filter.PropertyFilter.is_equal_to('prop', value.StringValue('abs'))
+    filter1 = filter.TagFilter.match_atleast_one(['123','qwe'])
     filter2 = filter.PropertyFilter.between('prop123', value.DateValue(datetime.date.today()), value.DateValue(datetime.date.today()))
     filter3 = filter.PropertyFilter.within_polygon('prop', value.GeoValues([value.GeoValue(10.10, -20.20), value.GeoValue(10.10, -20.20), value.GeoValue(10.10, -20.20)]))
     #q.filter = filter1
