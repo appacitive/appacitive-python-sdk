@@ -1,5 +1,8 @@
 __author__ = 'sathley'
 
+# remove values.py and figure out data type from Python type
+# use dict.get to set up objects
+# add logging
 
 from entity import Entity
 from error import *
