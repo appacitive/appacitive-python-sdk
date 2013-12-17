@@ -186,9 +186,6 @@ class AppacitiveConnection(Entity):
             return None
 
         return cls(response['connection'])
-        #return_obj = AppacitiveObject()
-        #return_obj.__set_self(response['object'])
-        #return return_obj
 
     def delete(self):
 
@@ -235,17 +232,10 @@ class AppacitiveConnection(Entity):
         if response['status']['code'] != '200':
             return None
 
-        #return_objs = []
-        #for obj in response['objects']:
-        #    obj1 = AppacitiveObject()
-        #    obj1.__set_self(obj)
-        #    return_objs.append(obj1)
-        #return return_objs
-
         return_conns = []
         for conn in response['connections']:
-            obj1 = cls(conn)
-            return_conns.append(conn)
+            conn1 = cls(conn)
+            return_conns.append(conn1)
         return return_conns
 
     def update(self):
@@ -274,20 +264,68 @@ class AppacitiveConnection(Entity):
         response = http.get(url, headers)
         if response['status']['code'] != '200':
             return None
-            #return_objs = []
-        #for obj in response['objects']:
-        #    obj1 = AppacitiveObject()
-        #    obj1.__set_self(obj)
-        #    return_objs.append(obj1)
-        #return return_objs
 
         return_conns = []
         for conn in response['connections']:
-            obj1 = cls(conn)
-            return_conns.append(conn)
+            conn1 = cls(conn)
+            return_conns.append(conn1)
         return return_conns
 
+    @classmethod
+    def find_by_objects(cls, object_id_1, object_id_2, relation=None):
+        if relation is None:
+            url = urlfactory.connection_urls["find_for_objects"](object_id_1, object_id_2)
+        else:
+            url = urlfactory.connection_urls["find_for_objects_and_relation"](relation, object_id_1, object_id_2)
 
+        headers = urlfactory.get_headers()
+        response = http.get(url, headers)
+        if response['status']['code'] != '200':
+            return None
+
+        return_conns = []
+        for conn in response['connections']:
+            conn1 = cls(conn)
+            return_conns.append(conn1)
+        return return_conns
+
+    @classmethod
+    def find_interconnects(cls, object_1_id, object_2_ids):
+
+        url = urlfactory.connection_urls["find_interconnects"]()
+        headers = urlfactory.get_headers()
+
+        payload = {"object1id": str(object_1_id), "object2ids": []}
+
+        for object_id in object_2_ids:
+            payload['object2ids'].append(str(object_id))
+
+        response = http.post(url, headers, json.dumps(payload))
+        if response['status']['code'] != '200':
+            return None
+
+        return_conns = []
+        for conn in response['connections']:
+            conn1 = cls(conn)
+            return_conns.append(conn1)
+        return return_conns
+
+    @classmethod
+    def find_by_object_and_label(cls, relation, object_id, label):
+
+        query = '?objectid={1}&label={2}'.format(object_id, label)
+        url = urlfactory.connection_urls["find_all"](relation, object_id, query)
+
+        headers = urlfactory.get_headers()
+        response = http.get(url, headers)
+        if response['status']['code'] != '200':
+            return None
+
+        return_conns = []
+        for conn in response['connections']:
+            conn1 = cls(conn)
+            return_conns.append(conn1)
+        return return_conns
 
 
 

@@ -154,9 +154,6 @@ class AppacitiveObject(Entity):
             return None
 
         return cls(response['object'])
-        #return_obj = AppacitiveObject()
-        #return_obj.__set_self(response['object'])
-        #return return_obj
 
     @classmethod
     def multi_get(cls, object_type, object_ids):
@@ -172,13 +169,6 @@ class AppacitiveObject(Entity):
         response = http.get(url, headers)
         if response['status']['code'] != '200':
             return None
-
-        #return_objs = []
-        #for obj in response['objects']:
-        #    obj1 = AppacitiveObject()
-        #    obj1.__set_self(obj)
-        #    return_objs.append(obj1)
-        #return return_objs
 
         return_objs = []
         for obj in response['objects']:
@@ -197,12 +187,6 @@ class AppacitiveObject(Entity):
         response = http.get(url, headers)
         if response['status']['code'] != '200':
             return None
-            #return_objs = []
-        #for obj in response['objects']:
-        #    obj1 = AppacitiveObject()
-        #    obj1.__set_self(obj)
-        #    return_objs.append(obj1)
-        #return return_objs
 
         return_objs = []
         for obj in response['objects']:

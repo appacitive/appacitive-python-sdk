@@ -78,6 +78,18 @@ def __connection_update_url(relation_type, connection_id):
 def __connection_find_all_url(relation_type, query):
     return '{0}/connection/{1}/find/all?{2}'.format(base_url, relation_type, str(query))
 
+
+def __connection_find_for_objects_url(object_id1, object_id2):
+    return '{0}/connection/find/{1}/{2}'.format(base_url, str(object_id1), str(object_id2))
+
+
+def __connection_find_for_objects_and_relation_url(relation_type, object_id1, object_id2):
+    return '{0}/connection/{1}/find/{2}/{3}'.format(base_url, relation_type, str(object_id1), str(object_id2))
+
+
+def __connection_find_interconnects_url():
+    return '{0}/connection/interconnects'.format(base_url)
+
 #endregion
 
 #region     USER URLS
@@ -106,7 +118,10 @@ connection_urls = {
     "delete": __connection_delete_url,
     "multidelete": __connection_multidelete_url,
     "update": __connection_update_url,
-    "find_all": __connection_find_all_url
+    "find_all": __connection_find_all_url,
+    "find_for_objects": __connection_find_for_objects_url,
+    "find_for_objects_and_relation": __connection_find_for_objects_and_relation_url,
+    "find_interconnects": __connection_find_interconnects_url
 }
 
 
