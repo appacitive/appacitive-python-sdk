@@ -8,7 +8,6 @@ from utilities import urlfactory, http, settings
 import json
 
 
-
 class AppacitiveObject(Entity):
     def __init__(self):
         super(AppacitiveObject, self).__init__()
@@ -17,26 +16,6 @@ class AppacitiveObject(Entity):
 
     system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
                          '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
-
-    #@staticmethod
-    #def get_object(obj):
-    #    system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby',
-    # '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
-    #    return_object = AppacitiveObject()
-    #    return_object.id = int(obj['__id']) if '__id' in obj else 0
-    #    return_object.type = obj['__type'] if '__type' in obj else None
-    #    return_object.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
-    #    return_object.created_by = obj['__createdby'] if '__createdby' in obj else None
-    #    return_object.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
-    #    return_object.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
-    #    return_object.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
-    #    return_object._tags = obj['__tags'] if '__tags' in obj else None
-    #    return_object._attributes = obj['__attributes'] if '__attributes' in obj else None
-    #    return_object.revision = int(obj['__revision']) if '__revision' in obj else None
-    #    for k, v in obj.iteritems():
-    #        if k not in system_properties:
-    #            return_object._properties[k] = v
-    #    return return_object
 
     def __set_self(self, obj):
 
@@ -108,8 +87,8 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         return http.delete(url, headers)
 
-    @staticmethod
-    def multi_delete(object_type, object_ids):
+    @classmethod
+    def multi_delete(cls, object_type, object_ids):
 
         if object_type is None :
             raise ValidationException('Type is missing.')
@@ -138,8 +117,8 @@ class AppacitiveObject(Entity):
         payload = self.get_update_command()
         return http.post(url, headers, payload)
 
-    @staticmethod
-    def get(object_type, object_id):
+    @classmethod
+    def get(cls, object_type, object_id):
 
         if object_type is None:
             raise ValidationException('Type is missing.')
@@ -157,8 +136,8 @@ class AppacitiveObject(Entity):
         return_obj.__set_self(response['object'])
         return return_obj
 
-    @staticmethod
-    def multi_get(object_type, object_ids):
+    @classmethod
+    def multi_get(cls, object_type, object_ids):
 
         if object_type is None:
             raise ValidationException('Type is missing.')
@@ -179,8 +158,8 @@ class AppacitiveObject(Entity):
             return_objs.append(obj1)
         return return_objs
 
-    @staticmethod
-    def find(object_type, query):
+    @classmethod
+    def find(cls, object_type, query):
 
         if object_type is None:
             raise ValidationException('Type is missing.')

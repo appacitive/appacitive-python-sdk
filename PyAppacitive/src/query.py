@@ -41,6 +41,7 @@ class AppacitiveQuery(object):
             else:
                 items.append('freetext='+self.free_text_tokens)
 
+        #   add query dsl for filters
         if self.filter is not None:
             items.append('filter='+self.filter)
 

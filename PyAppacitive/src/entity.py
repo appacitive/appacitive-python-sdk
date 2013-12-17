@@ -58,6 +58,12 @@ class Entity(object):
     def tag_exists(self, tag):
         return tag in self._tags
 
+    def discard_changes(self):
+        pass
+
+    def get_updated(self):
+        pass
+
     def get_update_command(self):
         update_command = {}
         update_command['__addtags'] = self.__tags_added
