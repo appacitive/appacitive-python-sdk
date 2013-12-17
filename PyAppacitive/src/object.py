@@ -56,7 +56,7 @@ class AppacitiveObject(Entity):
     def create(self):
 
         if self.type is None and self.type_id <= 0:
-            raise ValidationException('Provide at least one among type name or type id.')
+            raise ValidationError('Provide at least one among type name or type id.')
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
         resp = http.put(url, headers, self.get_json())
@@ -66,10 +66,10 @@ class AppacitiveObject(Entity):
     def delete(self):
 
         if self.type is None and self.type_id <= 0:
-            raise ValidationException('Provide at least one among type name or type id.')
+            raise ValidationError('Provide at least one among type name or type id.')
 
         if self.id <=0:
-            raise ValidationException('Object id is missing.')
+            raise ValidationError('Object id is missing.')
 
         url = urlfactory.object_urls["delete"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
@@ -78,10 +78,10 @@ class AppacitiveObject(Entity):
     def delete_with_connections(self):
 
         if self.type is None and self.type_id <= 0:
-            raise ValidationException('Provide at least one among type name or type id.')
+            raise ValidationError('Provide at least one among type name or type id.')
 
         if self.id <= 0:
-            raise ValidationException('Object id is missing.')
+            raise ValidationError('Object id is missing.')
 
         url = urlfactory.object_urls["delete_with_connection"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
@@ -91,10 +91,10 @@ class AppacitiveObject(Entity):
     def multi_delete(cls, object_type, object_ids):
 
         if object_type is None :
-            raise ValidationException('Type is missing.')
+            raise ValidationError('Type is missing.')
 
         if object_ids is None:
-            raise ValidationException('Object ids are missing.')
+            raise ValidationError('Object ids are missing.')
 
         url = urlfactory.object_urls["multidelete"](object_type)
         headers = urlfactory.get_headers()
@@ -108,10 +108,10 @@ class AppacitiveObject(Entity):
     def update(self):
 
         if self.type is None and self.type_id <= 0:
-            raise ValidationException('Provide at least one among type name or type id.')
+            raise ValidationError('Provide at least one among type name or type id.')
 
         if self.id <= 0:
-            raise ValidationException('Object id is missing.')
+            raise ValidationError('Object id is missing.')
         url = urlfactory.object_urls["update"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
@@ -121,10 +121,10 @@ class AppacitiveObject(Entity):
     def get(cls, object_type, object_id):
 
         if object_type is None:
-            raise ValidationException('Type is missing.')
+            raise ValidationError('Type is missing.')
 
         if object_id is None:
-            raise ValidationException('Object id is missing.')
+            raise ValidationError('Object id is missing.')
 
         url = urlfactory.object_urls["get"](object_type, object_id)
         headers = urlfactory.get_headers()
@@ -140,10 +140,10 @@ class AppacitiveObject(Entity):
     def multi_get(cls, object_type, object_ids):
 
         if object_type is None:
-            raise ValidationException('Type is missing.')
+            raise ValidationError('Type is missing.')
 
         if object_ids is None:
-            raise ValidationException('Object ids are missing.')
+            raise ValidationError('Object ids are missing.')
 
         url = urlfactory.object_urls["multiget"](object_type, object_ids)
         headers = urlfactory.get_headers()
@@ -162,7 +162,7 @@ class AppacitiveObject(Entity):
     def find(cls, object_type, query):
 
         if object_type is None:
-            raise ValidationException('Type is missing.')
+            raise ValidationError('Type is missing.')
 
         url = urlfactory.object_urls["find_all"](object_type, query)
         headers = urlfactory.get_headers()
