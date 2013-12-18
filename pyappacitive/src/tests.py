@@ -4,18 +4,17 @@ import json
 from object import AppacitiveObject
 from connection import AppacitiveConnection
 from appacitive_email import Email
+from user import AppacitiveUser
 import datetime
 
 
-d = datetime.date.today()
-dt = datetime.datetime.today()
+u1 = AppacitiveUser()
+u1.firstname = 'sathley'
+u1.username = 'qwe'
+u1.password = 'test123!@#'
+u1.email = 'sathley@appacitive.com'
+u1.lastname = 'athley'
 
+u1.create()
 
-print isinstance(d, datetime.date)
-print isinstance(d, datetime.datetime)
-
-print isinstance(dt, datetime.date) and not isinstance(dt, datetime.datetime)
-print isinstance(dt, datetime.datetime)
-
-print str(d)
-print str(dt)
+print u1.get_json()

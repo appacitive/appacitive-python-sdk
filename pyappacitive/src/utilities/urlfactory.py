@@ -21,37 +21,53 @@ def get_headers(**headers_key):
 
 
 def __object_create_url(object_type):
+    if object_type == 'user':
+        return __user_create_url()
     return '{0}/object/{1}'.format(base_url, object_type)
 
 
 def __object_delete_url(object_type, object_id):
+    if object_type == 'user':
+        return __user_delete_url(object_id)
     return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
 
 
 def __object_multidelete_url(object_type):
+    if object_type == 'user':
+        return __user_multidelete_url()
     return '{0}/object/{1}/bulkdelete'.format(base_url, object_type)
 
 
-def __object_delete_with_connection_url(object_type, object_id):
+def __object_delete_with_connections_url(object_type, object_id):
+    if object_type == 'user':
+        return __user_delete_with_connections_url(object_id)
     return '{0}/object/{1}/{2}?deleteconnections=true'.format(base_url,
                                                               object_type,
                                                               object_id)
 
 
 def __object_get_url(object_type, object_id):
+    if object_type == 'user':
+        return __user_get_url(object_id)
     return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
 
 
 def __object_multiget_url(object_type, object_ids):
+    if object_type == 'user':
+        return __user_multiget_url(object_ids)
     return '{0}/object/{1}/multiget/{2}'.format(base_url, object_type,
                                                 ','.join(object_ids))
 
 
 def __object_update_url(object_type, object_id):
+    if object_type == 'user':
+        return __user_update_url(object_id)
     return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
 
 
 def __object_find_all_url(object_type, query):
+    if object_type == 'user':
+        return __user_find_all_url(query)
     return '{0}/object/{1}/find/all?{2}'.format(base_url, object_type,
                                                 str(query))
 
@@ -117,8 +133,41 @@ def __update__password_url(user_id, identification_type):
 
 #region     USER URLS
 
+
+def __user_create_url():
+    return '{0}/user/create'.format(base_url)
+
+
+def __user_delete_url(user_id):
+    return '{0}/user/{1}'.format(base_url, user_id)
+
+
+def __user_multidelete_url():
+    return '{0}/user/bulkdelete'.format(base_url)
+
+
+def __user_delete_with_connections_url(user_id):
+    return '{0}/user/{1}?deleteconnections=true'.format(base_url, user_id)
+
+
+def __user_get_url(user_id):
+    return '{0}/user/{1}'.format(base_url, user_id)
+
+
+def __user_multiget_url(user_ids):
+    return '{0}/user/multiget/{1}'.format(base_url, ','.join(user_ids))
+
+
+def __user_update_url(user_id):
+    return '{0}/user/{1}'.format(base_url, user_id)
+
+
+def __user_find_all_url(query):
+    return '{0}/user/find/all?{1}'.format(base_url, str(query))
+
 #endregion
 
+#region MISC URLS
 
 def __graph_filter_url(filter_query_name):
     return '{0}/search/filter/{1}'.format(base_url, filter_query_name)
@@ -128,19 +177,27 @@ def __graph_project_url(project_query_name):
     return '{0}/search/projection/{1}'.format(base_url, project_query_name)
 
 
-
 def __email_send_url():
     return '{0}/email/send'.format(base_url)
 
+#endregion
+
 user_urls = {
-    "create": "user/create",
+    "create": __user_create_url,
+    "delete": __user_delete_url,
+    "delete_with_connections": __user_delete_with_connections_url,
+    "multidelete": __user_multidelete_url,
+    "get": __user_get_url,
+    "multiget": __user_multiget_url,
+    "update": __user_update_url,
+    "find_all": __user_find_all_url,
     "update_password": __update__password_url
 }
 
 object_urls = {
     "create": __object_create_url,
     "delete": __object_delete_url,
-    "delete_with_connection": __object_delete_with_connection_url,
+    "delete_with_connections": __object_delete_with_connections_url,
     "multidelete": __object_multidelete_url,
     "get": __object_get_url,
     "multiget": __object_multiget_url,

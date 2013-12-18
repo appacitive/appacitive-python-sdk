@@ -101,7 +101,7 @@ class AppacitiveObject(Entity):
         if self.id <= 0:
             raise ValidationError('Object id is missing.')
 
-        url = urlfactory.object_urls["delete_with_connection"](self.type if self.type is not None else self.type_id,
+        url = urlfactory.object_urls["delete_with_connections"](self.type if self.type is not None else self.type_id,
                                                                self.id)
         headers = urlfactory.get_headers()
         return http.delete(url, headers)
