@@ -342,7 +342,6 @@ class AppacitiveUser(AppacitiveObject):
 
         self.__set_self(user)
 
-
     @user_auth_required
     def update_password(self, old_password, new_password):
 

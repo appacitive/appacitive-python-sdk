@@ -22,7 +22,7 @@ class GraphSearch(object):
             return None
         for k, v in resp.iteritems():
             if k != 'status':
-                return resp[k]
+                return v
 
     @staticmethod
     def filter(query_name, query_dict):
