@@ -209,6 +209,18 @@ def __get_file_download_url(file_id):
 def __get_file_delete_url(file_id):
     return '{0}/file/delete/{1}'.format(base_url, file_id)
 
+
+def __get_send_push_url():
+    return '{0}/push/send'.format(base_url)
+
+
+def __get_push_url(notification_id):
+    return '{0}/push/notification/{1}'.format(base_url, notification_id)
+
+
+def __get_all_push_url():
+    return '{0}/push/getall'.format(base_url)
+
 #endregion
 
 user_urls = {
@@ -265,4 +277,10 @@ file_urls = {
     "get_upload_url": __get_file_upload_url,
     "get_download_url": __get_file_download_url,
     "file_delete": __get_file_delete_url
+}
+
+push_urls = {
+    "send": __get_send_push_url,
+    "get": __get_push_url,
+    "get_all": __get_all_push_url
 }
