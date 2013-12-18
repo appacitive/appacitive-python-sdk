@@ -108,6 +108,7 @@ def __connection_find_for_objects_and_relation_url(relation_type, object_id1,
 def __connection_find_interconnects_url():
     return '{0}/connection/interconnects'.format(base_url)
 
+
 def __update__password_url(user_id, identification_type):
     return '%s/user/%s/changepassword?useridtype=%s' % (base_url, user_id,
                                                         identification_type)
@@ -117,6 +118,15 @@ def __update__password_url(user_id, identification_type):
 #region     USER URLS
 
 #endregion
+
+
+def __graph_filter_url(filter_query_name):
+    return '{0}/search/filter/{1}'.format(base_url, filter_query_name)
+
+
+def __graph_project_url(project_query_name):
+    return '{0}/search/projection/{1}'.format(base_url, project_query_name)
+
 
 
 def __email_send_url():
@@ -153,5 +163,10 @@ connection_urls = {
 
 email_urls = {
     "send": __email_send_url
+}
+
+graph_search_urls = {
+    "filter": __graph_filter_url,
+    "project": __graph_project_url
 }
 
