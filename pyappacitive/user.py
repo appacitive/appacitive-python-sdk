@@ -20,8 +20,8 @@ def user_auth_required(func):
 
 class AppacitiveUser(AppacitiveObject):
 
-    def __init__(self, obj=None):
-        super(AppacitiveUser, self).__init__(obj)
+    def __init__(self, user=None):
+        super(AppacitiveUser, self).__init__(user)
         self._properties = {
             'username': None,
             'location': None,
