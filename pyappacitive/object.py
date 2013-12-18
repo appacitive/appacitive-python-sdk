@@ -14,7 +14,12 @@ import json
 # stop sending None properties
 # remove .idea folder
 # logging and nosetests
-# set_self should have only specific setting implementation for the current class. It should call the set self of base for others
+# set_self should have only specific setting implementation for the current class. It should call the set self of base for #others
+# add aggregate filter, check tag filter method names
+# push send - single function using kwargs
+# email- use kwargs
+# move object/conn/user class methods to new provider classes
+
 
 class AppacitiveObject(Entity):
 
