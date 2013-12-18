@@ -1,7 +1,7 @@
 __author__ = 'sathley'
 
-from PyAppacitive.src.query.query import AppacitiveQuery
-from PyAppacitive.src.query import operator, filter, value
+from pyappacitive.src.query.query import AppacitiveQuery
+from pyappacitive.src.query import operator, filter, value
 import datetime
 import nose
 

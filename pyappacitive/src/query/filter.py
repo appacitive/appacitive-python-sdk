@@ -1,4 +1,4 @@
-from PyAppacitive.src.query.value import ValueBase, GeoValue, DistanceValue
+from pyappacitive.src.query.value import ValueBase, GeoValue, DistanceValue
 
 __author__ = 'sathley'
 
