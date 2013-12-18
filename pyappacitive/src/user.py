@@ -15,8 +15,8 @@ class User(Base):
         Method will update the password
         Input: user object to update the password, old_password and new_password
         """
-        if self.id <= 0 or identification_type not in ['id', 'username',
-                                                       'token']:
+        if self.id <= 0 or identification_type not in ('id', 'username',
+                                                       'token'):
             raise ValueError('Incorrect data.')
 
         url = urlfactory.user_urls["update_password"](
@@ -28,5 +28,5 @@ class User(Base):
         headers = urlfactory.get_headers(**{"Appacitive-User-Auth": self.token})
         data = {"oldpassword": old_password,
                 "newpassword": new_password}
-        json = json.dumps(data)
-        return http.post(url, headers, json)
+        json_payload = json.dumps(data)
+        return http.post(url, headers, json_payload)

@@ -3,7 +3,7 @@ from pyappacitive.src.query.value import ValueBase, GeoValue, DistanceValue
 __author__ = 'sathley'
 
 import types
-
+import datetime
 
 class FilterBase(object):
     def __init__(self):
@@ -23,22 +23,25 @@ class PropertyFilter(FilterBase):
         self.value = value
         self.value_datatype = None
 
+
+
     def __repr__(self):
+
+        #   Handle date and datetime datatypes
+        if isinstance(self.value, datetime.date):
+            if isinstance(self.value, datetime.datetime) is False:
+                self.value = "date('{0}')".format(str(self.value))
+            else:
+                self.value = "datetime('{0}')".format(str(self.value))
 
         if self.operator == 'within_circle':
             geo_code, distance = self.value
-            #if isinstance(geo_code, GeoValue) is False or isinstance(distance, DistanceValue) is False:
-            #    raise TypeError('This filter expects a geo value and a distance value.')
             return "*{0} {1} {2},{3}".format(self.key, self.operator, str(geo_code), str(distance))
 
         if self.operator == 'between':
             value1, value2 = self.value
-            #if isinstance(value1, ValueBase) is False or isinstance(value2, ValueBase) is False:
-            #    raise TypeError('Both values should be derived from ValueBase. Use appropriate value objects.')
             return "*{0} {1} ({2},{3})".format(self.key, self.operator, str(value1), str(value2))
 
-        #if isinstance(self.value, ValueBase) is False:
-        #    raise TypeError('Value should be derived from ValueBase. Use an appropriate value object.')
         return "*{0} {1} {2}".format(self.key, self.operator, str(self.value))
 
     @classmethod

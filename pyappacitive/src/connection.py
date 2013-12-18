@@ -33,19 +33,18 @@ class AppacitiveConnection(Entity):
             'objectid': None,
             'object': None
         }
-
+        connection = {}
         if connection is not None:
-
-            self.id = int(connection['__id']) if '__id' in connection else 0
-            self.relation_type = connection['__relationtype'] if '__relationtype' in connection else None
-            self.relation_id = int(connection['__relationid']) if '__relationid' in connection else 0
-            self.created_by = connection['__createdby'] if '__createdby' in connection else None
-            self.last_modified_by = connection['__lastmodifiedby'] if '__lastmodifiedby' in connection else None
-            self.utc_date_created = connection['__utcdatecreated'] if '__utcdatecreated' in connection else None
-            self.utc_last_updated_date = connection['__utclastupdateddate'] if '__utclastupdateddate' in connection else None
-            self._tags = connection['__tags'] if '__tags' in connection else None
-            self._attributes = connection['__attributes'] if '__attributes' in connection else None
-            self.revision = int(connection['__revision']) if '__revision' in connection else None
+            self.id = int(connection.get('__id', 0))
+            self.relation_type = connection.get('__relationtype', None)
+            self.relation_id = int(connection.get('__relationid', 0))
+            self.created_by = connection.get('__createdby', None)
+            self.last_modified_by = connection.get('__lastmodifiedby', None)
+            self.utc_date_created = connection.get('__utcdatecreated', None)
+            self.utc_last_updated_date = connection.get('__utclastupdateddate', None)
+            self._tags = connection.get('__tags', None)
+            self._attributes = connection.get('__attributes', None)
+            self.revision = int(connection.get('__revision', None))
 
             if '__endpointa' in connection:
                 self.endpoint_a['label'] = connection['__endpointa']['label'] if 'label' in connection['__endpointa'] else None
@@ -122,16 +121,16 @@ class AppacitiveConnection(Entity):
 
     def __set_self(self, connection):
 
-        self.id = int(connection['__id']) if '__id' in connection else 0
-        self.relation_type = connection['__relationtype'] if '__relationtype' in connection else None
-        self.relation_id = int(connection['__relationid']) if '__relationid' in connection else 0
-        self.created_by = connection['__createdby'] if '__createdby' in connection else None
-        self.last_modified_by = connection['__lastmodifiedby'] if '__lastmodifiedby' in connection else None
-        self.utc_date_created = connection['__utcdatecreated'] if '__utcdatecreated' in connection else None
-        self.utc_last_updated_date = connection['__utclastupdateddate'] if '__utclastupdateddate' in connection else None
-        self._tags = connection['__tags'] if '__tags' in connection else None
-        self._attributes = connection['__attributes'] if '__attributes' in connection else None
-        self.revision = int(connection['__revision']) if '__revision' in connection else None
+        self.id = int(connection.get('__id', 0))
+        self.relation_type = connection.get('__relationtype', None)
+        self.relation_id = int(connection.get('__relationid', 0))
+        self.created_by = connection.get('__createdby', None)
+        self.last_modified_by = connection.get('__lastmodifiedby', None)
+        self.utc_date_created = connection.get('__utcdatecreated', None)
+        self.utc_last_updated_date = connection.get('__utclastupdateddate', None)
+        self._tags = connection.get('__tags', None)
+        self._attributes = connection.get('__attributes', None)
+        self.revision = int(connection.get('__revision', None))
 
         if '__endpointa' in connection:
                 self.endpoint_a['label'] = connection['__endpointa']['label'] if 'label' in connection['__endpointa'] else None
@@ -249,7 +248,7 @@ class AppacitiveConnection(Entity):
         if self.id <= 0:
             raise ValidationError('Connection id is missing.')
 
-        url = urlfactory.connection_urls["update"](self.relation_type if self.relation_typee is not None else self.relation_id, self.id)
+        url = urlfactory.connection_urls["update"](self.relation_type if self.relation_type is not None else self.relation_id, self.id)
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
         resp = http.post(url, headers, payload)
