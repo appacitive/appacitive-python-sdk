@@ -14,6 +14,7 @@ import json
 # stop sending None properties
 # remove .idea folder
 # logging and nosetests
+# set_self should have only specific setting implementation for the current class. It should call the set self of base for others
 
 class AppacitiveObject(Entity):
 
