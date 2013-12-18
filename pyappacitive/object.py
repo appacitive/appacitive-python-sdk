@@ -19,6 +19,7 @@ import json
 # push send - single function using kwargs
 # email- use kwargs
 # move object/conn/user class methods to new provider classes
+# properties in user/device should use setproperty and getproperty funcs to keep track of changes
 
 
 class AppacitiveObject(Entity):
