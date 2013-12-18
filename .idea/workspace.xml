@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b458740-5936-4395-81bc-134e5359c3e9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="appacitive-python-sdk.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -89,11 +89,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="63" selection-end="63" vertical-scroll-proportion="0.08038585" vertical-offset="0" max-vertical-offset="933">
+            <state line="5" column="0" selection-start="63" selection-end="63" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="file.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pyappacitive/file.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="43" column="42" selection-start="1172" selection-end="1172" vertical-scroll-proportion="0.69131833" vertical-offset="0" max-vertical-offset="1080">
+              <folding>
+                <element signature="e#24#55#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -132,7 +143,6 @@
         <option value="$PROJECT_DIR$/pyappacitive/error.py" />
         <option value="$PROJECT_DIR$/pyappacitive/object.py" />
         <option value="$PROJECT_DIR$/pyappacitive/utilities/http.py" />
-        <option value="$PROJECT_DIR$/pyappacitive/file.py" />
         <option value="$PROJECT_DIR$/pyappacitive/push.py" />
         <option value="$PROJECT_DIR$/pyappacitive/utilities/urlfactory.py" />
         <option value="$PROJECT_DIR$/pyappacitive/graphsearch.py" />
@@ -141,6 +151,7 @@
         <option value="$PROJECT_DIR$/pyappacitive/user.py" />
         <option value="$PROJECT_DIR$/pyappacitive/device.py" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/pyappacitive/file.py" />
       </list>
     </option>
   </component>
@@ -626,18 +637,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pyappacitive/file.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="29" selection-start="1368" selection-end="1368" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="405">
-          <folding>
-            <element signature="e#24#55#0" expanded="true" />
-            <element signature="e#301#820#0" expanded="false" />
-            <element signature="e#898#1319#0" expanded="false" />
-            <element signature="e#1378#1694#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pyappacitive/push.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="100" column="0" selection-start="2713" selection-end="2713" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
@@ -778,8 +777,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="63" selection-end="63" vertical-scroll-proportion="0.08038585" vertical-offset="0" max-vertical-offset="933">
+        <state line="5" column="0" selection-start="63" selection-end="63" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyappacitive/file.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="42" selection-start="1172" selection-end="1172" vertical-scroll-proportion="0.69131833" vertical-offset="0" max-vertical-offset="1080">
+          <folding>
+            <element signature="e#24#55#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
