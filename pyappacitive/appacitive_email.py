@@ -1,6 +1,7 @@
+from pyappacitive.utilities import http, urlfactory
+
 __author__ = 'sathley'
 
-from utilities import urlfactory, http, settings
 import json
 
 

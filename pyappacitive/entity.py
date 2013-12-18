@@ -3,20 +3,41 @@ __author__ = 'sathley'
 from datetime import datetime
 
 
+connection_system_properties = ['__relationtype', '__relationid', '__id', '__createdby', '__lastmodifiedby',
+                                '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties',
+                                '__revision', '__endpointa', '__endpointb']
+
+object_system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
+                            '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
+
+
 class Entity(object):
 
-    def __init__(self):
+    def __init__(self, entity=None):
         self._properties = {}
         self._attributes = {}
         self._tags = []
         self.id = 0
         self.revision = 0
         self.created_by = None
-        self.last_updated_by = None
-        self.created_by = None
         self.utc_date_created = None
         self.utc_last_updated_date = None
         self.last_modified_by = None
+
+        if entity is not None:
+
+            self.id = int(entity.get('__id', 0))
+            self.created_by = entity.get('__createdby', None)
+            self.last_modified_by = entity.get('__lastmodifiedby', None)
+            self.utc_date_created = entity.get('__utcdatecreated', None)
+            self.utc_last_updated_date = entity.get('__utclastupdateddate', None)
+            self._tags = entity.get('__tags', None)
+            self._attributes = entity.get('__attributes', None)
+            self.revision = int(entity.get('__revision', 0))
+
+            for k, v in entity.iteritems():
+                if k not in connection_system_properties:
+                    self._properties[k] = v
 
         # update observers
         self.__properties_changed = {}

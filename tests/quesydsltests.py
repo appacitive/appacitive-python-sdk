@@ -1,9 +1,9 @@
+from pyappacitive.query import filter, value, operator
+
 __author__ = 'sathley'
 
-from pyappacitive.src.query.query import AppacitiveQuery
-from pyappacitive.src.query import operator, filter, value
+from pyappacitive.query.query import AppacitiveQuery
 import datetime
-import nose
 
 
 def simple_filter_query_test():

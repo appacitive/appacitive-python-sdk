@@ -1,24 +1,21 @@
+from pyappacitive.utilities import http, urlfactory
+
 __author__ = 'sathley'
 
 # remove values.py and figure out data type from Python type
 # use dict.get to set up objects
 # add logging
 
-from entity import Entity
-from error import *
-from utilities import urlfactory, http, settings
+from pyappacitive.entity import Entity, connection_system_properties
+from pyappacitive.error import *
 import json
-from object import AppacitiveObject
-
-connection_system_properties = ['__relationtype', '__relationid', '__id', '__createdby', '__lastmodifiedby',
-                                '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties',
-                                '__revision', '__endpointa', '__endpointb']
+from pyappacitive.object import AppacitiveObject
 
 
 class AppacitiveConnection(Entity):
 
     def __init__(self, connection=None):
-        super(AppacitiveConnection, self).__init__()
+        super(AppacitiveConnection, self).__init__(connection)
         self.relation_type = None
         self.relation_id = 0
         self.endpoint_a = {
@@ -33,19 +30,9 @@ class AppacitiveConnection(Entity):
             'objectid': None,
             'object': None
         }
-        connection = {}
         if connection is not None:
-            self.id = int(connection.get('__id', 0))
             self.relation_type = connection.get('__relationtype', None)
             self.relation_id = int(connection.get('__relationid', 0))
-            self.created_by = connection.get('__createdby', None)
-            self.last_modified_by = connection.get('__lastmodifiedby', None)
-            self.utc_date_created = connection.get('__utcdatecreated', None)
-            self.utc_last_updated_date = connection.get('__utclastupdateddate', None)
-            self._tags = connection.get('__tags', None)
-            self._attributes = connection.get('__attributes', None)
-            self.revision = int(connection.get('__revision', None))
-
             if '__endpointa' in connection:
                 self.endpoint_a['label'] = connection['__endpointa']['label'] if 'label' in connection['__endpointa'] else None
                 self.endpoint_a['type'] = connection['__endpointa']['type'] if 'type' in connection['__endpointa'] else None
@@ -62,29 +49,12 @@ class AppacitiveConnection(Entity):
                 if 'object' in connection['__endpointb']:
                     self.endpoint_b['object'] = AppacitiveObject(connection['__endpointb']['object'])
 
-            for k, v in connection.iteritems():
-                if k not in connection_system_properties:
-                    self._properties[k] = v
-
     @staticmethod
     def _get_object_dict(obj):
 
         if obj is None:
             return None
-        native = {}
-        native['__type'] = obj.type
-        native['__typeid'] = str(obj.type_id)
-        native['__id'] = str(obj.id)
-        native['__revision'] = str(obj.revision)
-        native['__createdby'] = obj.created_by
-        native['__lastmodifiedby'] = obj.last_modified_by
-        native['__utcdatecreated'] = obj.utc_date_created
-        native['__utclastupdateddate'] = obj.utc_last_updated_date
-        native['__tags'] = obj._tags
-        native['__attributes'] = obj._attributes
-        for property_name, property_value in obj._properties.iteritems():
-            native[property_name] = property_value
-        return native
+        return obj.get_dict()
 
     def get_json(self):
 

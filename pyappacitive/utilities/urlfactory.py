@@ -1,6 +1,6 @@
-__author__ = 'sathley'
+from pyappacitive.utilities import settings
 
-import settings
+__author__ = 'sathley'
 
 base_url = settings.api_base_url
 

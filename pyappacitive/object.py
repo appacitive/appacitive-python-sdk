@@ -1,38 +1,22 @@
-from os import system
+from pyappacitive.utilities import http, urlfactory
 
 __author__ = 'sathley'
 
-from entity import Entity
-from error import *
-from utilities import urlfactory, http, settings
+from pyappacitive.entity import Entity, object_system_properties
+from pyappacitive.error import *
 import json
-
-object_system_properties = ['__type', '__typeid', '__id', '__createdby', '__lastmodifiedby', '__utcdatecreated',
-                            '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
 
 
 class AppacitiveObject(Entity):
 
     def __init__(self, obj=None):
-        super(AppacitiveObject, self).__init__()
+        super(AppacitiveObject, self).__init__(obj)
         self.type = None
         self.type_id = 0
 
         if obj is not None:
-
-            self.id = int(obj['__id']) if '__id' in obj else 0
             self.type = obj['__type'] if '__type' in obj else None
             self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
-            self.created_by = obj['__createdby'] if '__createdby' in obj else None
-            self.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
-            self.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
-            self.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
-            self._tags = obj['__tags'] if '__tags' in obj else None
-            self._attributes = obj['__attributes'] if '__attributes' in obj else None
-            self.revision = int(obj['__revision']) if '__revision' in obj else None
-            for k, v in obj.iteritems():
-                if k not in object_system_properties:
-                    self._properties[k] = v
 
     def __set_self(self, obj):
 
@@ -70,6 +54,23 @@ class AppacitiveObject(Entity):
             native[property_name] = property_value
         return json.dumps(native)
 
+    def get_dict(self):
+
+        native = {}
+        native['__type'] = self.type
+        native['__typeid'] = str(self.type_id)
+        native['__id'] = str(self.id)
+        native['__revision'] = str(self.revision)
+        native['__createdby'] = self.created_by
+        native['__lastmodifiedby'] = self.last_modified_by
+        native['__utcdatecreated'] = self.utc_date_created
+        native['__utclastupdateddate'] = self.utc_last_updated_date
+        native['__tags'] = self._tags
+        native['__attributes'] = self._attributes
+        for property_name, property_value in self._properties.iteritems():
+            native[property_name] = property_value
+        return native
+
     def create(self):
 
         if self.type is None and self.type_id <= 0:
@@ -78,8 +79,12 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
         resp = http.put(url, headers, self.get_json())
-        if resp['status']['code'] == '200':
-            self.__set_self(resp['object'])
+        if resp['status']['code'] != '200':
+            return None
+        obj = resp.get('object', None)
+        if obj is None:
+            return resp
+        self.__set_self(resp['object'])
 
     def delete(self):
 

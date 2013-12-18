@@ -1,15 +1,17 @@
+from pyappacitive.utilities import http, urlfactory
+
 __author__ = 'sathley'
 
-from object import AppacitiveObject
-from utilities import urlfactory, http, settings
-from error import ValidationError
+from pyappacitive.object import AppacitiveObject
+from pyappacitive.entity import object_system_properties
+from pyappacitive.error import ValidationError
 import json
 
 
 class AppacitiveUser(AppacitiveObject):
 
-    def __init__(self):
-        super(AppacitiveUser, self).__init__()
+    def __init__(self, obj=None):
+        super(AppacitiveUser, self).__init__(obj)
         self._properties = {
             'username': None,
             'location': None,
@@ -28,7 +30,27 @@ class AppacitiveUser(AppacitiveObject):
         }
         self.type = 'user'
 
+    def __set_self(self, obj):
+
+        if obj is None:
+            pass
+
+        self.id = int(obj['__id']) if '__id' in obj else 0
+        self.type = obj['__type'] if '__type' in obj else None
+        self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
+        self.created_by = obj['__createdby'] if '__createdby' in obj else None
+        self.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
+        self.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
+        self.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
+        self._tags = obj['__tags'] if '__tags' in obj else None
+        self._attributes = obj['__attributes'] if '__attributes' in obj else None
+        self.revision = int(obj['__revision']) if '__revision' in obj else None
+        for k, v in obj.iteritems():
+            if k not in object_system_properties:
+                self._properties[k] = v
+
 #region          user properties
+
     @property
     def username(self):
         return self._properties['username']
@@ -148,7 +170,9 @@ class AppacitiveUser(AppacitiveObject):
             if self.__getattribute__(field) is None:
                 raise ValidationError('{0} is a mandatory field.'.format(field))
 
-        return super(AppacitiveUser, self).create()
+        resp = super(AppacitiveUser, self).create()
+        self.__set_self(resp['user'])
+
 
 
 

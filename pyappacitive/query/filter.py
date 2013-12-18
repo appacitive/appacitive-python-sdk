@@ -1,5 +1,3 @@
-from pyappacitive.src.query.value import ValueBase, GeoValue, DistanceValue
-
 __author__ = 'sathley'
 
 import types
