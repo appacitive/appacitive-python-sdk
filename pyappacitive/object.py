@@ -6,6 +6,14 @@ from pyappacitive.entity import Entity, object_system_properties
 from pyappacitive.error import *
 import json
 
+# add support for update with revision number 
+# add fetch latest.call
+# add fields in get calls
+# add file upload support using urllib2
+# add imports in init.py
+# stop sending None properties
+# remove .idea folder
+# logging and nosetests
 
 class AppacitiveObject(Entity):
 
