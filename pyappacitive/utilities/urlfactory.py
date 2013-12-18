@@ -6,16 +6,13 @@ base_url = settings.api_base_url
 
 
 def get_headers(**headers_key):
-    """
-    The function will be used to return the required headers to make a call to
-    server
-    """
     headers_key.update({
         "Appacitive-Apikey": settings.api_key,
         "Appacitive-Environment": settings.environment,
         "Content-Type": "application/json"}
     )
     return headers_key
+
 
 #region     OBJECT URLS
 
@@ -138,8 +135,8 @@ def __user_create_url():
     return '{0}/user/create'.format(base_url)
 
 
-def __user_delete_url(user_id):
-    return '{0}/user/{1}'.format(base_url, user_id)
+def __user_delete_url(user_id, user_id_type='id', delete_connections=False):
+    return '{0}/user/{1}?useridtype={2}&deleteconnections={3}'.format(base_url, user_id, user_id_type, delete_connections)
 
 
 def __user_multidelete_url():
@@ -150,8 +147,8 @@ def __user_delete_with_connections_url(user_id):
     return '{0}/user/{1}?deleteconnections=true'.format(base_url, user_id)
 
 
-def __user_get_url(user_id):
-    return '{0}/user/{1}'.format(base_url, user_id)
+def __user_get_url(user_id, user_id_type='id'):
+    return '{0}/user/{1}?useridtype={2}'.format(base_url, user_id, user_id_type)
 
 
 def __user_multiget_url(user_ids):
@@ -164,6 +161,26 @@ def __user_update_url(user_id):
 
 def __user_find_all_url(query):
     return '{0}/user/find/all?{1}'.format(base_url, str(query))
+
+
+def __user_authenticate_url():
+    return '{0}/user/authenticate'.format(base_url)
+
+
+def __user_send_reset_password_email_url():
+    return '{0}/user/sendresetpassword'.format(base_url)
+
+
+def __user_validate_session_url():
+    return '{0}/user/validate'.format(base_url)
+
+
+def __user_invalidate_session_url():
+    return '{0}/user/invalidate'.format(base_url)
+
+
+def __user_checkin_url(user_id, latitude, longitude):
+    return '{0}/user/{1}/checkin?latitude={2}&longitude={3}'.format(base_url, user_id, latitude, longitude)
 
 #endregion
 
@@ -191,7 +208,12 @@ user_urls = {
     "multiget": __user_multiget_url,
     "update": __user_update_url,
     "find_all": __user_find_all_url,
-    "update_password": __update__password_url
+    "update_password": __update__password_url,
+    "authenticate": __user_authenticate_url,
+    "send_reset_password_email": __user_send_reset_password_email_url,
+    "validate_session": __user_validate_session_url,
+    "invalidate_session": __user_invalidate_session_url,
+    "checkin": __user_checkin_url
 }
 
 object_urls = {

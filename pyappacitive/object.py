@@ -140,8 +140,14 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
         resp = http.post(url, headers, payload)
-        if resp['status']['code'] == '200':
-            self.__set_self(resp['object'])
+        if resp['status']['code'] != '200':
+            return None
+
+        obj = resp.get('object', None)
+        if obj is None:
+            return resp
+
+        self.__set_self(obj)
 
     @classmethod
     def get(cls, object_type, object_id):
@@ -155,8 +161,13 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["get"](object_type, object_id)
         headers = urlfactory.get_headers()
         response = http.get(url, headers)
+
         if response['status']['code'] != '200':
             return None
+
+        obj = response.get('object', None)
+        if obj is None:
+            return response
 
         return cls(response['object'])
 
@@ -172,11 +183,16 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["multiget"](object_type, object_ids)
         headers = urlfactory.get_headers()
         response = http.get(url, headers)
+
         if response['status']['code'] != '200':
             return None
 
+        objs = response.get('objects', None)
+        if objs is None:
+            return response
+
         return_objs = []
-        for obj in response['objects']:
+        for obj in objs:
             obj1 = cls(obj)
             return_objs.append(obj1)
         return return_objs
@@ -193,8 +209,12 @@ class AppacitiveObject(Entity):
         if response['status']['code'] != '200':
             return None
 
+        objects = response.get('objects', None)
+        if objects is None:
+            return response
+
         return_objs = []
-        for obj in response['objects']:
+        for obj in objects:
             obj1 = cls(obj)
             return_objs.append(obj1)
         return return_objs
