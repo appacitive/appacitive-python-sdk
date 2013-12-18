@@ -5,12 +5,17 @@ import settings
 base_url = settings.api_base_url
 
 
-def get_headers():
-    return {
+def get_headers(**headers_key):
+    """
+    The function will be used to return the required headers to make a call to
+    server
+    """
+    headers_key.update({
         "Appacitive-Apikey": settings.api_key,
         "Appacitive-Environment": settings.environment,
-        "Content-Type": "application/json"
-    }
+        "Content-Type": "application/json"}
+    )
+    return headers_key
 
 #region     OBJECT URLS
 
@@ -28,7 +33,9 @@ def __object_multidelete_url(object_type):
 
 
 def __object_delete_with_connection_url(object_type, object_id):
-    return '{0}/object/{1}/{2}?deleteconnections=true'.format(base_url, object_type, object_id)
+    return '{0}/object/{1}/{2}?deleteconnections=true'.format(base_url,
+                                                              object_type,
+                                                              object_id)
 
 
 def __object_get_url(object_type, object_id):
@@ -36,7 +43,8 @@ def __object_get_url(object_type, object_id):
 
 
 def __object_multiget_url(object_type, object_ids):
-    return '{0}/object/{1}/multiget/{2}'.format(base_url, object_type, ','.join(object_ids))
+    return '{0}/object/{1}/multiget/{2}'.format(base_url, object_type,
+                                                ','.join(object_ids))
 
 
 def __object_update_url(object_type, object_id):
@@ -44,7 +52,8 @@ def __object_update_url(object_type, object_id):
 
 
 def __object_find_all_url(object_type, query):
-    return '{0}/object/{1}/find/all?{2}'.format(base_url, object_type, str(query))
+    return '{0}/object/{1}/find/all?{2}'.format(base_url, object_type,
+                                                str(query))
 
 #endregion
 
@@ -56,15 +65,18 @@ def __connection_create_url(relation_type):
 
 
 def __connection_get_url(relation_type, connection_id):
-    return '{0}/connection/{1}/{2}'.format(base_url, relation_type, connection_id)
+    return '{0}/connection/{1}/{2}'.format(base_url, relation_type,
+                                           connection_id)
 
 
 def __connection_multiget_url(relation_type, connection_ids):
-    return '{0}/connection/{1}/multiget/{2}'.format(base_url, relation_type, ','.join(connection_ids))
+    return '{0}/connection/{1}/multiget/{2}'.format(base_url, relation_type,
+                                                    ','.join(connection_ids))
 
 
 def __connection_delete_url(relation_type, connection_id):
-    return '{0}/connection/{1}/{2}'.format(base_url, relation_type, connection_id)
+    return '{0}/connection/{1}/{2}'.format(base_url, relation_type,
+                                           connection_id)
 
 
 def __connection_multidelete_url(relation_type):
@@ -72,23 +84,33 @@ def __connection_multidelete_url(relation_type):
 
 
 def __connection_update_url(relation_type, connection_id):
-    return '{0}/connection/{1}/{2}'.format(base_url, relation_type, connection_id)
+    return '{0}/connection/{1}/{2}'.format(base_url, relation_type,
+                                           connection_id)
 
 
 def __connection_find_all_url(relation_type, query):
-    return '{0}/connection/{1}/find/all?{2}'.format(base_url, relation_type, str(query))
+    return '{0}/connection/{1}/find/all?{2}'.format(base_url, relation_type,
+                                                    str(query))
 
 
 def __connection_find_for_objects_url(object_id1, object_id2):
-    return '{0}/connection/find/{1}/{2}'.format(base_url, str(object_id1), str(object_id2))
+    return '{0}/connection/find/{1}/{2}'.format(base_url, str(object_id1),
+                                                str(object_id2))
 
 
-def __connection_find_for_objects_and_relation_url(relation_type, object_id1, object_id2):
-    return '{0}/connection/{1}/find/{2}/{3}'.format(base_url, relation_type, str(object_id1), str(object_id2))
+def __connection_find_for_objects_and_relation_url(relation_type, object_id1,
+                                                   object_id2):
+    return '{0}/connection/{1}/find/{2}/{3}'.format(base_url, relation_type,
+                                                    str(object_id1),
+                                                    str(object_id2))
 
 
 def __connection_find_interconnects_url():
     return '{0}/connection/interconnects'.format(base_url)
+
+def __update__password_url(user_id, identification_type):
+    return '%s/user/%s/changepassword?useridtype=%s' % (base_url, user_id,
+                                                        identification_type)
 
 #endregion
 
@@ -102,13 +124,14 @@ def __email_send_url():
 
 user_urls = {
     "create": "user/create",
+    "update_password": __update__password_url
 }
 
 object_urls = {
     "create": __object_create_url,
     "delete": __object_delete_url,
     "delete_with_connection": __object_delete_with_connection_url,
-    "multidelete":__object_multidelete_url,
+    "multidelete": __object_multidelete_url,
     "get": __object_get_url,
     "multiget": __object_multiget_url,
     "update": __object_update_url,
@@ -131,5 +154,4 @@ connection_urls = {
 email_urls = {
     "send": __email_send_url
 }
-
 
