@@ -197,6 +197,18 @@ def __graph_project_url(project_query_name):
 def __email_send_url():
     return '{0}/email/send'.format(base_url)
 
+
+def __get_file_upload_url(content_type):
+    return '{0}/file/uploadurl?contenttype={1}'.format(base_url, content_type)
+
+
+def __get_file_download_url(file_id):
+    return '{0}/file/download/{1}'.format(base_url, file_id)
+
+
+def __get_file_delete_url(file_id):
+    return '{0}/file/delete/{1}'.format(base_url, file_id)
+
 #endregion
 
 user_urls = {
@@ -249,3 +261,8 @@ graph_search_urls = {
     "project": __graph_project_url
 }
 
+file_urls = {
+    "get_upload_url": __get_file_upload_url,
+    "get_download_url": __get_file_download_url,
+    "file_delete": __get_file_delete_url
+}
