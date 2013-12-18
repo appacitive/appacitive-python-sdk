@@ -18,7 +18,7 @@ import json
 # add aggregate filter, check tag filter method names
 # push send - single function using kwargs
 # email- use kwargs
-# move object/conn/user class methods to new provider classes
+# move object/conn/user class methods to new provider classes ?? Or make user inherit from entity or breakdown object interface
 # properties in user/device should use setproperty and getproperty funcs to keep track of changes
 
 
