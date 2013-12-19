@@ -4,25 +4,32 @@ import json
 import requests
 import logging
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def put(url, headers, payload):
-    response = requests.put(url, payload, headers=headers)
-    return to_dict(response)
+    response_from_api = requests.put(url, payload, headers=headers)
+    response = to_dict(response_from_api)
+    return response
 
 
 def post(url, headers, payload):
-    response = requests.post(url, payload, headers=headers)
-    return to_dict(response)
+    response_from_api = requests.post(url, payload, headers=headers)
+    response = to_dict(response_from_api)
+    return response
 
 
 def delete(url, headers):
-    response = requests.delete(url, headers=headers)
-    return to_dict(response)
+    response_from_api = requests.delete(url, headers=headers)
+    response = to_dict(response_from_api)
+    return response
 
 
 def get(url, headers):
-    response = requests.get(url, headers=headers)
-    return to_dict(response)
+    response_from_api = requests.get(url, headers=headers)
+    response = to_dict(response_from_api)
+    return response
 
 
 def to_dict(response):

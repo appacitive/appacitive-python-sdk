@@ -1,18 +1,25 @@
+"""
+
+__author__ = 'sathley'
+"""
 from pyappacitive.utilities import settings, appcontext
 
 
-__author__ = 'sathley'
 
 base_url = settings.api_base_url
 
 
 def get_headers(**headers_key):
-    headers_key.update({
+    headers_key = {
         "Appacitive-Apikey": settings.api_key,
         "Appacitive-Environment": settings.environment,
-        "Content-Type": "application/json"}
-    )
+        "Content-Type": "application/json"
+    }
+    user_token = appcontext.ApplicationContext.get_user_token()
+    if user_token is not None:
+        headers_key['Appacitive-User-Auth'] = user_token
     return headers_key
+
 
 def get_user_headers(**headers_key):
     headers_key.update({
@@ -125,8 +132,6 @@ def __update__password_url(user_id, identification_type):
 #region DEVICE URLS
 
 
-#endregion
-
 def __device_register_url():
     return '{0}/device/register'.format(base_url)
 
@@ -146,6 +151,8 @@ def __device_delete_url(device_id, delete_connections=False):
 def __device_find_all_url(query):
     return '{0}/object/device/find/all?{1}'.format(base_url, str(query))
 
+
+#endregion
 
 #region     USER URLS
 

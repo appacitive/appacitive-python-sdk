@@ -5,7 +5,7 @@ from pyappacitive.utilities import http, urlfactory
 import json
 
 
-class Email(object):
+class AppacitiveEmail(object):
     def __init__(self):
         pass
 

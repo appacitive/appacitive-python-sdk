@@ -79,7 +79,7 @@ class AppacitiveObject(Entity):
             native['__attributes'] = attributes
 
         properties = self.get_all_properties()
-        for property_name, property_value in properties:
+        for property_name, property_value in properties.iteritems():
             native[property_name] = property_value
         return native
 
