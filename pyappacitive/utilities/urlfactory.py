@@ -122,6 +122,31 @@ def __update__password_url(user_id, identification_type):
 
 #endregion
 
+#region DEVICE URLS
+
+
+#endregion
+
+def __device_register_url():
+    return '{0}/device/register'.format(base_url)
+
+
+def __device_get_url(device_id):
+    return '{0}/device/{1}'.format(base_url, device_id)
+
+
+def __device_update_url(device_id):
+    return '{0}/device/{1}'.format(base_url, device_id)
+
+
+def __device_delete_url(device_id, delete_connections=False):
+    return '{0}/device/{1}?deleteconnections={3}'.format(base_url, device_id, delete_connections)
+
+
+def __device_find_all_url(query):
+    return '{0}/object/device/find/all?{1}'.format(base_url, str(query))
+
+
 #region     USER URLS
 
 
@@ -146,7 +171,7 @@ def __user_get_url(user_id, user_id_type='id'):
 
 
 def __user_multiget_url(user_ids):
-    return '{0}/user/multiget/{1}'.format(base_url, ','.join(user_ids))
+    return '{0}/object/user/multiget/{1}'.format(base_url, ','.join(user_ids))
 
 
 def __user_update_url(user_id):
@@ -154,7 +179,7 @@ def __user_update_url(user_id):
 
 
 def __user_find_all_url(query):
-    return '{0}/user/find/all?{1}'.format(base_url, str(query))
+    return '{0}/object/user/find/all?{1}'.format(base_url, str(query))
 
 
 def __user_authenticate_url():
@@ -232,6 +257,14 @@ user_urls = {
     "validate_session": __user_validate_session_url,
     "invalidate_session": __user_invalidate_session_url,
     "checkin": __user_checkin_url
+}
+
+device_urls = {
+    "register": __device_register_url,
+    "get": __device_get_url,
+    "update": __device_update_url,
+    "delete": __device_delete_url,
+    "find_all": __device_find_all_url,
 }
 
 object_urls = {
