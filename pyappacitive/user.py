@@ -22,157 +22,124 @@ class AppacitiveUser(AppacitiveObject):
 
     def __init__(self, user=None):
         super(AppacitiveUser, self).__init__(user)
-        self._properties = {
-            'username': None,
-            'location': None,
-            'email': None,
-            'firstname': None,
-            'lastname': None,
-            'birthdate': None,
-            'isemailverified': None,
-            'isenabled': None,
-            'isonline': None,
-            'connectionid': None,
-            'secretquestion': None,
-            'secretanswer': None,
-            'password': None,
-            'phone': None
-        }
         self.type = 'user'
 
     user_auth_header_key = 'Appacitive-User-Auth'
 
-    def __set_self(self, obj):
-
-        if obj is None:
-            pass
-
-        self.id = int(obj['__id']) if '__id' in obj else 0
-        self.type = obj['__type'] if '__type' in obj else None
-        self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
-        self.created_by = obj['__createdby'] if '__createdby' in obj else None
-        self.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
-        self.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
-        self.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
-        self._tags = obj['__tags'] if '__tags' in obj else None
-        self._attributes = obj['__attributes'] if '__attributes' in obj else None
-        self.revision = int(obj['__revision']) if '__revision' in obj else None
-        for k, v in obj.iteritems():
-            if k not in object_system_properties:
-                self._properties[k] = v
-
+    def __set_self(self, user):
+        super(AppacitiveUser, self)._set_self(user)
 
     @property
     def username(self):
-        return self._properties['username']
+        return self.get_property('username')
 
     @username.setter
     def username(self, value):
-        self._properties['username'] = value
+        self.set_property('username', value)
 
     @property
     def location(self):
-        return self._properties['location']
+        return self.get_property('location')
 
     @location.setter
     def location(self, value):
-        self._properties['location'] = value
+        self.set_property('location', value)
 
     @property
     def email(self):
-        return self._properties['email']
+        return self.get_property('email')
 
     @email.setter
     def email(self, value):
-        self._properties['email'] = value
+        self.set_property('email', value)
 
     @property
     def firstname(self):
-        return self._properties['firstname']
+        return self.get_property('firstname')
 
     @firstname.setter
     def firstname(self, value):
-        self._properties['firstname'] = value
+        self.set_property('firstname', value)
 
     @property
     def lastname(self):
-        return self._properties['lastname']
+        return self.get_property('lastname')
 
     @lastname.setter
     def lastname(self, value):
-        self._properties['lastname'] = value
+        self.set_property('lastname', value)
 
     @property
     def birthdate(self):
-        return self._properties['birthdate']
+        return self.get_property('birthdate')
 
     @birthdate.setter
     def birthdate(self, value):
-        self._properties['birthdate'] = value
+        self.set_property('birthdate', value)
 
     @property
     def isemailverified(self):
-        return self._properties['isemailverified']
+        return self.get_property('isemailverified')
 
     @isemailverified.setter
     def isemailverified(self, value):
-        self._properties['isemailverified'] = value
+        self.set_property('isemailverified', value)
 
     @property
     def isenabled(self):
-        return self._properties['isenabled']
+        return self.get_property('isenabled')
 
     @isenabled.setter
     def isenabled(self, value):
-        self._properties['isenabled'] = value
+        self.set_property('isenabled', value)
 
     @property
     def isonline(self):
-        return self._properties['isonline']
+        return self.get_property('isonline')
 
     @isonline.setter
     def isonline(self, value):
-        self._properties['isonline'] = value
+        self.set_property('isonline', value)
 
     @property
     def connectionid(self):
-        return self._properties['connectionid']
+        return self.get_property('connectionid')
 
     @connectionid.setter
     def connectionid(self, value):
-        self._properties['connectionid'] = value
+        self.set_property('connectionid', value)
 
     @property
     def secretquestion(self):
-        return self._properties['secretquestion']
+        return self.get_property('secretquestion')
 
     @secretquestion.setter
     def secretquestion(self, value):
-        self._properties['secretquestion'] = value
+        self.set_property('secretquestion', value)
 
     @property
     def secretanswer(self):
-        return self._properties['secretanswer']
+        return self.get_property('secretanswer')
 
     @secretanswer.setter
     def secretanswer(self, value):
-        self._properties['secretanswer'] = value
+        self.set_property('secretanswer', value)
 
     @property
     def password(self):
-        return self._properties['password']
+        return self.get_property('password')
 
     @password.setter
     def password(self, value):
-        self._properties['password'] = value
+        self.set_property('password', value)
 
     @property
     def phone(self):
-        return self._properties['phone']
+        return self.get_property('phone')
 
     @phone.setter
     def phone(self, value):
-        self._properties['phone'] = value
+        self.set_property('phone', value)
 
     def create(self):
         mandatory_fields = ['username', 'email', 'firstname', 'password']

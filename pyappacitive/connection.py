@@ -56,19 +56,44 @@ class AppacitiveConnection(Entity):
             return None
         return obj.get_dict()
 
-    def get_json(self):
+    def get_dict(self):
 
         native = {}
-        native['__relationtype'] = self.relation_type
-        native['__relationid'] = str(self.relation_id)
-        native['__id'] = str(self.id)
-        native['__revision'] = str(self.revision)
-        native['__createdby'] = self.created_by
-        native['__lastmodifiedby'] = self.last_modified_by
-        native['__utcdatecreated'] = self.utc_date_created
-        native['__utclastupdateddate'] = self.utc_last_updated_date
-        native['__tags'] = self._tags
-        native['__attributes'] = self._attributes
+        if self.relation_type is not None:
+            native['__relationtype'] = self.relation_type
+
+        if self.relation_id is not None:
+            native['__relationid'] = str(self.relation_id)
+
+        if self.id is not None:
+            native['__id'] = str(self.id)
+
+        if self.revision is not 0:
+            native['__revision'] = str(self.revision)
+
+        if self.created_by is not None:
+            native['__createdby'] = self.created_by
+
+        if self.last_modified_by is not None:
+            native['__lastmodifiedby'] = self.last_modified_by
+
+        if self.utc_date_created is not None:
+            native['__utcdatecreated'] = self.utc_date_created
+
+        if self.utc_last_updated_date is not None:
+            native['__utclastupdateddate'] = self.utc_last_updated_date
+
+        tags = self.get_all_tags()
+        if tags is not None:
+            native['__tags'] = tags
+
+        attributes = self.get_all_attributes()
+        if attributes is not None:
+            native['__attributes'] = attributes
+
+        properties = self.get_all_properties()
+        for property_name, property_value in properties:
+            native[property_name] = property_value
 
         native['__endpointa'] = {
             'label': self.endpoint_a['label'],
@@ -84,23 +109,14 @@ class AppacitiveConnection(Entity):
             'object': self._get_object_dict(self.endpoint_b['object'])
         }
 
-        for property_name, property_value in self._properties.iteritems():
-            native[property_name] = property_value
-
-        return json.dumps(native)
+        return native
 
     def __set_self(self, connection):
 
-        self.id = int(connection.get('__id', 0))
+        super(AppacitiveConnection, self)._set_self(connection)
+
         self.relation_type = connection.get('__relationtype', None)
         self.relation_id = int(connection.get('__relationid', 0))
-        self.created_by = connection.get('__createdby', None)
-        self.last_modified_by = connection.get('__lastmodifiedby', None)
-        self.utc_date_created = connection.get('__utcdatecreated', None)
-        self.utc_last_updated_date = connection.get('__utclastupdateddate', None)
-        self._tags = connection.get('__tags', None)
-        self._attributes = connection.get('__attributes', None)
-        self.revision = int(connection.get('__revision', None))
 
         if '__endpointa' in connection:
                 self.endpoint_a['label'] = connection['__endpointa']['label'] if 'label' in connection['__endpointa'] else None
@@ -118,10 +134,6 @@ class AppacitiveConnection(Entity):
                 if 'object' in connection['__endpointb']:
                     self.endpoint_b['object'] = AppacitiveObject(connection['__endpointb']['object'])
 
-        for k, v in connection.iteritems():
-            if k not in connection_system_properties:
-                self._properties[k] = v
-
     def create(self):
 
         if self.relation_type is None and self.relation_id <= 0:
@@ -138,7 +150,7 @@ class AppacitiveConnection(Entity):
 
         url = urlfactory.connection_urls["create"](self.relation_type if self.relation_type is not None else self.relation_id)
         headers = urlfactory.get_headers()
-        resp = http.put(url, headers, self.get_json())
+        resp = http.put(url, headers, json.dumps(self.get_dict()))
         if resp['status']['code'] == '200':
             self.__set_self(resp['connection'])
 

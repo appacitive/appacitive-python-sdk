@@ -98,6 +98,29 @@ class PushNotifications(object):
         response = http.post(url, headers, payload)
 
     @staticmethod
+    def send(platform_options, data, expire_after, **kwargs):
+        push_request = {}
+        for key, val in kwargs:
+            push_request[key] = val
+
+        if platform_options is not None:
+            push_request['platformoptions'] = platform_options
+
+        if data is not None:
+            push_request['data'] = data
+
+        if expire_after is not None:
+            push_request['expire_after'] = expire_after
+
+        url = urlfactory.push_urls['send']()
+        headers = urlfactory.get_headers()
+
+        payload = json.dumps(push_request)
+
+        response = http.post(url, headers, payload)
+        return response['status']
+
+    @staticmethod
     def get_notification_by_id(notification_id):
 
         if notification_id is None:

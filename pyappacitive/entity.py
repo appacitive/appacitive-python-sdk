@@ -14,9 +14,9 @@ object_system_properties = ['__type', '__typeid', '__id', '__createdby', '__last
 class Entity(object):
 
     def __init__(self, entity=None):
-        self._properties = {}
-        self._attributes = {}
-        self._tags = []
+        self.__properties = {}
+        self.__attributes = {}
+        self.__tags = []
         self.id = 0
         self.revision = 0
         self.created_by = None
@@ -37,7 +37,7 @@ class Entity(object):
 
             for k, v in entity.iteritems():
                 if k not in connection_system_properties:
-                    self._properties[k] = v
+                    self.__properties[k] = v
 
         # update observers
         self.__properties_changed = {}
@@ -45,39 +45,65 @@ class Entity(object):
         self.__tags_added = []
         self.__tags_removed = []
 
+    def _set_self(self, obj):
+
+        if obj is None:
+            return
+
+        self.id = int(obj.get('__id', 0))
+        self.created_by = obj.get('__createdby', None)
+        self.last_modified_by = obj.get('__lastmodifiedby', None)
+        self.utc_date_created = obj.get('__utcdatecreated', None)
+        self.utc_last_updated_date = obj.get('__utclastupdateddate', None)
+        self.__tags = obj.get('__tags', None)
+        self.__attributes = obj.get('__attributes', None)
+        self.revision = int(obj.get('__revision', 0))
+        for k, v in obj.iteritems():
+            if k not in object_system_properties:
+                self.__properties[k] = v
+
+    def get_all_properties(self):
+        return self.__properties
+
+    def get_all_attributes(self):
+        return self.__attributes
+
+    def get_all_tags(self):
+        return self.__tags
+
     def set_property(self, property_name, property_value):
-        self._properties[property_name] = property_value
+        self.__properties[property_name] = property_value
         self.__properties_changed[property_name] = property_value
 
     def get_property(self, property_name):
-        return self._properties[property_name]
+        return self.__properties.get(property_name, None)
 
     def remove_property(self, property_name):
         self.set_property(property_name, None)
 
     def set_attribute(self, attribute_key, attribute_value):
-        self._attributes[attribute_key] = attribute_value
+        self.__attributes[attribute_key] = attribute_value
         self.__attributes_changed[attribute_key]= attribute_value
 
     def get_attribute(self, attribute_key):
-        return self._attributes[attribute_key]
+        return self.__attributes.get(attribute_key, None)
 
     def remove_attribute(self, attribute_key):
         if attribute_key in self._attributes:
             self.set_attribute(attribute_key, None)
 
     def add_tag(self, tag):
-        if tag not in self._tags:
-            self._tags.append(tag)
+        if tag not in self.__tags:
+            self.__tags.append(tag)
             self.__tags_added.append(tag)
 
     def remove_tag(self, tag):
-        if tag in self._tags:
-            self._tags.remove(tag)
+        if tag in self.__tags:
+            self.__tags.remove(tag)
             self.__tags_removed.append(tag)
 
     def tag_exists(self, tag):
-        return tag in self._tags
+        return tag in self.__tags
 
     def discard_changes(self):
         pass

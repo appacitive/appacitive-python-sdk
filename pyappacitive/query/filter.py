@@ -3,6 +3,7 @@ __author__ = 'sathley'
 import types
 import datetime
 
+
 class FilterBase(object):
     def __init__(self):
         self.operator = None
@@ -20,8 +21,6 @@ class PropertyFilter(FilterBase):
         self.key = property_name
         self.value = value
         self.value_datatype = None
-
-
 
     def __repr__(self):
 
@@ -121,6 +120,41 @@ class AttributeFilter(FilterBase):
         return cls('like', property_name, value+'*')
 
 
+class AggregateFilter(FilterBase):
+    def __init__(self, operator, property_name, value):
+        super(AggregateFilter, self).__init__()
+        self.operator = operator
+        self.key = property_name
+        self.value = value
+
+    def __repr__(self):
+        return "${0} {1} {2}".format(self.key, self.operator, str(self.value))
+
+    @classmethod
+    def is_equal_to(cls, property_name, value):
+        return cls('==', property_name, value)
+
+    @classmethod
+    def is_not_equal_to(cls, property_name, value):
+        return cls('!=', property_name, value)
+
+    @classmethod
+    def is_greater_than(cls, property_name, value):
+        return cls('>', property_name, value)
+
+    @classmethod
+    def is_less_than(cls, property_name, value):
+        return cls('<', property_name, value)
+
+    @classmethod
+    def is_greater_than_equal_to(cls, property_name, value):
+        return cls('>=', property_name, value)
+
+    @classmethod
+    def is_less_than_equal_to(cls, property_name, value):
+        return cls('<=', property_name, value)
+
+
 class TagFilter(FilterBase):
 
     def __init__(self, operator, tags):
@@ -138,6 +172,6 @@ class TagFilter(FilterBase):
         return cls('tagged_with_one_or_more', tags)
 
     @classmethod
-    def match_atleast_one(cls, tags):
+    def match_all(cls, tags):
         return cls('tagged_with_all', tags)
 

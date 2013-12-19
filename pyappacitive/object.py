@@ -11,16 +11,17 @@ import json
 # add fields in get calls
 # add file upload support using urllib2
 # add imports in init.py
-# stop sending None properties
-# remove .idea folder
+## stop sending None properties
+## remove .idea folder
 # logging and nosetests
-# set_self should have only specific setting implementation for the current class. It should call the set self of base for #others
-# add aggregate filter, check tag filter method names
-# push send - single function using kwargs
+## set_self should have only specific setting implementation for the current class. It should call the set self of base for #others
+## add aggregate filter,
+## check tag filter method names
+## push send - single function using kwargs
 # email- use kwargs
 # move object/conn/user class methods to new provider classes ?? Or make user inherit from entity and provide a objectbase class to the user
-# properties in user/device should use setproperty and getproperty funcs to keep track of changes
-# make properties private and provide a get all properties function
+## properties in user/device should use setproperty and getproperty funcs to keep track of changes
+## make properties private and provide a get all properties function
 
 
 class AppacitiveObject(Entity):
@@ -36,54 +37,48 @@ class AppacitiveObject(Entity):
 
     def __set_self(self, obj):
 
-        if obj is None:
-            pass
+        super(AppacitiveObject, self)._set_self(obj)
 
-        self.id = int(obj['__id']) if '__id' in obj else 0
-        self.type = obj['__type'] if '__type' in obj else None
-        self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
-        self.created_by = obj['__createdby'] if '__createdby' in obj else None
-        self.last_modified_by = obj['__lastmodifiedby'] if '__lastmodifiedby' in obj else None
-        self.utc_date_created = obj['__utcdatecreated'] if '__utcdatecreated' in obj else None
-        self.utc_last_updated_date = obj['__utclastupdateddate'] if '__utclastupdateddate' in obj else None
-        self._tags = obj['__tags'] if '__tags' in obj else None
-        self._attributes = obj['__attributes'] if '__attributes' in obj else None
-        self.revision = int(obj['__revision']) if '__revision' in obj else None
-        for k, v in obj.iteritems():
-            if k not in object_system_properties:
-                self._properties[k] = v
-
-    def get_json(self):
-
-        native = {}
-        native['__type'] = self.type
-        native['__typeid'] = str(self.type_id)
-        native['__id'] = str(self.id)
-        native['__revision'] = str(self.revision)
-        native['__createdby'] = self.created_by
-        native['__lastmodifiedby'] = self.last_modified_by
-        native['__utcdatecreated'] = self.utc_date_created
-        native['__utclastupdateddate'] = self.utc_last_updated_date
-        native['__tags'] = self._tags
-        native['__attributes'] = self._attributes
-        for property_name, property_value in self._properties.iteritems():
-            native[property_name] = property_value
-        return json.dumps(native)
+        self.type = obj.get('__type', None)
+        self.type_id = int(obj.get('__typeid', 0))
 
     def get_dict(self):
 
         native = {}
-        native['__type'] = self.type
-        native['__typeid'] = str(self.type_id)
-        native['__id'] = str(self.id)
-        native['__revision'] = str(self.revision)
-        native['__createdby'] = self.created_by
-        native['__lastmodifiedby'] = self.last_modified_by
-        native['__utcdatecreated'] = self.utc_date_created
-        native['__utclastupdateddate'] = self.utc_last_updated_date
-        native['__tags'] = self._tags
-        native['__attributes'] = self._attributes
-        for property_name, property_value in self._properties.iteritems():
+        if self.type is not None:
+            native['__type'] = self.type
+
+        if self.type_id is not None:
+            native['__typeid'] = str(self.type_id)
+
+        if self.id is not None:
+            native['__id'] = str(self.id)
+
+        if self.revision is not 0:
+            native['__revision'] = str(self.revision)
+
+        if self.created_by is not None:
+            native['__createdby'] = self.created_by
+
+        if self.last_modified_by is not None:
+            native['__lastmodifiedby'] = self.last_modified_by
+
+        if self.utc_date_created is not None:
+            native['__utcdatecreated'] = self.utc_date_created
+
+        if self.utc_last_updated_date is not None:
+            native['__utclastupdateddate'] = self.utc_last_updated_date
+
+        tags = self.get_all_tags()
+        if tags is not None:
+            native['__tags'] = tags
+
+        attributes = self.get_all_attributes()
+        if attributes is not None:
+            native['__attributes'] = attributes
+
+        properties = self.get_all_properties()
+        for property_name, property_value in properties:
             native[property_name] = property_value
         return native
 
@@ -94,7 +89,7 @@ class AppacitiveObject(Entity):
 
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
-        resp = http.put(url, headers, self.get_json())
+        resp = http.put(url, headers, json.dumps(self.get_dict()))
         if resp['status']['code'] != '200':
             return None
         obj = resp.get('object', None)
