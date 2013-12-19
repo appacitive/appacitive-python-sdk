@@ -33,8 +33,8 @@ class AppacitiveObject(Entity):
         self.type_id = 0
 
         if obj is not None:
-            self.type = obj['__type'] if '__type' in obj else None
-            self.type_id = int(obj['__typeid']) if '__typeid' in obj else 0
+            self.type = obj.get('__type', None)
+            self.type_id = int(obj.get('__typeid', 0))
 
     def __set_self(self, obj):
 

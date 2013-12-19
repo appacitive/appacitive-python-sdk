@@ -1,20 +1,27 @@
 __author__ = 'sathley'
 
 from object import AppacitiveObject
-from entity import object_system_properties
+from entity import Entity, object_system_properties
 from error import ValidationError, UserAuthError
 from utilities import http, urlfactory, appcontext
 from response import Response
 import json
 
 
-class AppacitiveDevice(AppacitiveObject):
+class AppacitiveDevice(Entity):
     def __init__(self, device=None):
         super(AppacitiveDevice, self).__init__()
         self.type = 'device'
+        self.type_id = 0
+
+        if device is not None:
+            self.type = device.get('__type', None)
+            self.type_id = int(device.get('__typeid', 0))
 
     def __set_self(self, device):
         super(AppacitiveDevice, self)._set_self(device)
+        self.type = device.get('__type', None)
+        self.type_id = int(device.get('__typeid', 0))
 
     @property
     def devicetype(self):

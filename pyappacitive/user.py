@@ -25,11 +25,18 @@ class AppacitiveUser(Entity):
     def __init__(self, user=None):
         super(AppacitiveUser, self).__init__(user)
         self.type = 'user'
+        self.type_id = 0
+
+        if user is not None:
+            self.type = user.get('__type', None)
+            self.type_id = int(user.get('__typeid', 0))
 
     user_auth_header_key = 'Appacitive-User-Auth'
 
     def __set_self(self, user):
         super(AppacitiveUser, self)._set_self(user)
+        self.type = user.get('__type', None)
+        self.type_id = int(user.get('__typeid', 0))
 
     @property
     def username(self):
