@@ -175,7 +175,7 @@ class AppacitiveDevice(AppacitiveObject):
         if api_response['status']['code'] != '200':
             return None
 
-        api_devices = api_response.get('users', None)
+        api_devices = api_response.get('devices', None)
 
         return_devices = []
         for device in api_devices:
