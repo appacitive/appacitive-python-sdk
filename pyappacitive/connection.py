@@ -1,4 +1,5 @@
 from pyappacitive.utilities import http, urlfactory
+from response import Response
 
 __author__ = 'sathley'
 
@@ -150,9 +151,12 @@ class AppacitiveConnection(Entity):
 
         url = urlfactory.connection_urls["create"](self.relation_type if self.relation_type is not None else self.relation_id)
         headers = urlfactory.get_headers()
-        resp = http.put(url, headers, json.dumps(self.get_dict()))
-        if resp['status']['code'] == '200':
-            self.__set_self(resp['connection'])
+
+        api_resp = http.put(url, headers, json.dumps(self.get_dict()))
+        response = Response(api_resp['status']['code'])
+        if response.status == '200':
+            self.__set_self(api_resp['connection'])
+        return response
 
     @classmethod
     def get(cls, relation_type, connection_id):
@@ -165,11 +169,11 @@ class AppacitiveConnection(Entity):
 
         url = urlfactory.connection_urls["get"](relation_type, connection_id)
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
+        api_response = http.get(url, headers)
+        if api_response['status']['code'] != '200':
             return None
 
-        return cls(response['connection'])
+        return cls(api_response['connection'])
 
     def delete(self):
 
@@ -181,7 +185,9 @@ class AppacitiveConnection(Entity):
 
         url = urlfactory.connection_urls["delete"](self.relation_type if self.relation_type is not None else self.relation_id, self.id)
         headers = urlfactory.get_headers()
-        return http.delete(url, headers)
+        api_resp = http.delete(url, headers)
+        response = Response(api_resp['status']['code'])
+        return response
 
     @classmethod
     def multi_delete(cls, relation_type, connection_ids):
@@ -199,7 +205,9 @@ class AppacitiveConnection(Entity):
         for connection_id in connection_ids:
             payload["idlist"].append(str(connection_id))
 
-        return http.post(url, headers, json.dumps(payload))
+        api_resp = http.post(url, headers, json.dumps(payload))
+        response = Response(api_resp['status']['code'])
+        return response
 
     @classmethod
     def multi_get(cls, relation_type, connection_ids):
@@ -212,15 +220,15 @@ class AppacitiveConnection(Entity):
 
         url = urlfactory.connection_urls["multiget"](relation_type, connection_ids)
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
+        api_response = http.get(url, headers)
+        if api_response['status']['code'] != '200':
             return None
 
-        return_conns = []
-        for conn in response['connections']:
-            conn1 = cls(conn)
-            return_conns.append(conn1)
-        return return_conns
+        return_connections = []
+        for connection in api_response['connections']:
+            appacitive_connection = cls(connection)
+            return_connections.append(appacitive_connection)
+        return return_connections
 
     def update(self):
 
@@ -233,9 +241,12 @@ class AppacitiveConnection(Entity):
         url = urlfactory.connection_urls["update"](self.relation_type if self.relation_type is not None else self.relation_id, self.id)
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
-        resp = http.post(url, headers, payload)
-        if resp['status']['code'] == '200':
-            self.__set_self(resp['connection'])
+        api_resp = http.post(url, headers, payload)
+        response = Response(api_resp['status']['code'])
+
+        if response.status == '200':
+            self.__set_self(api_resp['connection'])
+        return response
 
     @classmethod
     def find(cls, relation_type, query):
@@ -245,15 +256,17 @@ class AppacitiveConnection(Entity):
 
         url = urlfactory.connection_urls["find_all"](relation_type, query)
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
+        api_response = http.get(url, headers)
+        if api_response['status']['code'] != '200':
             return None
 
-        return_conns = []
-        for conn in response['connections']:
-            conn1 = cls(conn)
-            return_conns.append(conn1)
-        return return_conns
+        api_connections = api_response.get('connections', None)
+
+        return_connections = []
+        for connection in api_connections:
+            appacitive_connection = cls(connection)
+            return_connections.append(appacitive_connection)
+        return return_connections
 
     @classmethod
     def find_by_objects(cls, object_id_1, object_id_2, relation=None):
@@ -263,15 +276,17 @@ class AppacitiveConnection(Entity):
             url = urlfactory.connection_urls["find_for_objects_and_relation"](relation, object_id_1, object_id_2)
 
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
+        api_response = http.get(url, headers)
+        if api_response['status']['code'] != '200':
             return None
 
-        return_conns = []
-        for conn in response['connections']:
-            conn1 = cls(conn)
-            return_conns.append(conn1)
-        return return_conns
+        api_connections = api_response.get('connections', None)
+
+        return_connections = []
+        for connection in api_connections:
+            appacitive_connection = cls(connection)
+            return_connections.append(appacitive_connection)
+        return return_connections
 
     @classmethod
     def find_interconnects(cls, object_1_id, object_2_ids):
@@ -284,15 +299,17 @@ class AppacitiveConnection(Entity):
         for object_id in object_2_ids:
             payload['object2ids'].append(str(object_id))
 
-        response = http.post(url, headers, json.dumps(payload))
-        if response['status']['code'] != '200':
+        api_response = http.post(url, headers, json.dumps(payload))
+        if api_response['status']['code'] != '200':
             return None
 
-        return_conns = []
-        for conn in response['connections']:
-            conn1 = cls(conn)
-            return_conns.append(conn1)
-        return return_conns
+        api_connections = api_response.get('connections', None)
+
+        return_connections = []
+        for connection in api_connections:
+            appacitive_connection = cls(connection)
+            return_connections.append(appacitive_connection)
+        return return_connections
 
     @classmethod
     def find_by_object_and_label(cls, relation, object_id, label):
@@ -301,16 +318,17 @@ class AppacitiveConnection(Entity):
         url = urlfactory.connection_urls["find_all"](relation, object_id, query)
 
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
+        api_response = http.get(url, headers)
+        if api_response['status']['code'] != '200':
             return None
 
-        return_conns = []
-        for conn in response['connections']:
-            conn1 = cls(conn)
-            return_conns.append(conn1)
-        return return_conns
+        api_connections = api_response.get('connections', None)
 
+        return_connections = []
+        for connection in api_connections:
+            appacitive_connection = cls(connection)
+            return_connections.append(appacitive_connection)
+        return return_connections
 
 
 

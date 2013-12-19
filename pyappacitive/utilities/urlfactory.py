@@ -1,4 +1,5 @@
-from pyappacitive.utilities import settings
+from pyappacitive.utilities import settings, appcontext
+
 
 __author__ = 'sathley'
 
@@ -13,58 +14,51 @@ def get_headers(**headers_key):
     )
     return headers_key
 
+def get_user_headers(**headers_key):
+    headers_key.update({
+        "Appacitive-Apikey": settings.api_key,
+        "Appacitive-Environment": settings.environment,
+        "Appacitive-User-Auth": appcontext.ApplicationContext.get_user_token(),
+        "Content-Type": "application/json"}
+    )
+    return headers_key
+
 
 #region     OBJECT URLS
 
 
 def __object_create_url(object_type):
-    if object_type == 'user':
-        return __user_create_url()
     return '{0}/object/{1}'.format(base_url, object_type)
 
 
 def __object_delete_url(object_type, object_id):
-    if object_type == 'user':
-        return __user_delete_url(object_id)
     return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
 
 
 def __object_multidelete_url(object_type):
-    if object_type == 'user':
-        return __user_multidelete_url()
     return '{0}/object/{1}/bulkdelete'.format(base_url, object_type)
 
 
 def __object_delete_with_connections_url(object_type, object_id):
-    if object_type == 'user':
-        return __user_delete_with_connections_url(object_id)
     return '{0}/object/{1}/{2}?deleteconnections=true'.format(base_url,
                                                               object_type,
                                                               object_id)
 
 
 def __object_get_url(object_type, object_id):
-    if object_type == 'user':
-        return __user_get_url(object_id)
     return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
 
 
 def __object_multiget_url(object_type, object_ids):
-    if object_type == 'user':
-        return __user_multiget_url(object_ids)
     return '{0}/object/{1}/multiget/{2}'.format(base_url, object_type,
                                                 ','.join(object_ids))
 
 
 def __object_update_url(object_type, object_id):
-    if object_type == 'user':
-        return __user_update_url(object_id)
     return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
 
 
 def __object_find_all_url(object_type, query):
-    if object_type == 'user':
-        return __user_find_all_url(query)
     return '{0}/object/{1}/find/all?{2}'.format(base_url, object_type,
                                                 str(query))
 

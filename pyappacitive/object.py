@@ -4,6 +4,7 @@ __author__ = 'sathley'
 
 from pyappacitive.entity import Entity, object_system_properties
 from pyappacitive.error import *
+from response import Response
 import json
 
 # add support for update with revision number 
@@ -89,13 +90,14 @@ class AppacitiveObject(Entity):
 
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
-        resp = http.put(url, headers, json.dumps(self.get_dict()))
-        if resp['status']['code'] != '200':
-            return None
-        obj = resp.get('object', None)
-        if obj is None:
-            return resp
-        self.__set_self(resp['object'])
+
+        api_resp = http.put(url, headers, json.dumps(self.get_dict()))
+
+        response = Response(api_resp['status']['code'])
+
+        if response.status == '200':
+            self.__set_self(api_resp['object'])
+        return response
 
     def delete(self):
 
@@ -107,7 +109,10 @@ class AppacitiveObject(Entity):
 
         url = urlfactory.object_urls["delete"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
-        return http.delete(url, headers)
+
+        api_resp = http.delete(url, headers)
+        response = Response(api_resp['status']['code'])
+        return response
 
     def delete_with_connections(self):
 
@@ -120,7 +125,9 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["delete_with_connections"](self.type if self.type is not None else self.type_id,
                                                                self.id)
         headers = urlfactory.get_headers()
-        return http.delete(url, headers)
+        api_resp = http.delete(url, headers)
+        response = Response(api_resp['status']['code'])
+        return response
 
     @classmethod
     def multi_delete(cls, object_type, object_ids):
@@ -138,7 +145,9 @@ class AppacitiveObject(Entity):
         for object_id in object_ids:
             payload["idlist"].append(str(object_id))
 
-        return http.post(url, headers, json.dumps(payload))
+        api_resp = http.post(url, headers, json.dumps(payload))
+        response = Response(api_resp['status']['code'])
+        return response
 
     def update(self):
 
@@ -150,15 +159,13 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["update"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
-        resp = http.post(url, headers, payload)
-        if resp['status']['code'] != '200':
-            return None
 
-        obj = resp.get('object', None)
-        if obj is None:
-            return resp
+        api_resp = http.post(url, headers, payload)
+        response = Response(api_resp['status']['code'])
 
-        self.__set_self(obj)
+        if response.status == '200':
+            self.__set_self(api_resp['object'])
+        return response
 
     @classmethod
     def get(cls, object_type, object_id):
@@ -171,16 +178,12 @@ class AppacitiveObject(Entity):
 
         url = urlfactory.object_urls["get"](object_type, object_id)
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
+        api_response = http.get(url, headers)
 
-        if response['status']['code'] != '200':
+        if api_response['status']['code'] != '200':
             return None
 
-        obj = response.get('object', None)
-        if obj is None:
-            return response
-
-        return cls(response['object'])
+        return cls(api_response['object'])
 
     @classmethod
     def multi_get(cls, object_type, object_ids):
@@ -193,20 +196,18 @@ class AppacitiveObject(Entity):
 
         url = urlfactory.object_urls["multiget"](object_type, object_ids)
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
+        api_response = http.get(url, headers)
 
-        if response['status']['code'] != '200':
+        if api_response['status']['code'] != '200':
             return None
 
-        objs = response.get('objects', None)
-        if objs is None:
-            return response
+        api_objects = api_response.get('objects', None)
 
-        return_objs = []
-        for obj in objs:
-            obj1 = cls(obj)
-            return_objs.append(obj1)
-        return return_objs
+        return_objects = []
+        for obj in api_objects:
+            appacitive_object = cls(obj)
+            return_objects.append(appacitive_object)
+        return return_objects
 
     @classmethod
     def find(cls, object_type, query):
@@ -216,16 +217,14 @@ class AppacitiveObject(Entity):
 
         url = urlfactory.object_urls["find_all"](object_type, query)
         headers = urlfactory.get_headers()
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
+        api_response = http.get(url, headers)
+        if api_response['status']['code'] != '200':
             return None
 
-        objects = response.get('objects', None)
-        if objects is None:
-            return response
+        api_objects = api_response.get('objects', None)
 
-        return_objs = []
-        for obj in objects:
-            obj1 = cls(obj)
-            return_objs.append(obj1)
-        return return_objs
+        return_objects = []
+        for obj in api_objects:
+            appacitive_object = cls(obj)
+            return_objects.append(appacitive_object)
+        return return_objects
