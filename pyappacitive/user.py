@@ -1,9 +1,11 @@
 __author__ = 'sathley'
 
 from object import AppacitiveObject
-from entity import object_system_properties
+from entity import Entity, object_system_properties
 from error import ValidationError, UserAuthError
-from utilities import http, urlfactory, appcontext
+from utilities import http, urlfactory
+from utilities.appcontext import ApplicationContext
+from response import Response
 import json
 
 
@@ -11,14 +13,14 @@ def user_auth_required(func):
 
         def inner(*args, **kwargs):
 
-            if appcontext.ApplicationContext.get_user_token() is None:
+            if ApplicationContext.get_user_token() is None:
                 raise UserAuthError('No logged in user found. Call authenticate first.')
             return func(*args, **kwargs)
 
         return inner
 
 
-class AppacitiveUser(AppacitiveObject):
+class AppacitiveUser(Entity):
 
     def __init__(self, user=None):
         super(AppacitiveUser, self).__init__(user)
@@ -147,8 +149,16 @@ class AppacitiveUser(AppacitiveObject):
             if self.__getattribute__(field) is None:
                 raise ValidationError('{0} is a mandatory field.'.format(field))
 
-        resp = super(AppacitiveUser, self).create()
-        self.__set_self(resp['user'])
+        url = urlfactory.user_urls["create"]()
+        headers = urlfactory.get_user_headers()
+
+        api_resp = http.put(url, headers, json.dumps(self.get_dict()))
+
+        response = Response(api_resp['status']['code'])
+
+        if response.status == '200':
+            self.__set_self(api_resp['user'])
+        return response
 
     @classmethod
     @user_auth_required
@@ -159,15 +169,16 @@ class AppacitiveUser(AppacitiveObject):
 
         url = urlfactory.user_urls["get"]('user', user_id)
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
 
-        response = http.get(url, headers)
+        api_resp = http.get(url, headers)
 
-        if response['status']['code'] != '200':
+        api_response = Response(api_resp['status']['code'])
+
+        if api_response['status']['code'] != '200':
             return None
 
-        return cls(response['user'])
+        return cls(api_response['object'])
 
     @classmethod
     @user_auth_required
@@ -177,34 +188,38 @@ class AppacitiveUser(AppacitiveObject):
             raise ValidationError('Username is missing.')
 
         url = urlfactory.user_urls["get"]('user', username, 'username')
+        headers = urlfactory.get_user_headers()
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        api_resp = http.get(url, headers)
 
-        response = http.get(url, headers)
-
-        if response['status']['code'] != '200':
+        api_response = Response(api_resp['status']['code'])
+        if api_response['status']['code'] != '200':
             return None
 
-        return cls(response['user'])
+        return cls(api_response['object'])
 
     @classmethod
     @user_auth_required
     def get_logged_in_user(cls):
 
+        if ApplicationContext.get_logged_in_user() is not None:
+            return ApplicationContext.get_logged_in_user()
+
+        if ApplicationContext.get_user_token() is None:
+            raise UserAuthError('No logged in user found.')
+
         url = urlfactory.user_urls["get"]('user', 'me', 'token')
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
 
-        response = http.get(url, headers)
+        api_response = http.get(url, headers)
 
-        if response['status']['code'] != '200':
+        if api_response['status']['code'] != '200':
             return None
 
-        return cls(response['user'])
+        return cls(api_response['user'])
 
-    @classmethod
+    @staticmethod
     def authenticate(cls, username, password, expiry=None, attempts=None):
 
         url = urlfactory.user_urls['authenticate']()
@@ -218,22 +233,36 @@ class AppacitiveUser(AppacitiveObject):
         if attempts is not None:
             payload['attempts'] = attempts
 
-        response = http.post(url, headers, json.dumps(payload))
-        if response is not None and response['status']['code'] == '200':
-            appcontext.ApplicationContext.set_user_token(response['token'])
-            user = cls(response['user'])
-            appcontext.ApplicationContext.set_logged_in_user(user)
-            return user
-        return None
+        api_response = http.post(url, headers, json.dumps(payload))
+
+        response = Response(api_response['status']['code'])
+        if response.status == '200':
+            response.token = api_response['token']
+            ApplicationContext.set_user_token(response.token)
+            response.user = cls(api_response['user'])
+            ApplicationContext.set_logged_in_user(response.user)
+        return response
 
     @classmethod
     def multi_get(cls, user_ids):
-        response = AppacitiveObject.multi_get('user', user_ids)
-        users = []
-        for user in response['users']:
-            user1 = cls(user)
-            users.append(user1)
-        return users
+
+        if user_ids is None:
+            raise ValidationError('User ids are missing.')
+
+        url = urlfactory.user_urls["multiget"](user_ids)
+        headers = urlfactory.get_headers()
+        api_response = http.get(url, headers)
+
+        if api_response['status']['code'] != '200':
+            return None
+
+        api_users = api_response.get('users', None)
+
+        return_users = []
+        for user in api_users:
+            appacitive_user = cls(user)
+            return_users.append(appacitive_user)
+        return return_users
 
     @classmethod
     @user_auth_required
@@ -244,13 +273,11 @@ class AppacitiveUser(AppacitiveObject):
 
         url = urlfactory.user_urls["delete"]('user', user_id, delete_connections)
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
 
-        response = http.delete(url, headers)
-
-        if response['status']['code'] != '200':
-            return None
+        api_resp = http.delete(url, headers)
+        response = Response(api_resp['status']['code'])
+        return response
 
     @classmethod
     @user_auth_required
@@ -261,13 +288,11 @@ class AppacitiveUser(AppacitiveObject):
 
         url = urlfactory.user_urls["delete"]('user', username, 'username', delete_connections)
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
 
-        response = http.delete(url, headers)
-
-        if response['status']['code'] != '200':
-            return None
+        api_resp = http.delete(url, headers)
+        response = Response(api_resp['status']['code'])
+        return response
 
     @classmethod
     @user_auth_required
@@ -275,13 +300,11 @@ class AppacitiveUser(AppacitiveObject):
 
         url = urlfactory.user_urls["delete"]('user', 'me', 'token', delete_connections)
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
 
-        response = http.delete(url, headers)
-
-        if response['status']['code'] != '200':
-            return None
+        api_resp = http.delete(url, headers)
+        response = Response(api_resp['status']['code'])
+        return response
 
     def delete(self, delete_connections=False):
         return AppacitiveUser.delete_by_id(self.id, delete_connections)
@@ -295,27 +318,23 @@ class AppacitiveUser(AppacitiveObject):
             raise ValidationError('User id is missing.')
 
         url = urlfactory.user_urls["update"](self.id)
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
 
         payload = self.get_update_command()
-        response = http.post(url, headers, payload)
-        if response['status']['code'] != '200':
-            return None
+        api_resp = http.post(url, headers, payload)
+        response = Response(api_resp['status']['code'])
 
-        user = response.get('user', None)
-        if user is None:
-            return response
-
-        self.__set_self(user)
+        if response.status == '200':
+            self.__set_self(api_resp['user'])
+        return response
 
     @user_auth_required
     def update_password(self, old_password, new_password):
 
         url = urlfactory.user_urls["update_password"](self.id)
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
+        headers[AppacitiveUser.user_auth_header_key] = ApplicationContext.get_user_token()
 
         data = {
             "oldpassword": old_password,
@@ -323,9 +342,8 @@ class AppacitiveUser(AppacitiveObject):
         }
 
         json_payload = json.dumps(data)
-        response = http.post(url, headers, json_payload)
-        if response['status']['code'] != '200':
-            return None
+        api_response = http.post(url, headers, json_payload)
+        return Response(api_response['status']['code'])
 
     @staticmethod
     def send_reset_password_email(username, email_subject):
@@ -339,46 +357,43 @@ class AppacitiveUser(AppacitiveObject):
         }
 
         json_payload = json.dumps(data)
-        response = http.post(url, headers, json_payload)
-        if response['status']['code'] != '200':
-            return None
+        api_response = http.post(url, headers, json_payload)
+        return Response(api_response['status']['code'])
 
     @staticmethod
     @user_auth_required
     def validate_session():
         url = urlfactory.user_urls["validate_session"]()
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
         payload = {}
 
-        response = http.post(url, headers, json.dumps(payload))
-        if response['status']['code'] != '200':
-            return None
-        return response['result']
+        api_response = http.post(url, headers, json.dumps(payload))
+        response = Response(api_response['status']['code'])
+        if response.status == '200':
+            response.result = api_response['result']
+        return response
 
     @staticmethod
     @user_auth_required
     def invalidate_session():
         url = urlfactory.user_urls["invalidate_session"]()
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
         payload = {}
 
-        response = http.post(url, headers, json.dumps(payload))
-        if response['status']['code'] != '200':
-            return None
-        return response['result']
+        api_response = http.post(url, headers, json.dumps(payload))
+        response = Response(api_response['status']['code'])
+        if response.status == '200':
+            response.result = api_response['result']
+        return response
 
     @user_auth_required
     def checkin(self, latitude, longitude):
         url = urlfactory.user_urls["checkin"](self.id, latitude, longitude)
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
         payload = {}
 
-        response = http.post(url, headers, json.dumps(payload))
-        if response['status']['code'] != '200':
-            return None
+        api_response = http.post(url, headers, json.dumps(payload))
+        return Response(api_response['status']['code'])
 
     @classmethod
     @user_auth_required
@@ -386,20 +401,17 @@ class AppacitiveUser(AppacitiveObject):
 
         url = urlfactory.user_urls["find_all"](query)
 
-        headers = urlfactory.get_headers()
-        headers[AppacitiveUser.user_auth_header_key] = appcontext.ApplicationContext.get_user_token()
+        headers = urlfactory.get_user_headers()
 
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
+        api_response = http.get(url, headers)
+        if api_response['status']['code'] != '200':
             return None
 
-        users = response.get('users', None)
-        if users is None:
-            return response
+        api_users = api_response.get('users', None)
 
         return_users = []
-        for user in users:
-            user1 = cls(user)
-            return_users.append(user1)
+        for user in api_users:
+            appacitive_user = cls(user)
+            return_users.append(appacitive_user)
         return return_users
 
