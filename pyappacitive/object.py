@@ -11,7 +11,7 @@ import json
 # add fetch latest.call
 # add fields in get calls
 # add file upload support using urllib2
-# add imports in init.py
+## add imports in init.py
 ## stop sending None properties
 ## remove .idea folder
 # logging and nosetests
@@ -20,9 +20,11 @@ import json
 ## check tag filter method names
 ## push send - single function using kwargs
 # email- use kwargs
-# move object/conn/user class methods to new provider classes ?? Or make user inherit from entity and provide a objectbase class to the user
+## move object/conn/user class methods to new provider classes ?? Or make user inherit from entity and provide a objectbase class to the user
 ## properties in user/device should use setproperty and getproperty funcs to keep track of changes
 ## make properties private and provide a get all properties function
+# license, pylint, pyflakes, sphynx
+# return response status! result! and message from every function.?simply copy status into response
 
 
 class AppacitiveObject(Entity):
