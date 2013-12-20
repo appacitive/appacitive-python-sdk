@@ -23,6 +23,44 @@ class AppacitiveDevice(Entity):
         self.type = device.get('__type', None)
         self.type_id = int(device.get('__typeid', 0))
 
+    def get_dict(self):
+
+        native = {}
+        if self.type is not None:
+            native['__type'] = self.type
+
+        if self.type_id is not None:
+            native['__typeid'] = str(self.type_id)
+
+        if self.id is not None:
+            native['__id'] = str(self.id)
+
+        if self.revision is not 0:
+            native['__revision'] = str(self.revision)
+
+        if self.created_by is not None:
+            native['__createdby'] = self.created_by
+
+        if self.last_modified_by is not None:
+            native['__lastmodifiedby'] = self.last_modified_by
+
+        if self.utc_date_created is not None:
+            native['__utcdatecreated'] = self.utc_date_created
+
+        if self.utc_last_updated_date is not None:
+            native['__utclastupdateddate'] = self.utc_last_updated_date
+
+        tags = self.get_all_tags()
+        if tags is not None:
+            native['__tags'] = tags
+
+        attributes = self.get_all_attributes()
+        if attributes is not None:
+            native['__attributes'] = attributes
+
+        native.update(self.get_all_properties())
+        return native
+
     @property
     def devicetype(self):
         return self.get_property('devicetype')
@@ -90,9 +128,9 @@ class AppacitiveDevice(Entity):
 
         api_resp = http.put(url, headers, json.dumps(self.get_dict()))
 
-        response = Response(api_resp['status']['code'])
+        response = Response(api_resp['status'])
 
-        if response.status == '200':
+        if response.status_code == '200':
             self.__set_self(api_resp['device'])
         return response
 
@@ -106,14 +144,13 @@ class AppacitiveDevice(Entity):
 
         headers = urlfactory.get_headers()
 
-        api_resp = http.get(url, headers)
+        api_response = http.get(url, headers)
 
-        api_response = Response(api_resp['status']['code'])
+        response = Response(api_response['status'])
 
-        if api_response['status']['code'] != '200':
-            return None
-
-        return cls(api_response['device'])
+        if response.status_code == '200':
+            response.device = cls(api_response['device'])
+        return response
 
     @classmethod
     def multi_get(cls, device_ids):
@@ -125,18 +162,19 @@ class AppacitiveDevice(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        if api_response['status']['code'] != '200':
-            return None
+        response = Response(api_response['status'])
+        if response.status_code == '200':
 
-        api_devices = api_response.get('devices', None)
+            api_devices = api_response.get('devices', None)
 
-        return_devices = []
-        for device in api_devices:
-            appacitive_device = cls(device)
-            return_devices.append(appacitive_device)
-        return return_devices
+            return_devices = []
+            for device in api_devices:
+                appacitive_device = cls(device)
+                return_devices.append(appacitive_device)
+            response.devices = return_devices
+            return response
 
-    def update(self):
+    def update(self, with_revision=False):
         if self.type is None and self.type_id <= 0:
             raise ValidationError('Provide at least one among type name or type id.')
 
@@ -144,11 +182,15 @@ class AppacitiveDevice(Entity):
             raise ValidationError('Device id is missing.')
 
         url = urlfactory.device_urls["update"](self.id)
+
+        if with_revision:
+            url += '?revision=' + self.revision
+
         headers = urlfactory.get_user_headers()
 
         payload = self.get_update_command()
         api_resp = http.post(url, headers, payload)
-        response = Response(api_resp['status']['code'])
+        response = Response(api_resp['status'])
 
         if response.status == '200':
             self.__set_self(api_resp['device'])
@@ -165,7 +207,7 @@ class AppacitiveDevice(Entity):
         headers = urlfactory.get_user_headers()
 
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status']['code'])
+        response = Response(api_resp['status'])
         return response
 
     def delete(self, delete_connections=False):
@@ -179,13 +221,14 @@ class AppacitiveDevice(Entity):
         headers = urlfactory.get_user_headers()
 
         api_response = http.get(url, headers)
-        if api_response['status']['code'] != '200':
-            return None
+        response = Response(api_response['status'])
+        if response.status_code == '200':
 
-        api_devices = api_response.get('devices', None)
+            api_devices = api_response.get('devices', None)
 
-        return_devices = []
-        for device in api_devices:
-            appacitive_device = cls(device)
-            return_devices.append(appacitive_device)
-        return return_devices
+            return_devices = []
+            for device in api_devices:
+                appacitive_device = cls(device)
+                return_devices.append(appacitive_device)
+            response.devices = return_devices
+            return response

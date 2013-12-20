@@ -4,8 +4,6 @@ __author__ = 'sathley'
 """
 from pyappacitive.utilities import settings, appcontext
 
-
-
 base_url = settings.api_base_url
 
 

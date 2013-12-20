@@ -18,7 +18,7 @@ The object api allows you to store, retrieve and manage all the data that you st
     obj.set_property('geofield', '10.10,20.20')
     obj.set_property('multifield', ['val1', 'val2', 'val3'])
 
-    obj.create()
+    response = obj.create()
 
     assert obj.id is not None
 
