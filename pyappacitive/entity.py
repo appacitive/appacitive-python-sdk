@@ -85,13 +85,13 @@ class Entity(object):
 
     def set_attribute(self, attribute_key, attribute_value):
         self.__attributes[attribute_key] = attribute_value
-        self.__attributes_changed[attribute_key]= attribute_value
+        self.__attributes_changed[attribute_key] = attribute_value
 
     def get_attribute(self, attribute_key):
         return self.__attributes.get(attribute_key, None)
 
     def remove_attribute(self, attribute_key):
-        if attribute_key in self._attributes:
+        if attribute_key in self.__attributes:
             self.set_attribute(attribute_key, None)
 
     def add_tag(self, tag):

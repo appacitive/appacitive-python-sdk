@@ -29,8 +29,8 @@ class AppacitiveConnection(Entity):
     def __init__(self, connection=None):
         self.relation_type = None
         self.relation_id = 0
-        self.endpoint_a = None
-        self.endpoint_b = None
+        self.endpoint_a = AppacitiveEndpoint()
+        self.endpoint_b = AppacitiveEndpoint()
 
         if isinstance(connection, str):
 
@@ -98,7 +98,7 @@ class AppacitiveConnection(Entity):
             native['__attributes'] = attributes
 
         properties = self.get_all_properties()
-        for property_name, property_value in properties:
+        for property_name, property_value in properties.iteritems():
             native[property_name] = property_value
 
         native['__endpointa'] = {
@@ -135,13 +135,13 @@ class AppacitiveConnection(Entity):
         if self.relation_type is None and self.relation_id <= 0:
             raise ValidationError('Provide at least one among relation name or relation id.')
 
-        if self.endpoint_a['objectid'] is None and self.endpoint_a['object'] is None:
+        if self.endpoint_a.objectid is 0 and self.endpoint_a.object is None:
             raise ValidationError('Provide object or objectid for endpoint a.')
 
-        if self.endpoint_b['objectid'] is None and self.endpoint_b['object'] is None:
+        if self.endpoint_b.objectid is 0 and self.endpoint_b.object is None:
             raise ValidationError('Provide object or objectid for endpoint b.')
 
-        if self.endpoint_a['label'] is None and self.endpoint_b['label'] is None:
+        if self.endpoint_a.label is None and self.endpoint_b.label is None:
             raise ValidationError('Label on both endpoints is mandatory.')
 
 
@@ -205,7 +205,7 @@ class AppacitiveConnection(Entity):
         for connection_id in connection_ids:
             payload["idlist"].append(str(connection_id))
 
-        api_resp = http.post(url, headers, json.dumps(payload))
+        api_resp = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_resp['status'])
         return response
 
@@ -247,7 +247,7 @@ class AppacitiveConnection(Entity):
 
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
-        api_resp = http.post(url, headers, payload)
+        api_resp = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_resp['status'])
 
         if response.status_code == '200':

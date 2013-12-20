@@ -189,7 +189,7 @@ class AppacitiveDevice(Entity):
         headers = urlfactory.get_user_headers()
 
         payload = self.get_update_command()
-        api_resp = http.post(url, headers, payload)
+        api_resp = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_resp['status'])
 
         if response.status_code == '200':

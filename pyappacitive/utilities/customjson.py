@@ -27,7 +27,7 @@ def serialize(obj):
     reloaded_json_object = loads(serialized_json)
 
     # oh yeaaaaaahh !!!!!
-    stringified_json_object = {k: str(v) if not isinstance(v, types.ListType) else v for k, v in
+    stringified_json_object = {k: str(v) if not isinstance(v, types.ListType) and not isinstance(v, types.DictionaryType) else v for k, v in
                                reloaded_json_object.iteritems()}
 
     # Re serialize object into json for magnificence level over 9000
