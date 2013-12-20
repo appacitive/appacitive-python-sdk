@@ -141,7 +141,7 @@ class AppacitiveConnection(Entity):
         return response
 
     @classmethod
-    def get(cls, relation_type, connection_id):
+    def get(cls, relation_type, connection_id, fields=None):
 
         if relation_type is None:
             raise ValidationError('Relation type is missing.')
@@ -150,6 +150,10 @@ class AppacitiveConnection(Entity):
             raise ValidationError('Connection id is missing.')
 
         url = urlfactory.connection_urls["get"](relation_type, connection_id)
+
+        if fields is not None:
+            url += '?fields=' + ','.join(fields)
+
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = Response(api_response['status'])
@@ -202,7 +206,7 @@ class AppacitiveConnection(Entity):
         return response
 
     @classmethod
-    def multi_get(cls, relation_type, connection_ids):
+    def multi_get(cls, relation_type, connection_ids, fields=None):
 
         if relation_type is None:
             raise ValidationError('Relation type is missing.')
@@ -211,6 +215,8 @@ class AppacitiveConnection(Entity):
             raise ValidationError('Connection ids are missing.')
 
         url = urlfactory.connection_urls["multiget"](relation_type, connection_ids)
+        if fields is not None:
+            url += '?fields=' + ','.join(fields)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 

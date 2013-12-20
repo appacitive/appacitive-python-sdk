@@ -6,7 +6,7 @@ from pyappacitive.error import *
 from utilities import customjson
 from response import Response
 
-# add fetch latest.call
+## add fetch latest.call
 # add fields to get in get calls
 # add file upload support using urllib2
 # logging and nosetests
@@ -180,7 +180,7 @@ class AppacitiveObject(Entity):
         return response
 
     @classmethod
-    def get(cls, object_type, object_id):
+    def get(cls, object_type, object_id, fields=None):
 
         if object_type is None:
             raise ValidationError('Type is missing.')
@@ -189,6 +189,8 @@ class AppacitiveObject(Entity):
             raise ValidationError('Object id is missing.')
 
         url = urlfactory.object_urls["get"](object_type, object_id)
+        if fields is not None:
+            url += '?fields=' + ','.join(fields)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
@@ -208,7 +210,7 @@ class AppacitiveObject(Entity):
             self._set_self(api_response['object'])
 
     @classmethod
-    def multi_get(cls, object_type, object_ids):
+    def multi_get(cls, object_type, object_ids, fields=None):
 
         if object_type is None:
             raise ValidationError('Type is missing.')
@@ -217,6 +219,8 @@ class AppacitiveObject(Entity):
             raise ValidationError('Object ids are missing.')
 
         url = urlfactory.object_urls["multiget"](object_type, object_ids)
+        if fields is not None:
+            url += '?fields=' + ','.join(fields)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
@@ -256,12 +260,16 @@ class AppacitiveObject(Entity):
             return response
 
     @classmethod
-    def find_in_between_two_articles(cls, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b):
+    def find_in_between_two_objects(cls, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b, fields=None):
 
         if object_type is None:
             raise ValidationError('Type is missing.')
 
-        url = urlfactory.object_urls["find_between_two_articles"](object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b)
+        url = urlfactory.object_urls["find_between_two_objects"](object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b)
+
+        if fields is not None:
+            url += '?fields=' + ','.join(fields)
+
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 

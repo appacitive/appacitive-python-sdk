@@ -66,7 +66,7 @@ def __object_find_all_url(object_type, query):
                                                 str(query))
 
 
-def __object_find_between_two_articles_url(object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b):
+def __object_find_between_two_objects_url(object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b):
     return '{0}/object/{1}/{2}/{3}/{4}/{5}/{6}/{7}'.format(base_url, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b)
 
 #endregion
@@ -289,7 +289,7 @@ object_urls = {
     "multiget": __object_multiget_url,
     "update": __object_update_url,
     "find_all": __object_find_all_url,
-    "find_between_two_articles": __object_find_between_two_articles_url
+    "find_between_two_objects": __object_find_between_two_objects_url
 }
 
 connection_urls = {
