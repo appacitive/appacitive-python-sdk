@@ -13,7 +13,7 @@ from connection import AppacitiveConnection
 from user import AppacitiveUser
 from device import AppacitiveDevice
 
-from query import FilterBase, PropertyFilter, TagFilter, AttributeFilter, AggregateFilter
+from query import PropertyFilter, TagFilter, AttributeFilter, AggregateFilter
 from query import BooleanOperator
 from query import AppacitiveQuery
 

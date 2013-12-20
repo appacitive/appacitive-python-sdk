@@ -131,6 +131,7 @@ class AppacitiveDevice(Entity):
 
         if response.status_code == '200':
             self.__set_self(api_resp['device'])
+            self._reset_update_commands()
         return response
 
     @classmethod

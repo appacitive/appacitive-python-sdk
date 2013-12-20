@@ -11,7 +11,6 @@ from pyappacitive.object import AppacitiveObject
 class AppacitiveConnection(Entity):
 
     def __init__(self, connection=None):
-        super(AppacitiveConnection, self).__init__(connection)
         self.relation_type = None
         self.relation_id = 0
         self.endpoint_a = {
@@ -26,6 +25,21 @@ class AppacitiveConnection(Entity):
             'objectid': None,
             'object': None
         }
+
+        if isinstance(connection, str):
+
+            super(AppacitiveConnection, self).__init__()
+            self.relation_type = connection
+            self.relation_id = 0
+            return
+        if isinstance(connection, int):
+            super(AppacitiveConnection, self).__init__()
+            self.relation_type = None
+            self.relation_id = connection
+            return
+
+        super(AppacitiveConnection, self).__init__(connection)
+
         if connection is not None:
             self.relation_type = connection.get('__relationtype', None)
             self.relation_id = int(connection.get('__relationid', 0))
@@ -144,6 +158,7 @@ class AppacitiveConnection(Entity):
         if self.endpoint_a['label'] is None and self.endpoint_b['label'] is None:
             raise ValidationError('Label on both endpoints is mandatory.')
 
+
         url = urlfactory.connection_urls["create"](self.relation_type if self.relation_type is not None else self.relation_id)
         headers = urlfactory.get_headers()
 
@@ -152,6 +167,7 @@ class AppacitiveConnection(Entity):
         response = Response(api_resp['status'])
         if response.status_code == '200':
             self.__set_self(api_resp['connection'])
+            self._reset_update_commands()
         return response
 
     @classmethod

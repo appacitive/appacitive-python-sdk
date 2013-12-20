@@ -1,5 +1,4 @@
 from pyappacitive.utilities import http, urlfactory
-from pyappacitive.utilities.customjson import CustomEncoder
 __author__ = 'sathley'
 
 from pyappacitive.entity import Entity, object_system_properties
@@ -17,15 +16,29 @@ import datetime
 # email- use kwargs
 # give proper structure to pushnotification
 # license, pylint, pyflakes, sphynx
+# session token management
 
 
 class AppacitiveObject(Entity):
 
     def __init__(self, obj=None):
-        super(AppacitiveObject, self).__init__(obj)
+
         self.type = None
         self.type_id = 0
 
+        if isinstance(obj, str):
+
+            super(AppacitiveObject, self).__init__()
+            self.type = obj
+            self.type_id = 0
+            return
+        if isinstance(obj, int):
+            super(AppacitiveObject, self).__init__()
+            self.type = None
+            self.type_id = obj
+            return
+
+        super(AppacitiveObject, self).__init__(obj)
         if obj is not None:
             self.type = obj.get('__type', None)
             self.type_id = int(obj.get('__typeid', 0))
@@ -89,6 +102,8 @@ class AppacitiveObject(Entity):
 
         if response.status_code == '200':
             self.__set_self(api_resp['object'])
+            self._reset_update_commands()
+
         return response
 
     def delete(self):
@@ -137,7 +152,7 @@ class AppacitiveObject(Entity):
         for object_id in object_ids:
             payload["idlist"].append(str(object_id))
 
-        api_resp = http.post(url, headers, json.dumps(payload))
+        api_resp = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_resp['status'])
         return response
 
@@ -156,7 +171,7 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
 
-        api_resp = http.post(url, headers, payload)
+        api_resp = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_resp['status'])
 
         if response.status_code == '200':

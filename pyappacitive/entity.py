@@ -24,6 +24,12 @@ class Entity(object):
         self.utc_last_updated_date = None
         self.last_modified_by = None
 
+        # update observers
+        self.__properties_changed = {}
+        self.__attributes_changed = {}
+        self.__tags_added = []
+        self.__tags_removed = []
+
         if entity is not None:
 
             self.id = int(entity.get('__id', 0))
@@ -39,11 +45,7 @@ class Entity(object):
                 if k not in connection_system_properties:
                     self.__properties[k] = v
 
-        # update observers
-        self.__properties_changed = {}
-        self.__attributes_changed = {}
-        self.__tags_added = []
-        self.__tags_removed = []
+
 
     def _set_self(self, obj):
 
@@ -119,4 +121,11 @@ class Entity(object):
         for k, v in self.__properties_changed.iteritems():
             update_command[k] = v
         return update_command
+
+    def _reset_update_commands(self):
+        # update observers
+        self.__properties_changed = {}
+        self.__attributes_changed = {}
+        self.__tags_added = []
+        self.__tags_removed = []
 
