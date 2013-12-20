@@ -8,23 +8,29 @@ from pyappacitive.error import *
 from pyappacitive.object import AppacitiveObject
 
 
+class AppacitiveEndpoint(object):
+    def __init__(self, endpoint=None):
+        if endpoint is not None:
+            self.label = endpoint.get('label', None)
+            self.type = endpoint.get('type', None)
+            self.objectid = endpoint.get('objectid', 0)
+            obj = endpoint.get('object', None)
+            if obj is not None:
+                self.object = AppacitiveObject(obj)
+        else:
+            self.label = None
+            self.object = None
+            self.type = None
+            self.objectid = 0
+
+
 class AppacitiveConnection(Entity):
 
     def __init__(self, connection=None):
         self.relation_type = None
         self.relation_id = 0
-        self.endpoint_a = {
-            'label': None,
-            'type': None,
-            'objectid': None,
-            'object': None
-        }
-        self.endpoint_b = {
-            'label': None,
-            'type': None,
-            'objectid': None,
-            'object': None
-        }
+        self.endpoint_a = None
+        self.endpoint_b = None
 
         if isinstance(connection, str):
 
@@ -44,20 +50,10 @@ class AppacitiveConnection(Entity):
             self.relation_type = connection.get('__relationtype', None)
             self.relation_id = int(connection.get('__relationid', 0))
             if '__endpointa' in connection:
-                self.endpoint_a['label'] = connection['__endpointa']['label'] if 'label' in connection['__endpointa'] else None
-                self.endpoint_a['type'] = connection['__endpointa']['type'] if 'type' in connection['__endpointa'] else None
-                self.endpoint_a['objectid'] = int(connection['__endpointa']['objectid']) if 'objectid' in connection['__endpointa'] else None
-
-                if 'object' in connection['__endpointa']:
-                    self.endpoint_a['object'] = AppacitiveObject(connection['__endpointa']['object'])
+                self.endpoint_a = AppacitiveEndpoint(connection['__endpointa'])
 
             if '__endpointb' in connection:
-                self.endpoint_b['label'] = connection['__endpointb']['label'] if 'label' in connection['__endpointb'] else None
-                self.endpoint_b['type'] = connection['__endpointb']['type'] if 'type' in connection['__endpointb'] else None
-                self.endpoint_b['objectid'] = int(connection['__endpointb']['objectid']) if 'objectid' in connection['__endpointb'] else None
-
-                if 'object' in connection['__endpointb']:
-                    self.endpoint_b['object'] = AppacitiveObject(connection['__endpointb']['object'])
+                self.endpoint_b = AppacitiveEndpoint(connection['__endpointb'])
 
     @staticmethod
     def _get_object_dict(obj):
@@ -106,17 +102,17 @@ class AppacitiveConnection(Entity):
             native[property_name] = property_value
 
         native['__endpointa'] = {
-            'label': self.endpoint_a['label'],
-            'type': self.endpoint_a['type'],
-            'objectid': str(self.endpoint_a['objectid']),
-            'object': self._get_object_dict(self.endpoint_a['object'])
+            'label': self.endpoint_a.label,
+            'type': self.endpoint_a.type,
+            'objectid': str(self.endpoint_a.objectid),
+            'object': self._get_object_dict(self.endpoint_a.object)
         }
 
         native['__endpointb'] = {
-            'label': self.endpoint_b['label'],
-            'type': self.endpoint_b['type'],
-            'objectid': str(self.endpoint_b['objectid']),
-            'object': self._get_object_dict(self.endpoint_b['object'])
+            'label': self.endpoint_b.label,
+            'type': self.endpoint_b.type,
+            'objectid': str(self.endpoint_b.objectid),
+            'object': self._get_object_dict(self.endpoint_b.object)
         }
 
         return native
@@ -129,20 +125,10 @@ class AppacitiveConnection(Entity):
         self.relation_id = int(connection.get('__relationid', 0))
 
         if '__endpointa' in connection:
-                self.endpoint_a['label'] = connection['__endpointa']['label'] if 'label' in connection['__endpointa'] else None
-                self.endpoint_a['type'] = connection['__endpointa']['type'] if 'type' in connection['__endpointa'] else None
-                self.endpoint_a['objectid'] = int(connection['__endpointa']['objectid']) if 'objectid' in connection['__endpointa'] else None
-
-                if 'object' in connection['__endpointa']:
-                    self.endpoint_a['object'] = AppacitiveObject(connection['__endpointa']['object'])
+                self.endpoint_a = AppacitiveEndpoint(connection['__endpointa'])
 
         if '__endpointb' in connection:
-                self.endpoint_b['label'] = connection['__endpointb']['label'] if 'label' in connection['__endpointb'] else None
-                self.endpoint_b['type'] = connection['__endpointb']['type'] if 'type' in connection['__endpointb'] else None
-                self.endpoint_b['objectid'] = int(connection['__endpointb']['objectid']) if 'objectid' in connection['__endpointb'] else None
-
-                if 'object' in connection['__endpointb']:
-                    self.endpoint_b['object'] = AppacitiveObject(connection['__endpointb']['object'])
+                self.endpoint_b = AppacitiveEndpoint(connection['__endpointb'])
 
     def create(self):
 
@@ -354,6 +340,8 @@ class AppacitiveConnection(Entity):
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
             return response
+
+
 
 
 

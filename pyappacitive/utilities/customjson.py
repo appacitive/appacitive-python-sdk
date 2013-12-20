@@ -13,7 +13,7 @@ class CustomEncoder(JSONEncoder):
             if isinstance(obj, datetime.datetime) is False:
                 return str(obj)
             else:
-                # convert datetime to iso and add the trailing 0Z
+                # convert datetime to appacitive-iso
                 return obj.strftime('%Y-%m-%dT%H:%M:%S.%f') + '0Z'
 
         return JSONEncoder.default(self, obj)
@@ -23,7 +23,7 @@ def serialize(obj):
     # Custom encode object for datetime magnificence
     serialized_json = dumps(obj, cls=CustomEncoder)
 
-    # Reload json string to perform further magnificence into the unknown realm
+    # Reload json string to perform further magnificence from the unknown realm
     reloaded_json_object = loads(serialized_json)
 
     # oh yeaaaaaahh !!!!!

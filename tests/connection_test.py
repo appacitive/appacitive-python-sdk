@@ -10,8 +10,11 @@ def create_connection_with_object_ids_test():
     obj1 = AppacitiveObject('object')
     obj1.create()
 
-    conn = AppacitiveConnection('')
-    conn.set_property()
+    conn = AppacitiveConnection('sibling')
+    conn.set_property('field1', 'hello')
+    conn.set_property('field2', 101)
+
+    conn.endpoint_a['id']
     resp = conn.create()
 
     assert resp.status_code == '200'
