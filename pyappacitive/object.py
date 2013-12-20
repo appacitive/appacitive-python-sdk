@@ -5,17 +5,19 @@ from pyappacitive.entity import Entity, object_system_properties
 from pyappacitive.error import *
 from utilities import customjson
 from response import Response
-import datetime
 
 # add fetch latest.call
-# add fields in get calls
+# add fields to get in get calls
 # add file upload support using urllib2
-# add imports in init.py
+# add imports properly in init.py
 # logging and nosetests
-## push send - single function using kwargs
 # email- use kwargs
 # give proper structure to pushnotification
-# license, pylint, pyflakes, sphynx
+# add license file
+# run pylint, pyflakes, sphynx
+# session token management
+# add in between 2 articles search in object.py
+# add remaining connection searches
 # session token management
 
 
