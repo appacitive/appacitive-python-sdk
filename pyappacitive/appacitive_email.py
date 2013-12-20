@@ -2,7 +2,7 @@ __author__ = 'sathley'
 
 from pyappacitive.utilities import http, urlfactory
 
-import json
+from utilities import customjson
 
 
 class AppacitiveEmail(object):
@@ -31,7 +31,7 @@ class AppacitiveEmail(object):
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()
 
-        resp = http.post(url, headers, json.dumps(payload))
+        resp = http.post(url, headers, customjson.serialize(payload))
         return resp
 
     @staticmethod
@@ -57,6 +57,6 @@ class AppacitiveEmail(object):
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()
 
-        resp = http.post(url, headers, json.dumps(payload))
+        resp = http.post(url, headers, customjson.serialize(payload))
         return resp
 

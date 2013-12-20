@@ -1,5 +1,5 @@
 __author__ = 'sathley'
-from json import JSONEncoder, dumps
+from json import JSONEncoder, dumps, loads
 import datetime
 
 
@@ -12,8 +12,15 @@ class CustomEncoder(JSONEncoder):
             if isinstance(obj, datetime.datetime) is False:
                 return str(obj)
             else:
-                # convert datetime to iso and add  the trailing 0Z
+                # convert datetime to iso and add the trailing 0Z
                 return str(obj.isoformat()) + '0Z'
 
         return JSONEncoder.default(self, obj)
 
+
+def serialize(obj):
+    return dumps(obj, cls=CustomEncoder)
+
+
+def deserialize(obj):
+    return loads(obj)

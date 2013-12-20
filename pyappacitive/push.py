@@ -1,8 +1,8 @@
 __author__ = 'sathley'
 
-from utilities import urlfactory, http
+from utilities import urlfactory, http, customjson
 from error import ValidationError
-import json
+from response import Response
 
 
 class PushNotifications(object):
@@ -27,9 +27,11 @@ class PushNotifications(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = json.dumps(push_request)
+        payload = customjson.serialize(push_request)
 
-        response = http.post(url, headers, payload)
+        api_response = http.post(url, headers, payload)
+        return Response(api_response['status'])
+
 
     @staticmethod
     def send_to_channels(channels, platform_options=None, data=None, expire_after=None):
@@ -49,9 +51,10 @@ class PushNotifications(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = json.dumps(push_request)
+        payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
+        return Response(response['status'])
 
     @staticmethod
     def send_to_specific_devices(device_ids, platform_options=None, data=None, expire_after=None):
@@ -71,9 +74,10 @@ class PushNotifications(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = json.dumps(push_request)
+        payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
+        return Response(response['status'])
 
     @staticmethod
     def send_using_query(query, platform_options=None, data=None, expire_after=None):
@@ -93,9 +97,10 @@ class PushNotifications(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = json.dumps(push_request)
+        payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
+        return Response(response['status'])
 
     @staticmethod
     def send(platform_options, data, expire_after, **kwargs):
@@ -115,10 +120,10 @@ class PushNotifications(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = json.dumps(push_request)
+        payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
-        return response['status']
+        return Response(response['status'])
 
     @staticmethod
     def get_notification_by_id(notification_id):
@@ -129,7 +134,11 @@ class PushNotifications(object):
         url = urlfactory.push_urls['get'](notification_id)
         headers = urlfactory.get_headers()
 
-        response = http.get(url, headers)
+        api_response = http.get(url, headers)
+        response = Response(api_response['status'])
+
+        if response.status_code == '200':
+            response.notification = api_response['pushnotification']
 
     @staticmethod
     def get_all_notification():
@@ -137,6 +146,10 @@ class PushNotifications(object):
         url = urlfactory.push_urls['get_all']()
         headers = urlfactory.get_headers()
 
-        response = http.get(url, headers)
+        api_response = http.get(url, headers)
+        response = Response(api_response['status'])
+
+        if response.status_code == '200':
+            response.notification = api_response['pushnotifications']
 
 

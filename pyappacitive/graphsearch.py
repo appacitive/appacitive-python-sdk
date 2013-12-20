@@ -2,7 +2,7 @@ from pyappacitive.utilities import http, urlfactory
 
 __author__ = 'sathley'
 
-import json
+from utilities import customjson
 
 
 class GraphSearch(object):
@@ -17,7 +17,7 @@ class GraphSearch(object):
             'ids': id_list,
             'placeholders': query_dict
         }
-        resp = http.post(url, headers, json.dumps(payload))
+        resp = http.post(url, headers, customjson.serialize(payload))
         if resp['status']['code'] != '200':
             return None
         for k, v in resp.iteritems():
@@ -32,7 +32,7 @@ class GraphSearch(object):
             'placeholders': query_dict
         }
 
-        resp = http.post(url, headers, json.dumps(payload))
+        resp = http.post(url, headers, customjson.serialize(payload))
         if resp['status']['code'] == '200':
             return resp['ids']
 

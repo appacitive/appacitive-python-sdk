@@ -3,9 +3,8 @@ __author__ = 'sathley'
 from object import AppacitiveObject
 from entity import Entity, object_system_properties
 from error import ValidationError, UserAuthError
-from utilities import http, urlfactory, appcontext
+from utilities import http, urlfactory, appcontext, customjson
 from response import Response
-import json
 
 
 class AppacitiveDevice(Entity):
@@ -126,7 +125,7 @@ class AppacitiveDevice(Entity):
         url = urlfactory.device_urls["register"]()
         headers = urlfactory.get_headers()
 
-        api_resp = http.put(url, headers, json.dumps(self.get_dict()))
+        api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = Response(api_resp['status'])
 
@@ -192,7 +191,7 @@ class AppacitiveDevice(Entity):
         api_resp = http.post(url, headers, payload)
         response = Response(api_resp['status'])
 
-        if response.status == '200':
+        if response.status_code == '200':
             self.__set_self(api_resp['device'])
         return response
 

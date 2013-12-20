@@ -1,6 +1,6 @@
 __author__ = 'sushant'
 
-import json
+from . import customjson
 import requests
 import logging
 
@@ -33,5 +33,5 @@ def get(url, headers):
 
 
 def to_dict(response):
-    return json.loads(response.content.decode('utf-8-sig'))
+    return customjson.deserialize(response.content.decode('utf-8-sig'))
 

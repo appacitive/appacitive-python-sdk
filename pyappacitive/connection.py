@@ -1,15 +1,10 @@
-from pyappacitive.utilities import http, urlfactory
+from pyappacitive.utilities import http, urlfactory, customjson
 from response import Response
 
 __author__ = 'sathley'
 
-# remove values.py and figure out data type from Python type
-# use dict.get to set up objects
-# add logging
-
 from pyappacitive.entity import Entity, connection_system_properties
 from pyappacitive.error import *
-import json
 from pyappacitive.object import AppacitiveObject
 
 
@@ -152,7 +147,7 @@ class AppacitiveConnection(Entity):
         url = urlfactory.connection_urls["create"](self.relation_type if self.relation_type is not None else self.relation_id)
         headers = urlfactory.get_headers()
 
-        api_resp = http.put(url, headers, json.dumps(self.get_dict()))
+        api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = Response(api_resp['status'])
         if response.status_code == '200':
@@ -311,7 +306,7 @@ class AppacitiveConnection(Entity):
         for object_id in object_2_ids:
             payload['object2ids'].append(str(object_id))
 
-        api_response = http.post(url, headers, json.dumps(payload))
+        api_response = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_response['status'])
         if response.status_code == '200':
 

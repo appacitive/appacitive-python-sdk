@@ -3,10 +3,9 @@ __author__ = 'sathley'
 from object import AppacitiveObject
 from entity import Entity, object_system_properties
 from error import ValidationError, UserAuthError
-from utilities import http, urlfactory
+from utilities import http, urlfactory, customjson
 from utilities.appcontext import ApplicationContext
 from response import Response
-import json
 
 
 def user_auth_required(func):
@@ -197,7 +196,7 @@ class AppacitiveUser(Entity):
         url = urlfactory.user_urls["create"]()
         headers = urlfactory.get_user_headers()
 
-        api_resp = http.put(url, headers, json.dumps(self.get_dict()))
+        api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = Response(api_resp['status'])
 
@@ -281,7 +280,7 @@ class AppacitiveUser(Entity):
         if attempts is not None:
             payload['attempts'] = attempts
 
-        api_response = http.post(url, headers, json.dumps(payload))
+        api_response = http.post(url, headers, customjson.serialize(payload))
 
         response = Response(api_response['status'])
         if response.status_code == '200':
@@ -376,7 +375,7 @@ class AppacitiveUser(Entity):
         api_resp = http.post(url, headers, payload)
         response = Response(api_resp['status'])
 
-        if response.status == '200':
+        if response.status_code == '200':
             self.__set_self(api_resp['user'])
         return response
 
@@ -388,12 +387,12 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
         headers[AppacitiveUser.user_auth_header_key] = ApplicationContext.get_user_token()
 
-        data = {
+        payload = {
             "oldpassword": old_password,
             "newpassword": new_password
         }
 
-        json_payload = json.dumps(data)
+        json_payload = customjson.serialize(payload)
         api_response = http.post(url, headers, json_payload)
         return Response(api_response['status'])
 
@@ -403,12 +402,12 @@ class AppacitiveUser(Entity):
         url = urlfactory.user_urls["send_reset_password_email"]()
         headers = urlfactory.get_headers()
 
-        data = {
+        payload = {
             "username": username,
             "subject": email_subject
         }
 
-        json_payload = json.dumps(data)
+        json_payload = customjson.serialize(payload)
         api_response = http.post(url, headers, json_payload)
         return Response(api_response['status'])
 
@@ -419,7 +418,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
         payload = {}
 
-        api_response = http.post(url, headers, json.dumps(payload))
+        api_response = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_response['status'])
         if response.status_code == '200':
             response.result = api_response['result']
@@ -432,7 +431,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
         payload = {}
 
-        api_response = http.post(url, headers, json.dumps(payload))
+        api_response = http.post(url, headers, customjson.serialize(payload))
         response = Response(api_response['status'])
         if response.status_code == '200':
             response.result = api_response['result']
@@ -444,7 +443,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
         payload = {}
 
-        api_response = http.post(url, headers, json.dumps(payload))
+        api_response = http.post(url, headers, customjson.serialize(payload))
         return Response(api_response['status'])
 
     @classmethod

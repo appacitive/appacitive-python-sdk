@@ -1,30 +1,22 @@
 from pyappacitive.utilities import http, urlfactory
-from pyappacitive.utilities.customencoder import CustomEncoder
+from pyappacitive.utilities.customjson import CustomEncoder
 __author__ = 'sathley'
 
 from pyappacitive.entity import Entity, object_system_properties
 from pyappacitive.error import *
+from utilities import customjson
 from response import Response
-import json, datetime
+import datetime
 
-## add support for update with revision number
 # add fetch latest.call
 # add fields in get calls
 # add file upload support using urllib2
-## add imports in init.py
-## stop sending None properties
-## remove .idea folder
+# add imports in init.py
 # logging and nosetests
-## set_self should have only specific setting implementation for the current class. It should call the set self of base for #others
-## add aggregate filter,
-## check tag filter method names
 ## push send - single function using kwargs
 # email- use kwargs
-## move object/conn/user class methods to new provider classes ?? Or make user inherit from entity and provide a objectbase class to the user
-## properties in user/device should use setproperty and getproperty funcs to keep track of changes
-## make properties private and provide a get all properties function
+# give proper structure to pushnotification
 # license, pylint, pyflakes, sphynx
-## return response status! result! and message from every function.?simply copy status into response
 
 
 class AppacitiveObject(Entity):
@@ -91,7 +83,7 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
 
-        api_resp = http.put(url, headers, json.dumps(self.get_dict(), cls=CustomEncoder ))
+        api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = Response(api_resp['status'])
 
@@ -167,7 +159,7 @@ class AppacitiveObject(Entity):
         api_resp = http.post(url, headers, payload)
         response = Response(api_resp['status'])
 
-        if response.status == '200':
+        if response.status_code == '200':
             updated_object = api_resp['object']
             self.__set_self(updated_object)
 
