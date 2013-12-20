@@ -24,7 +24,10 @@ class PropertyFilter(FilterBase):
 
     def __repr__(self):
 
-        #   Handle date and datetime datatypes
+        #   Handle date,time and datetime datatypes
+        if isinstance(self.value, datetime.time):
+            self.value = "time('{0}')".format(str(self.value))
+
         if isinstance(self.value, datetime.date):
             if isinstance(self.value, datetime.datetime) is False:
                 self.value = "date('{0}')".format(str(self.value))

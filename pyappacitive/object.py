@@ -1,11 +1,11 @@
 from pyappacitive.utilities import http, urlfactory
-
+from pyappacitive.utilities.customencoder import CustomEncoder
 __author__ = 'sathley'
 
 from pyappacitive.entity import Entity, object_system_properties
 from pyappacitive.error import *
 from response import Response
-import json
+import json, datetime
 
 # add support for update with revision number 
 # add fetch latest.call
@@ -78,8 +78,7 @@ class AppacitiveObject(Entity):
         if attributes is not None:
             native['__attributes'] = attributes
 
-        properties = self.get_all_properties()
-        native.update(properties)
+        native.update(self.get_all_properties())
         return native
 
     def create(self):
@@ -90,7 +89,7 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
 
-        api_resp = http.put(url, headers, json.dumps(self.get_dict()))
+        api_resp = http.put(url, headers, json.dumps(self.get_dict(), cls=CustomEncoder ))
 
         response = Response(api_resp['status']['code'])
 
