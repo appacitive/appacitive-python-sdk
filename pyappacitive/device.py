@@ -152,6 +152,14 @@ class AppacitiveDevice(Entity):
             response.device = cls(api_response['device'])
         return response
 
+    def fetch_latest(self):
+        url = urlfactory.device_urls["get"](self.id)
+        headers = urlfactory.get_headers()
+        api_response = http.get(url, headers)
+        response = Response(api_response['status'])
+        if response.status_code == '200':
+            self._set_self(api_response['device'])
+
     @classmethod
     def multi_get(cls, device_ids):
 

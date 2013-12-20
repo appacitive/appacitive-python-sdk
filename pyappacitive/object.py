@@ -9,15 +9,12 @@ from response import Response
 # add fetch latest.call
 # add fields to get in get calls
 # add file upload support using urllib2
-# add imports properly in init.py
 # logging and nosetests
-# email- use kwargs
 # give proper structure to pushnotification
 # add license file
 # run pylint, pyflakes, sphynx
 # session token management
-## add in between 2 articles search in object.py
-# add remaining connection searches
+
 # session token management
 
 
@@ -201,6 +198,14 @@ class AppacitiveObject(Entity):
             obj = api_response['object']
             response.object = cls(obj)
         return response
+
+    def fetch_latest(self):
+        url = urlfactory.object_urls["get"](self.type, self.id)
+        headers = urlfactory.get_headers()
+        api_response = http.get(url, headers)
+        response = Response(api_response['status'])
+        if response.status_code == '200':
+            self._set_self(api_response['object'])
 
     @classmethod
     def multi_get(cls, object_type, object_ids):

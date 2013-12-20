@@ -212,7 +212,7 @@ class AppacitiveUser(Entity):
         if user_id is None:
             raise ValidationError('User id is missing.')
 
-        url = urlfactory.user_urls["get"]('user', user_id)
+        url = urlfactory.user_urls["get"](user_id, 'id')
 
         headers = urlfactory.get_user_headers()
 
@@ -225,6 +225,14 @@ class AppacitiveUser(Entity):
 
         return response
 
+    def fetch_latest(self):
+        url = urlfactory.user_urls["get"](self.id)
+        headers = urlfactory.get_headers()
+        api_response = http.get(url, headers)
+        response = Response(api_response['status'])
+        if response.status_code == '200':
+            self._set_self(api_response['user'])
+
     @classmethod
     @user_auth_required
     def get_by_username(cls, username):
@@ -232,7 +240,7 @@ class AppacitiveUser(Entity):
         if username is None:
             raise ValidationError('Username is missing.')
 
-        url = urlfactory.user_urls["get"]('user', username, 'username')
+        url = urlfactory.user_urls["get"](username, 'username')
         headers = urlfactory.get_user_headers()
 
         api_response = http.get(url, headers)
@@ -254,7 +262,7 @@ class AppacitiveUser(Entity):
         if ApplicationContext.get_user_token() is None:
             raise UserAuthError('No logged in user found.')
 
-        url = urlfactory.user_urls["get"]('user', 'me', 'token')
+        url = urlfactory.user_urls["get"]('me', 'token')
 
         headers = urlfactory.get_user_headers()
 
@@ -320,7 +328,7 @@ class AppacitiveUser(Entity):
         if user_id is None:
             raise ValidationError('User id is missing.')
 
-        url = urlfactory.user_urls["delete"]('user', user_id, delete_connections)
+        url = urlfactory.user_urls["delete"](user_id, 'id', delete_connections)
 
         headers = urlfactory.get_user_headers()
 
@@ -335,7 +343,7 @@ class AppacitiveUser(Entity):
         if username is None:
             raise ValidationError('Username is missing.')
 
-        url = urlfactory.user_urls["delete"]('user', username, 'username', delete_connections)
+        url = urlfactory.user_urls["delete"](username, 'username', delete_connections)
 
         headers = urlfactory.get_user_headers()
 
@@ -347,7 +355,7 @@ class AppacitiveUser(Entity):
     @user_auth_required
     def delete_logged_in_user(cls, delete_connections=False):
 
-        url = urlfactory.user_urls["delete"]('user', 'me', 'token', delete_connections)
+        url = urlfactory.user_urls["delete"]('me', 'token', delete_connections)
 
         headers = urlfactory.get_user_headers()
 

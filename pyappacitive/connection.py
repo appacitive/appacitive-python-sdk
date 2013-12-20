@@ -8,22 +8,6 @@ from pyappacitive.error import *
 from pyappacitive.object import AppacitiveObject
 
 
-class AppacitiveEndpoint(object):
-    def __init__(self, endpoint=None):
-        if endpoint is not None:
-            self.label = endpoint.get('label', None)
-            self.type = endpoint.get('type', None)
-            self.objectid = endpoint.get('objectid', 0)
-            obj = endpoint.get('object', None)
-            if obj is not None:
-                self.object = AppacitiveObject(obj)
-        else:
-            self.label = None
-            self.object = None
-            self.type = None
-            self.objectid = 0
-
-
 class AppacitiveConnection(Entity):
 
     def __init__(self, connection=None):
@@ -174,6 +158,14 @@ class AppacitiveConnection(Entity):
             response.connection = cls(api_response['connection'])
 
         return response
+
+    def fetch_latest(self):
+        url = urlfactory.connection_urls["get"](self.relation_type, self.id)
+        headers = urlfactory.get_headers()
+        api_response = http.get(url, headers)
+        response = Response(api_response['status'])
+        if response.status_code == '200':
+            self._set_self(api_response['connection'])
 
     def delete(self):
 

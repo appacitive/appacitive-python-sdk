@@ -1,7 +1,5 @@
-"""
-
 __author__ = 'sathley'
-"""
+
 from pyappacitive.utilities import settings, appcontext
 
 base_url = settings.api_base_url
@@ -255,6 +253,8 @@ def __get_all_push_url():
 
 #endregion
 
+#region URL DICTS
+
 user_urls = {
     "create": __user_create_url,
     "delete": __user_delete_url,
@@ -326,3 +326,5 @@ push_urls = {
     "get": __get_push_url,
     "get_all": __get_all_push_url
 }
+
+#endregion
