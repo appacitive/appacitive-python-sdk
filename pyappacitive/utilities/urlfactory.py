@@ -56,7 +56,7 @@ def __object_get_url(object_type, object_id):
 
 def __object_multiget_url(object_type, object_ids):
     return '{0}/object/{1}/multiget/{2}'.format(base_url, object_type,
-                                                ','.join(object_ids))
+                                                ','.join([str(object_id) for object_id in object_ids]))
 
 
 def __object_update_url(object_type, object_id):
@@ -83,7 +83,7 @@ def __connection_get_url(relation_type, connection_id):
 
 def __connection_multiget_url(relation_type, connection_ids):
     return '{0}/connection/{1}/multiget/{2}'.format(base_url, relation_type,
-                                                    ','.join(connection_ids))
+                                                    ','.join([str(connection_id) for connection_id in connection_ids]))
 
 
 def __connection_delete_url(relation_type, connection_id):
@@ -176,7 +176,7 @@ def __user_get_url(user_id, user_id_type='id'):
 
 
 def __user_multiget_url(user_ids):
-    return '{0}/object/user/multiget/{1}'.format(base_url, ','.join(user_ids))
+    return '{0}/object/user/multiget/{1}'.format(base_url, ','.join([str(user_id) for user_id in user_ids]))
 
 
 def __user_update_url(user_id):
