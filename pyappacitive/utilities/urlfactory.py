@@ -67,6 +67,10 @@ def __object_find_all_url(object_type, query):
     return '{0}/object/{1}/find/all?{2}'.format(base_url, object_type,
                                                 str(query))
 
+
+def __object_find_between_two_articles_url(object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b):
+    return '{0}/object/{1}/{2}/{3}/{4}/{5}/{6}/{7}'.format(base_url, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b)
+
 #endregion
 
 #region     CONNECTION URLS
@@ -119,6 +123,10 @@ def __connection_find_for_objects_and_relation_url(relation_type, object_id1,
 
 def __connection_find_interconnects_url():
     return '{0}/connection/interconnects'.format(base_url)
+
+
+def __connection_find_connected_objects_url(relation, object_type, object_id):
+    return '{0}/connection/{1}/{2}/{3}/find'.format(base_url, relation, object_type, object_id)
 
 
 def __update__password_url(user_id, identification_type):
@@ -280,7 +288,8 @@ object_urls = {
     "get": __object_get_url,
     "multiget": __object_multiget_url,
     "update": __object_update_url,
-    "find_all": __object_find_all_url
+    "find_all": __object_find_all_url,
+    "find_between_two_articles": __object_find_between_two_articles_url
 }
 
 connection_urls = {
@@ -293,7 +302,8 @@ connection_urls = {
     "find_all": __connection_find_all_url,
     "find_for_objects": __connection_find_for_objects_url,
     "find_for_objects_and_relation": __connection_find_for_objects_and_relation_url,
-    "find_interconnects": __connection_find_interconnects_url
+    "find_interconnects": __connection_find_interconnects_url,
+    "find_connected_objects": __connection_find_connected_objects_url
 }
 
 email_urls = {

@@ -9,7 +9,7 @@ from appacitive_email import AppacitiveEmail
 from response import Response
 from entity import Entity
 from object import AppacitiveObject
-from connection import AppacitiveConnection
+from connection import AppacitiveConnection, AppacitiveEndpoint
 from user import AppacitiveUser
 from device import AppacitiveDevice
 

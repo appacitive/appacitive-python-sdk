@@ -16,7 +16,7 @@ from response import Response
 # add license file
 # run pylint, pyflakes, sphynx
 # session token management
-# add in between 2 articles search in object.py
+## add in between 2 articles search in object.py
 # add remaining connection searches
 # session token management
 
@@ -247,4 +247,30 @@ class AppacitiveObject(Entity):
                 appacitive_object = cls(obj)
                 return_objects.append(appacitive_object)
             response.objects = return_objects
+            response.paging_info = api_response['paginginfo']
             return response
+
+    @classmethod
+    def find_in_between_two_articles(cls, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b):
+
+        if object_type is None:
+            raise ValidationError('Type is missing.')
+
+        url = urlfactory.object_urls["find_between_two_articles"](object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b)
+        headers = urlfactory.get_headers()
+        api_response = http.get(url, headers)
+
+        response = Response(api_response['status'])
+        if response.status_code == '200':
+
+            api_objects = api_response.get('objects', None)
+
+            return_objects = []
+            for obj in api_objects:
+                appacitive_object = cls(obj)
+                return_objects.append(appacitive_object)
+            response.objects = return_objects
+            response.paging_info = api_response['paginginfo']
+            return response
+
+

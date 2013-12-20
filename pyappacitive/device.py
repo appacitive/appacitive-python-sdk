@@ -231,4 +231,5 @@ class AppacitiveDevice(Entity):
                 appacitive_device = cls(device)
                 return_devices.append(appacitive_device)
             response.devices = return_devices
+            response.paging_info = api_response['paginginfo']
             return response

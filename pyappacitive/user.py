@@ -466,5 +466,6 @@ class AppacitiveUser(Entity):
                 appacitive_user = cls(user)
                 return_users.append(appacitive_user)
             response.users = return_users
+            response.paging_info = api_response['paginginfo']
             return response
 

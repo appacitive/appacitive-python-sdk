@@ -274,6 +274,7 @@ class AppacitiveConnection(Entity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
+            response.paging_info = api_response['paginginfo']
             return response
 
     @classmethod
@@ -295,6 +296,7 @@ class AppacitiveConnection(Entity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
+            response.paging_info = api_response['paginginfo']
             return response
 
     @classmethod
@@ -319,6 +321,7 @@ class AppacitiveConnection(Entity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
+            response.paging_info = api_response['paginginfo']
             return response
 
     @classmethod
@@ -339,6 +342,28 @@ class AppacitiveConnection(Entity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
+            response.paging_info = api_response['paginginfo']
+            return response
+
+    @classmethod
+    def find_connected_objects(cls, relation, object_type, object_id):
+
+        url = urlfactory.connection_urls["find_connected_objects"](relation, object_type, object_id)
+
+        headers = urlfactory.get_headers()
+        api_response = http.get(url, headers)
+        response = Response(api_response['status'])
+        if response.status_code == '200':
+
+            api_objects = api_response.get('nodes', None)
+
+            return_objects = []
+            for obj in api_objects:
+                appacitive_object = AppacitiveObject(obj)
+                return_objects.append(appacitive_object)
+            response.nodes = return_objects
+            response.paging_info = api_response['paginginfo']
+            response.parent = api_response['parent']
             return response
 
 

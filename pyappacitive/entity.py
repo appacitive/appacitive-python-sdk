@@ -46,7 +46,6 @@ class Entity(object):
                     self.__properties[k] = v
 
 
-
     def _set_self(self, obj):
 
         if obj is None:
