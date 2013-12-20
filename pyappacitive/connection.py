@@ -6,6 +6,7 @@ __author__ = 'sathley'
 from pyappacitive.entity import Entity, connection_system_properties
 from pyappacitive.error import *
 from pyappacitive.object import AppacitiveObject
+from endpoint import AppacitiveEndpoint
 
 
 class AppacitiveConnection(Entity):
