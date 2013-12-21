@@ -4,7 +4,7 @@ from utilities import urlfactory, http
 from error import ValidationError
 
 
-class FileHelper(object):
+class AppacitiveFile(object):
     def __init__(self):
         pass
 

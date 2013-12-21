@@ -1,6 +1,5 @@
 __author__ = 'sathley'
 
-from user import AppacitiveUser
 
 class ApplicationContext(object):
     def __init__(self):
@@ -21,7 +20,6 @@ class ApplicationContext(object):
     @staticmethod
     def set_logged_in_user(user):
         ApplicationContext.__logged_in_user = user
-        AppacitiveUser().authenticate()
 
     @staticmethod
     def set_user_token(token):

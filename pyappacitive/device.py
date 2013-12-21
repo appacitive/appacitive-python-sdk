@@ -1,12 +1,12 @@
 __author__ = 'sathley'
 
-from entity import Entity
+from entity import AppacitiveEntity
 from error import ValidationError
 from utilities import http, urlfactory, customjson
 from response import AppacitiveResponse
 
 
-class AppacitiveDevice(Entity):
+class AppacitiveDevice(AppacitiveEntity):
     def __init__(self, device=None):
         super(AppacitiveDevice, self).__init__()
         self.type = 'device'

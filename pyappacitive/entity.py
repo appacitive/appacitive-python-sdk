@@ -8,7 +8,7 @@ object_system_properties = ['__type', '__typeid', '__id', '__createdby', '__last
                             '__utclastupdateddate', '__tags', '__attributes', '__properties', '__revision']
 
 
-class Entity(object):
+class AppacitiveEntity(object):
 
     def __init__(self, entity=None):
         self.__properties = {}

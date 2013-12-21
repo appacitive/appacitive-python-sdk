@@ -1,7 +1,7 @@
 from pyappacitive.utilities import http, urlfactory
 __author__ = 'sathley'
 
-from pyappacitive.entity import Entity
+from pyappacitive.entity import AppacitiveEntity
 from pyappacitive.error import *
 from utilities import customjson
 from response import AppacitiveResponse
@@ -14,7 +14,7 @@ from response import AppacitiveResponse
 # session token management
 
 
-class AppacitiveObject(Entity):
+class AppacitiveObject(AppacitiveEntity):
 
     def __init__(self, obj=None):
 

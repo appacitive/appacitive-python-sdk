@@ -5,7 +5,7 @@ from error import ValidationError
 from response import AppacitiveResponse
 
 
-class PushNotification(object):
+class AppacitivePushNotification(object):
     def __init__(self, push=None):
 
         if push is not None:
@@ -271,7 +271,7 @@ class PushNotification(object):
         response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
-            response.notification = PushNotification(api_response['pushnotification'])
+            response.notification = AppacitivePushNotification(api_response['pushnotification'])
 
     @staticmethod
     def get_all_notification():
@@ -286,7 +286,7 @@ class PushNotification(object):
             return_notifications = []
             for notification in api_response['pushnotifications']:
                 if notification:
-                    return_notifications.append(PushNotification(notification))
+                    return_notifications.append(AppacitivePushNotification(notification))
             response.notifications = return_notifications
             return response
 

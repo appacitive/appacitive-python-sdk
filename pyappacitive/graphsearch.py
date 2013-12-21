@@ -6,7 +6,7 @@ from utilities import customjson
 from response import AppacitiveResponse
 
 
-class GraphSearch(object):
+class AppacitiveGraphSearch(object):
     def __init__(self):
         pass
 

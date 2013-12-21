@@ -2,12 +2,12 @@ __author__ = 'sathley'
 
 
 from error import ValidationError, UserAuthError
-from file import FileHelper
-from graphsearch import GraphSearch
-from push import PushNotification
+from file import AppacitiveFile
+from graphsearch import AppacitiveGraphSearch
+from push import AppacitivePushNotification
 from appacitive_email import AppacitiveEmail
 from response import AppacitiveResponse
-from entity import Entity
+from entity import AppacitiveEntity
 from object import AppacitiveObject
 from endpoint import AppacitiveEndpoint
 from connection import AppacitiveConnection

@@ -1,7 +1,7 @@
 __author__ = 'sathley'
 
 from pyappacitive.utilities import http, urlfactory
-
+from response import AppacitiveResponse
 from utilities import customjson
 
 
@@ -10,7 +10,7 @@ class AppacitiveEmail(object):
         pass
 
     @staticmethod
-    def send_raw_email(to, cc, bcc, subject, body, is_body_html=False, smtp=None, from_email=None, reply_to_email=None):
+    def send_raw_email(to, subject, body, cc=None, bcc=None, is_body_html=False, smtp=None, from_email=None, reply_to_email=None):
         payload = {}
         payload['to'] = to
         payload['cc'] = cc
@@ -31,11 +31,11 @@ class AppacitiveEmail(object):
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()
 
-        resp = http.post(url, headers, customjson.serialize(payload))
-        return resp
+        api_response = http.post(url, headers, customjson.serialize(payload))
+        return AppacitiveResponse(api_response['status'])
 
     @staticmethod
-    def send_templated_email(to, cc, bcc, subject, template_name, template_fillers, is_body_html=False, smtp=None, from_email=None, reply_to_email=None):
+    def send_templated_email(to, subject, template_name, template_fillers, cc=None, bcc=None, is_body_html=False, smtp=None, from_email=None, reply_to_email=None):
         payload = {}
         payload['to'] = to
         payload['cc'] = cc
@@ -57,6 +57,7 @@ class AppacitiveEmail(object):
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()
 
-        resp = http.post(url, headers, customjson.serialize(payload))
-        return resp
+        api_response = http.post(url, headers, customjson.serialize(payload))
+        return AppacitiveResponse(api_response['status'])
+
 

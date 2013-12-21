@@ -1,6 +1,6 @@
 __author__ = 'sathley'
 
-from entity import Entity
+from entity import AppacitiveEntity
 from error import ValidationError, UserAuthError
 from utilities import http, urlfactory, customjson
 from pyappacitive.appcontext import ApplicationContext
@@ -18,7 +18,7 @@ def user_auth_required(func):
         return inner
 
 
-class AppacitiveUser(Entity):
+class AppacitiveUser(AppacitiveEntity):
 
     def __init__(self, user=None):
         super(AppacitiveUser, self).__init__(user)
@@ -277,7 +277,7 @@ class AppacitiveUser(Entity):
         return response
 
     @staticmethod
-    def authenticate(cls, username, password, expiry=None, attempts=None):
+    def authenticate(username, password, expiry=None, attempts=None):
 
         url = urlfactory.user_urls['authenticate']()
         headers = urlfactory.get_headers()
@@ -296,7 +296,7 @@ class AppacitiveUser(Entity):
         if response.status_code == '200':
             response.token = api_response['token']
             ApplicationContext.set_user_token(response.token)
-            response.user = cls(api_response['user'])
+            response.user = AppacitiveUser(api_response['user'])
             ApplicationContext.set_logged_in_user(response.user)
         return response
 
