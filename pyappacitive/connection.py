@@ -7,7 +7,7 @@ from pyappacitive.entity import AppacitiveEntity, connection_system_properties
 from pyappacitive.error import *
 from pyappacitive.object import AppacitiveObject
 from endpoint import AppacitiveEndpoint
-
+from response import AppacitiveResponse, PagingInfo
 
 class AppacitiveConnection(AppacitiveEntity):
 
@@ -136,7 +136,7 @@ class AppacitiveConnection(AppacitiveEntity):
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = AppacitiveResponse(api_resp['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             self.__set_self(api_resp['connection'])
             self._reset_update_commands()
         return response
@@ -156,7 +156,7 @@ class AppacitiveConnection(AppacitiveEntity):
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.connection = cls(api_response['connection'])
 
         return response
@@ -166,7 +166,7 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             self._set_self(api_response['connection'])
             self._reset_update_commands()
         return response
@@ -220,7 +220,7 @@ class AppacitiveConnection(AppacitiveEntity):
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             return_connections = []
             for connection in api_response.get('connections', None):
@@ -247,7 +247,7 @@ class AppacitiveConnection(AppacitiveEntity):
         api_resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_resp['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             self.__set_self(api_resp['connection'])
         return response
 
@@ -262,7 +262,7 @@ class AppacitiveConnection(AppacitiveEntity):
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_connections = api_response.get('connections', None)
 
@@ -271,7 +271,7 @@ class AppacitiveConnection(AppacitiveEntity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 
     @classmethod
@@ -284,7 +284,7 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_connections = api_response.get('connections', None)
 
@@ -293,7 +293,7 @@ class AppacitiveConnection(AppacitiveEntity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 
     @classmethod
@@ -309,7 +309,7 @@ class AppacitiveConnection(AppacitiveEntity):
 
         api_response = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_connections = api_response.get('connections', None)
 
@@ -318,7 +318,7 @@ class AppacitiveConnection(AppacitiveEntity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 
     @classmethod
@@ -333,7 +333,7 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_connections = api_response.get('connections', None)
 
@@ -342,7 +342,7 @@ class AppacitiveConnection(AppacitiveEntity):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 
     @classmethod
@@ -353,7 +353,7 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_objects = api_response.get('nodes', None)
 
@@ -362,7 +362,7 @@ class AppacitiveConnection(AppacitiveEntity):
                 appacitive_object = AppacitiveObject(obj)
                 return_objects.append(appacitive_object)
             response.nodes = return_objects
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             response.parent = api_response['parent']
             return response
 

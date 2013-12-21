@@ -20,7 +20,7 @@ def create_connection_with_object_ids_test():
     conn.endpoint_b.label = 'object'
     resp = conn.create()
 
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert conn.id != 0
 
 
@@ -39,7 +39,7 @@ def create_connection_with_objects_test():
     conn.endpoint_b.label = 'object'
     resp = conn.create()
 
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert conn.id != 0
     assert conn.endpoint_a.objectid > 0
     assert conn.endpoint_b.objectid > 0
@@ -70,7 +70,7 @@ def get_connection_test():
 
     resp = AppacitiveConnection.get('sibling', conn.id)
 
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert hasattr(resp, 'connection')
     assert resp.connection.id == conn.id
 
@@ -89,7 +89,7 @@ def multiget_connection_test():
         conn_ids.append(conn.id)
 
     resp = AppacitiveConnection.multi_get('sibling', conn_ids)
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert hasattr(resp, 'connections')
     assert len(resp.connections) == 12
 
@@ -113,10 +113,10 @@ def delete_connection_test():
     id = conn.id
 
     resp = conn.delete()
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
 
     resp = AppacitiveConnection.get('sibling', id)
-    assert resp.status_code != '200'
+    assert resp.status.code != '200'
 
 
 def multi_delete_connection_test():
@@ -141,11 +141,11 @@ def multi_delete_connection_test():
         conn_ids.append(conn.id)
 
     resp = AppacitiveConnection.multi_delete('sibling', conn_ids)
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
 
     for conn_id in conn_ids:
         resp = AppacitiveConnection.get('sibling', conn_id)
-        assert resp.status_code != '200'
+        assert resp.status.code != '200'
 
 
 def update_connection_test():
@@ -179,7 +179,7 @@ def update_connection_test():
     conn.set_attribute('a2', 'v2')
 
     resp = conn.update()
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
 
     assert conn.get_property('field1') == 'world'
     assert conn.get_property('field2') == '202'

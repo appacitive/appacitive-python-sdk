@@ -35,7 +35,7 @@ def create_user_test():
     user.secretanswer = 'python'
 
     resp = user.create()
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert user.id > 0
 
 
@@ -44,7 +44,7 @@ def get_user_by_id_test():
     user.create()
     user.authenticate('test123!@#')
     resp = AppacitiveUser.get_by_id(user.id)
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert hasattr(resp, 'user')
     assert user.id == resp.user.id
 
@@ -58,7 +58,7 @@ def multiget_user_test():
     user.authenticate('test123!@#')
 
     response = AppacitiveUser.multi_get(user_ids)
-    assert response.status_code == '200'
+    assert response.status.code == '200'
     assert len(response.users) == 12
 
 
@@ -68,10 +68,10 @@ def delete_user_test():
     user_id = user.id
     user.authenticate('test123!@#')
     response = user.delete()
-    assert response.status_code == '200'
+    assert response.status.code == '200'
 
     response = AppacitiveUser.get_by_id(user_id)
-    assert response.status_code != '200'
+    assert response.status.code != '200'
     assert hasattr(response, 'user') is False
 
 
@@ -93,7 +93,7 @@ def update_user_test():
     user.lastname = 'LN2'
 
     response = user.update()
-    assert response.status_code == '200'
+    assert response.status.code == '200'
     assert user.tag_exists('t1') is False
     assert user.tag_exists('t4')
     assert user.get_attribute('a1') is None
@@ -107,13 +107,13 @@ def update_password_user_test():
     user.authenticate('test123!@#')
 
     response = user.update_password('test123!@#', 'zaq1ZAQ!')
-    assert response.status_code == '200'
+    assert response.status.code == '200'
 
     response = user.authenticate('test123!@#')
-    assert response.status_code != '200'
+    assert response.status.code != '200'
 
     response = user.authenticate('zaq1ZAQ!')
-    assert response.status_code == '200'
+    assert response.status.code == '200'
 
 
 def validate_session_user_test():
@@ -122,14 +122,14 @@ def validate_session_user_test():
     user.authenticate('test123!@#')
 
     response = AppacitiveUser.validate_session()
-    assert response.status_code == '200'
+    assert response.status.code == '200'
     assert response.result is True
 
     response = AppacitiveUser.invalidate_session()
-    assert response.status_code == '200'
+    assert response.status.code == '200'
 
     response = AppacitiveUser.validate_session()
-    assert response.status_code != '200'
+    assert response.status.code != '200'
 
 
 def checkin_user_test():
@@ -138,7 +138,7 @@ def checkin_user_test():
     user.authenticate('test123!@#')
 
     response = user.checkin(10.10, 20.20)
-    assert response.status_code == '200'
+    assert response.status.code == '200'
 
     user.fetch_latest()
     assert user.location == '10.1,20.2'

@@ -3,7 +3,7 @@ __author__ = 'sathley'
 from entity import AppacitiveEntity
 from error import ValidationError
 from utilities import http, urlfactory, customjson
-from response import AppacitiveResponse
+from response import AppacitiveResponse, PagingInfo
 
 
 class AppacitiveDevice(AppacitiveEntity):
@@ -128,7 +128,7 @@ class AppacitiveDevice(AppacitiveEntity):
 
         response = AppacitiveResponse(api_resp['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             self.__set_self(api_resp['device'])
             self._reset_update_commands()
         return response
@@ -147,7 +147,7 @@ class AppacitiveDevice(AppacitiveEntity):
 
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.device = cls(api_response['device'])
         return response
 
@@ -156,7 +156,7 @@ class AppacitiveDevice(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             self._set_self(api_response['device'])
             self._reset_update_commands()
         return response
@@ -172,7 +172,7 @@ class AppacitiveDevice(AppacitiveEntity):
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_devices = api_response.get('devices', None)
 
@@ -201,7 +201,7 @@ class AppacitiveDevice(AppacitiveEntity):
         api_resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_resp['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             self.__set_self(api_resp['device'])
         return response
 
@@ -231,7 +231,7 @@ class AppacitiveDevice(AppacitiveEntity):
 
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_devices = api_response.get('devices', None)
 
@@ -240,5 +240,5 @@ class AppacitiveDevice(AppacitiveEntity):
                 appacitive_device = cls(device)
                 return_devices.append(appacitive_device)
             response.devices = return_devices
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response

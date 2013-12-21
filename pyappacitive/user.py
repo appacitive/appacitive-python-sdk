@@ -4,7 +4,7 @@ from entity import AppacitiveEntity
 from error import ValidationError, UserAuthError
 from utilities import http, urlfactory, customjson
 from pyappacitive.appcontext import ApplicationContext
-from response import AppacitiveResponse
+from response import AppacitiveResponse, PagingInfo
 
 
 def user_auth_required(func):
@@ -199,7 +199,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         response = AppacitiveResponse(api_resp['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             self.__set_self(api_resp['user'])
             self._reset_update_commands()
         return response
@@ -219,7 +219,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.user = cls(api_response['user'])
 
         return response
@@ -229,7 +229,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             self._set_self(api_response['user'])
             self._reset_update_commands()
         return response
@@ -248,7 +248,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.user = cls(api_response['user'])
 
         return response
@@ -271,7 +271,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.user = cls(api_response['user'])
 
         return response
@@ -293,7 +293,7 @@ class AppacitiveUser(AppacitiveEntity):
         api_response = http.post(url, headers, customjson.serialize(payload))
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.token = api_response['token']
             ApplicationContext.set_user_token(response.token)
             response.user = AppacitiveUser(api_response['user'])
@@ -316,7 +316,7 @@ class AppacitiveUser(AppacitiveEntity):
         api_response = http.post(url, headers, customjson.serialize(payload))
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.token = api_response['token']
             ApplicationContext.set_user_token(response.token)
             response.user = AppacitiveUser(api_response['user'])
@@ -334,7 +334,7 @@ class AppacitiveUser(AppacitiveEntity):
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_users = api_response.get('objects', None)
 
@@ -408,7 +408,7 @@ class AppacitiveUser(AppacitiveEntity):
         api_resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_resp['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             self.__set_self(api_resp['user'])
         return response
 
@@ -453,7 +453,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         api_response = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.result = api_response['result']
         return response
 
@@ -487,7 +487,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_users = api_response.get('users', None)
 
@@ -496,6 +496,6 @@ class AppacitiveUser(AppacitiveEntity):
                 appacitive_user = cls(user)
                 return_users.append(appacitive_user)
             response.users = return_users
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 

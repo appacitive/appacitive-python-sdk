@@ -4,7 +4,7 @@ __author__ = 'sathley'
 from pyappacitive.entity import AppacitiveEntity
 from pyappacitive.error import *
 from utilities import customjson
-from response import AppacitiveResponse
+from response import AppacitiveResponse, PagingInfo
 
 # add file upload support using urllib2
 # logging and nosetests
@@ -95,7 +95,7 @@ class AppacitiveObject(AppacitiveEntity):
 
         response = AppacitiveResponse(api_resp['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             self.__set_self(api_resp['object'])
             self._reset_update_commands()
 
@@ -169,7 +169,7 @@ class AppacitiveObject(AppacitiveEntity):
         api_resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_resp['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             updated_object = api_resp['object']
             self.__set_self(updated_object)
 
@@ -192,7 +192,7 @@ class AppacitiveObject(AppacitiveEntity):
 
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             obj = api_response['object']
             response.object = cls(obj)
         return response
@@ -202,7 +202,7 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
             self._set_self(api_response['object'])
             self._reset_update_commands()
         return response
@@ -222,7 +222,7 @@ class AppacitiveObject(AppacitiveEntity):
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_objects = api_response.get('objects', None)
 
@@ -244,7 +244,7 @@ class AppacitiveObject(AppacitiveEntity):
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_objects = api_response.get('objects', None)
 
@@ -253,7 +253,7 @@ class AppacitiveObject(AppacitiveEntity):
                 appacitive_object = cls(obj)
                 return_objects.append(appacitive_object)
             response.objects = return_objects
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 
     @classmethod
@@ -268,7 +268,7 @@ class AppacitiveObject(AppacitiveEntity):
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
+        if response.status.code == '200':
 
             api_objects = api_response.get('objects', None)
 
@@ -277,7 +277,7 @@ class AppacitiveObject(AppacitiveEntity):
                 appacitive_object = cls(obj)
                 return_objects.append(appacitive_object)
             response.objects = return_objects
-            response.paging_info = api_response['paginginfo']
+            response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 
 

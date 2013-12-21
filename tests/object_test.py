@@ -19,7 +19,7 @@ The object api allows you to store, retrieve and manage all the data that you st
     obj.set_property('multifield', ['val1', 'val2', 'val3'])
 
     resp = obj.create()
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert obj.id > 0
 
 
@@ -28,7 +28,7 @@ def get_object_test():
     obj.create()
 
     resp = AppacitiveObject.get('object', obj.id)
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert resp.object is not None
 
 
@@ -40,7 +40,7 @@ def multiget_object_test():
         object_ids.append(obj.id)
 
     resp = AppacitiveObject.multi_get('object', object_ids)
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
     assert hasattr(resp, 'objects')
     assert len(resp.objects) == 12
 
@@ -50,10 +50,10 @@ def delete_object_test():
     obj.create()
     id = obj.id
     resp = obj.delete()
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
 
     resp = AppacitiveObject.get('object', id)
-    assert resp.status_code != '200'
+    assert resp.status.code != '200'
     assert not hasattr(resp, 'object')
 
 
@@ -69,11 +69,11 @@ def multi_delete_object_test():
         object_ids.append(obj.id)
 
     resp = AppacitiveObject.multi_delete('object', object_ids)
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
 
     for object_id in object_ids:
         resp = AppacitiveObject.get('object', object_id)
-        assert resp.status_code != '200'
+        assert resp.status.code != '200'
 
 
 def update_object_test():
@@ -115,7 +115,7 @@ def update_object_test():
     obj.set_property('multifield', ['val4', 'val5', 'val6'])
 
     resp = obj.update()
-    assert resp.status_code == '200'
+    assert resp.status.code == '200'
 
 
 
