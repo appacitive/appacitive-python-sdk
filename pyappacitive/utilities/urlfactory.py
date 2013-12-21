@@ -1,8 +1,7 @@
 from pyappacitive import appcontext
+import settings
 
 __author__ = 'sathley'
-
-from pyappacitive.utilities import settings
 
 base_url = settings.api_base_url
 

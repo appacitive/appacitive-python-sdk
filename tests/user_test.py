@@ -57,7 +57,7 @@ def get_user_by_id_test():
 
 def multiget_user_test():
     user_ids = []
-    for i in range(12):
+    for i in range(2):
         user = get_random_user()
         user.create()
         user_ids.append(user.id)
@@ -65,7 +65,7 @@ def multiget_user_test():
 
     response = AppacitiveUser.multi_get(user_ids)
     assert response.status.code == '200'
-    assert len(response.users) == 12
+    assert len(response.users) == 2
 
 
 def delete_user_test():

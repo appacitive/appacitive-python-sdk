@@ -46,7 +46,7 @@ class PropertyFilter(FilterBase):
             value1, value2 = self.value
             return "*{0} {1} ({2},{3})".format(self.key, self.operator, str(value1), str(value2))
 
-        if self.operator == 'like':
+        if isinstance(self.value, str):
             return "*{0} {1} '{2}'".format(self.key, self.operator, str(self.value))
 
         return "*{0} {1} {2}".format(self.key, self.operator, str(self.value))

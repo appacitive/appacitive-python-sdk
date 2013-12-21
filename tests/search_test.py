@@ -179,8 +179,14 @@ def search_geo_within_polygon_test():
 
 
 def search_aggregated_queries_test():
+    obj = AppacitiveObject('object')
+    obj.set_attribute('Gangnam', 'Style')
+    obj.set_property('textfield', '''Karan Arjun is a 1995 Bollywood action thriller film starring Raakhee, Shahrukh Khan, Salman Khan, Amrish Puri, Kajol, Mamta Kulkarni and Ranjeet. The film was directed by Rakesh Roshan and written by Ravi Kapoor and Sachin Bhowmick.''')
+    obj.set_property('stringfield', 'gangnam')
+    obj.set_property('intfield', 5)
+    obj.create()
     query = AppacitiveQuery()
-    filter1 = PropertyFilter.is_equal_to('geofield', '10.10,20.20')
+    filter1 = PropertyFilter.is_equal_to('stringfield', 'gangnam')
     filter2 = PropertyFilter.is_greater_than('intfield', 0)
 
     filter3 = AttributeFilter.is_equal_to('Gangnam', 'Style')
