@@ -16,6 +16,7 @@ from response import AppacitiveResponse, PagingInfo
 # run pylint, pyflakes, sphynx
 # give graph response proper structure
 # session token management
+# query and utilities don't have to be modules- remove init.py
 
 
 class AppacitiveObject(AppacitiveEntity):
