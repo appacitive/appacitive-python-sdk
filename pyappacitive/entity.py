@@ -94,10 +94,22 @@ class AppacitiveEntity(object):
             self.__tags.append(tag)
             self.__tags_added.append(tag)
 
+    def add_tags(self, tags):
+        for tag in tags:
+            if tag not in self.__tags:
+                self.__tags.append(tag)
+                self.__tags_added.append(tag)
+
     def remove_tag(self, tag):
         if tag in self.__tags:
             self.__tags.remove(tag)
             self.__tags_removed.append(tag)
+
+    def remove_tags(self, tags):
+        for tag in tags:
+            if tag in self.__tags:
+                self.__tags.remove(tag)
+                self.__tags_removed.append(tag)
 
     def tag_exists(self, tag):
         return tag in self.__tags

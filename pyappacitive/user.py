@@ -300,6 +300,29 @@ class AppacitiveUser(AppacitiveEntity):
             ApplicationContext.set_logged_in_user(response.user)
         return response
 
+    def authenticate(self, password,  expiry=None, attempts=None):
+
+        url = urlfactory.user_urls['authenticate']()
+        headers = urlfactory.get_headers()
+        payload = {
+            'username': self.username,
+            'password': password
+        }
+        if expiry is not None:
+            payload['expiry'] = expiry
+        if attempts is not None:
+            payload['attempts'] = attempts
+
+        api_response = http.post(url, headers, customjson.serialize(payload))
+
+        response = AppacitiveResponse(api_response['status'])
+        if response.status_code == '200':
+            response.token = api_response['token']
+            ApplicationContext.set_user_token(response.token)
+            response.user = AppacitiveUser(api_response['user'])
+            ApplicationContext.set_logged_in_user(response.user)
+        return response
+
     @classmethod
     def multi_get(cls, user_ids):
 
@@ -313,7 +336,7 @@ class AppacitiveUser(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
-            api_users = api_response.get('users', None)
+            api_users = api_response.get('objects', None)
 
             return_users = []
             for user in api_users:
@@ -443,8 +466,6 @@ class AppacitiveUser(AppacitiveEntity):
 
         api_response = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_response['status'])
-        if response.status_code == '200':
-            response.result = api_response['result']
         return response
 
     @user_auth_required
@@ -453,7 +474,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         payload = {}
 
-        api_response = http.post(url, headers, customjson.serialize(payload))
+        api_response = http.post(url, headers, None)
         return AppacitiveResponse(api_response['status'])
 
     @classmethod

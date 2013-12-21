@@ -163,10 +163,6 @@ def __connection_find_connected_objects_url(relation, object_type, object_id, fi
     return url
 
 
-def __update__password_url(user_id, identification_type):
-    return '%s/user/%s/changepassword?useridtype=%s' % (base_url, user_id,
-                                                        identification_type)
-
 #endregion
 
 #region DEVICE URLS
@@ -252,7 +248,12 @@ def __user_invalidate_session_url():
 
 
 def __user_checkin_url(user_id, latitude, longitude):
-    return '{0}/user/{1}/checkin?latitude={2}&longitude={3}'.format(base_url, user_id, latitude, longitude)
+    return '{0}/user/{1}/checkin?lat={2}&long={3}'.format(base_url, user_id, latitude, longitude)
+
+
+def __update__password_url(user_id, identification_type='id'):
+    return '%s/user/%s/changepassword?useridtype=%s' % (base_url, user_id,
+                                                        identification_type)
 
 #endregion
 
