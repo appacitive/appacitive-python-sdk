@@ -252,12 +252,12 @@ class AppacitiveConnection(Entity):
         return response
 
     @classmethod
-    def find(cls, relation_type, query):
+    def find(cls, relation_type, query, fields=None):
 
         if relation_type is None:
             raise ValidationError('Relation type is missing.')
 
-        url = urlfactory.connection_urls["find_all"](relation_type, query)
+        url = urlfactory.connection_urls["find_all"](relation_type, query, fields)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 

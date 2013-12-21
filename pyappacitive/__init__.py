@@ -13,6 +13,7 @@ from endpoint import AppacitiveEndpoint
 from connection import AppacitiveConnection
 from user import AppacitiveUser
 from device import AppacitiveDevice
+from appcontext import ApplicationContext
 
 from query import PropertyFilter, TagFilter, AttributeFilter, AggregateFilter
 from query import BooleanOperator

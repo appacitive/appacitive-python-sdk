@@ -1,7 +1,7 @@
 from pyappacitive.utilities import http, urlfactory
 __author__ = 'sathley'
 
-from pyappacitive.entity import Entity, object_system_properties
+from pyappacitive.entity import Entity
 from pyappacitive.error import *
 from utilities import customjson
 from response import AppacitiveResponse
@@ -234,12 +234,12 @@ class AppacitiveObject(Entity):
             return response
 
     @classmethod
-    def find(cls, object_type, query):
+    def find(cls, object_type, query, fields=None):
 
         if object_type is None:
             raise ValidationError('Type is missing.')
 
-        url = urlfactory.object_urls["find_all"](object_type, query)
+        url = urlfactory.object_urls["find_all"](object_type, query, fields)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 

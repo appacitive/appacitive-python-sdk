@@ -1,6 +1,8 @@
+from pyappacitive import appcontext
+
 __author__ = 'sathley'
 
-from pyappacitive.utilities import settings, appcontext
+from pyappacitive.utilities import settings
 
 base_url = settings.api_base_url
 
@@ -67,9 +69,12 @@ def __object_update_url(object_type, object_id):
     return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
 
 
-def __object_find_all_url(object_type, query):
-    return '{0}/object/{1}/find/all?{2}'.format(base_url, object_type,
+def __object_find_all_url(object_type, query, fields):
+    url = '{0}/object/{1}/find/all?{2}'.format(base_url, object_type,
                                                 str(query))
+    if fields is not None:
+        url += '&fields=' + ','.join(fields)
+    return url
 
 
 def __object_find_between_two_objects_url(object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b, fields):
@@ -118,9 +123,12 @@ def __connection_update_url(relation_type, connection_id):
                                            connection_id)
 
 
-def __connection_find_all_url(relation_type, query):
-    return '{0}/connection/{1}/find/all?{2}'.format(base_url, relation_type,
+def __connection_find_all_url(relation_type, query, fields):
+    url = '{0}/connection/{1}/find/all?{2}'.format(base_url, relation_type,
                                                     str(query))
+    if fields is not None:
+        url += '&fields=' + ','.join(fields)
+        return url
 
 
 def __connection_find_for_objects_url(object_id1, object_id2, fields):
@@ -180,8 +188,11 @@ def __device_delete_url(device_id, delete_connections=False):
     return '{0}/device/{1}?deleteconnections={3}'.format(base_url, device_id, delete_connections)
 
 
-def __device_find_all_url(query):
-    return '{0}/object/device/find/all?{1}'.format(base_url, str(query))
+def __device_find_all_url(query, fields):
+    url = '{0}/object/device/find/all?{1}'.format(base_url, str(query))
+    if fields is not None:
+        url += '&fields=' + ','.join(fields)
+        return url
 
 
 #endregion
@@ -217,8 +228,11 @@ def __user_update_url(user_id):
     return '{0}/user/{1}'.format(base_url, user_id)
 
 
-def __user_find_all_url(query):
-    return '{0}/object/user/find/all?{1}'.format(base_url, str(query))
+def __user_find_all_url(query, fields):
+    url = '{0}/object/user/find/all?{1}'.format(base_url, str(query))
+    if fields is not None:
+        url += '&fields=' + ','.join(fields)
+        return url
 
 
 def __user_authenticate_url():

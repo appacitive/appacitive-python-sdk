@@ -1,9 +1,8 @@
 __author__ = 'sathley'
 
-from object import AppacitiveObject
-from entity import Entity, object_system_properties
-from error import ValidationError, UserAuthError
-from utilities import http, urlfactory, appcontext, customjson
+from entity import Entity
+from error import ValidationError
+from utilities import http, urlfactory, customjson
 from response import AppacitiveResponse
 
 
@@ -224,9 +223,9 @@ class AppacitiveDevice(Entity):
         return AppacitiveDevice.delete_by_id(self.id, delete_connections)
 
     @classmethod
-    def find(cls, query):
+    def find(cls, query, fields=None):
 
-        url = urlfactory.device_urls["find_all"](query)
+        url = urlfactory.device_urls["find_all"](query, fields)
 
         headers = urlfactory.get_user_headers()
 

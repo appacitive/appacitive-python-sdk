@@ -1,7 +1,6 @@
 __author__ = 'sathley'
 
-from user import AppacitiveUser
-from utilities import urlfactory, http, appcontext
+from utilities import urlfactory, http
 from error import ValidationError
 
 

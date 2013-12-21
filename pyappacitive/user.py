@@ -1,10 +1,9 @@
 __author__ = 'sathley'
 
-from object import AppacitiveObject
-from entity import Entity, object_system_properties
+from entity import Entity
 from error import ValidationError, UserAuthError
 from utilities import http, urlfactory, customjson
-from utilities.appcontext import ApplicationContext
+from pyappacitive.appcontext import ApplicationContext
 from response import AppacitiveResponse
 
 
@@ -459,9 +458,9 @@ class AppacitiveUser(Entity):
 
     @classmethod
     @user_auth_required
-    def find(cls, query):
+    def find(cls, query, fields=None):
 
-        url = urlfactory.user_urls["find_all"](query)
+        url = urlfactory.user_urls["find_all"](query, fields)
 
         headers = urlfactory.get_user_headers()
 

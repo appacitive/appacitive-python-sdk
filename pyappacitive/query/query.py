@@ -13,8 +13,6 @@ class AppacitiveQuery(object):
         self.order_by = None
         self.is_ascending = None
 
-        self.fields_to_return = []
-
         self.free_text_tokens = []
         self.free_text_language = None
         self.language = None
@@ -40,11 +38,6 @@ class AppacitiveQuery(object):
             if isinstance(self.is_ascending, bool) is False:
                 raise TypeError('Invalid value for isAscending. It should be a bool.')
             items.append('isAsc='+str(self.is_ascending))
-
-        if len(self.fields_to_return) > 0:
-            if isinstance(self.fields_to_return, types.ListType) is False:
-                raise TypeError('Invalid value for fields_to_return.')
-            items.append('fields='+','.join(self.fields_to_return))
 
         if len(self.free_text_tokens) > 0:
             if self.free_text_language is not None:
