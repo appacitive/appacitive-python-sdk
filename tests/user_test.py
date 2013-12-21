@@ -5,10 +5,16 @@ import random
 import datetime
 
 
-def get_random_string():
-    arr = [str(i) for i in range(10)]
+def get_random_string(number_of_characters=10):
+    arr = [str(i) for i in range(number_of_characters)]
     random.shuffle(arr)
     return ''.join(arr)
+
+
+def get_random_number(number_of_digits=10):
+    arr = [str(i) for i in range(number_of_digits)]
+    random.shuffle(arr)
+    return int(''.join(arr))
 
 
 def get_random_user():

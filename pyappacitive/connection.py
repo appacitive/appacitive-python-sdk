@@ -11,7 +11,7 @@ from response import AppacitiveResponse, PagingInfo
 
 class AppacitiveConnection(AppacitiveEntity):
 
-    def __init__(self, connection=None):
+    def __init__(self, connection):
         self.relation_type = None
         self.relation_id = 0
         self.endpoint_a = AppacitiveEndpoint()

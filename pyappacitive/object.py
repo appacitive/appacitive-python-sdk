@@ -16,7 +16,7 @@ from response import AppacitiveResponse, PagingInfo
 
 class AppacitiveObject(AppacitiveEntity):
 
-    def __init__(self, obj=None):
+    def __init__(self, obj):
 
         self.type = None
         self.type_id = 0
