@@ -1,7 +1,7 @@
 __author__ = 'sathley'
 
 
-class Response(object):
+class AppacitiveResponse(object):
     def __init__(self, status):
         self.status_code = status['code']
 

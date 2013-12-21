@@ -4,12 +4,13 @@ __author__ = 'sathley'
 from pyappacitive.entity import Entity, object_system_properties
 from pyappacitive.error import *
 from utilities import customjson
-from response import Response
+from response import AppacitiveResponse
 
 # add file upload support using urllib2
 # logging and nosetests
 # add license file
 # run pylint, pyflakes, sphynx
+# give graph response proper structure
 # session token management
 
 
@@ -92,7 +93,7 @@ class AppacitiveObject(Entity):
 
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
 
         if response.status_code == '200':
             self.__set_self(api_resp['object'])
@@ -112,7 +113,7 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
 
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     def delete_with_connections(self):
@@ -127,7 +128,7 @@ class AppacitiveObject(Entity):
                                                                self.id)
         headers = urlfactory.get_headers()
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     @classmethod
@@ -147,7 +148,7 @@ class AppacitiveObject(Entity):
             payload["idlist"].append(str(object_id))
 
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     def update(self, with_revision=False):
@@ -166,7 +167,7 @@ class AppacitiveObject(Entity):
         payload = self.get_update_command()
 
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
 
         if response.status_code == '200':
             updated_object = api_resp['object']
@@ -189,7 +190,7 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             obj = api_response['object']
@@ -200,7 +201,7 @@ class AppacitiveObject(Entity):
         url = urlfactory.object_urls["get"](self.type, self.id)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             self._set_self(api_response['object'])
             self._reset_update_commands()
@@ -220,7 +221,7 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_objects = api_response.get('objects', None)
@@ -242,7 +243,7 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_objects = api_response.get('objects', None)
@@ -266,7 +267,7 @@ class AppacitiveObject(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_objects = api_response.get('objects', None)

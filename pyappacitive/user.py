@@ -5,7 +5,7 @@ from entity import Entity, object_system_properties
 from error import ValidationError, UserAuthError
 from utilities import http, urlfactory, customjson
 from utilities.appcontext import ApplicationContext
-from response import Response
+from response import AppacitiveResponse
 
 
 def user_auth_required(func):
@@ -198,7 +198,7 @@ class AppacitiveUser(Entity):
 
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
 
         if response.status_code == '200':
             self.__set_self(api_resp['user'])
@@ -218,7 +218,7 @@ class AppacitiveUser(Entity):
 
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             response.user = cls(api_response['user'])
@@ -229,7 +229,7 @@ class AppacitiveUser(Entity):
         url = urlfactory.user_urls["get"](self.id)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             self._set_self(api_response['user'])
             self._reset_update_commands()
@@ -247,7 +247,7 @@ class AppacitiveUser(Entity):
 
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             response.user = cls(api_response['user'])
@@ -270,7 +270,7 @@ class AppacitiveUser(Entity):
 
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             response.user = cls(api_response['user'])
@@ -293,7 +293,7 @@ class AppacitiveUser(Entity):
 
         api_response = http.post(url, headers, customjson.serialize(payload))
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             response.token = api_response['token']
             ApplicationContext.set_user_token(response.token)
@@ -311,7 +311,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_users = api_response.get('users', None)
@@ -335,7 +335,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
 
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     @classmethod
@@ -350,7 +350,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
 
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     @classmethod
@@ -362,7 +362,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
 
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     def delete(self, delete_connections=False):
@@ -384,7 +384,7 @@ class AppacitiveUser(Entity):
 
         payload = self.get_update_command()
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
 
         if response.status_code == '200':
             self.__set_self(api_resp['user'])
@@ -405,7 +405,7 @@ class AppacitiveUser(Entity):
 
         json_payload = customjson.serialize(payload)
         api_response = http.post(url, headers, json_payload)
-        return Response(api_response['status'])
+        return AppacitiveResponse(api_response['status'])
 
     @staticmethod
     def send_reset_password_email(username, email_subject):
@@ -420,7 +420,7 @@ class AppacitiveUser(Entity):
 
         json_payload = customjson.serialize(payload)
         api_response = http.post(url, headers, json_payload)
-        return Response(api_response['status'])
+        return AppacitiveResponse(api_response['status'])
 
     @staticmethod
     @user_auth_required
@@ -430,7 +430,7 @@ class AppacitiveUser(Entity):
         payload = {}
 
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             response.result = api_response['result']
         return response
@@ -443,7 +443,7 @@ class AppacitiveUser(Entity):
         payload = {}
 
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             response.result = api_response['result']
         return response
@@ -455,7 +455,7 @@ class AppacitiveUser(Entity):
         payload = {}
 
         api_response = http.post(url, headers, customjson.serialize(payload))
-        return Response(api_response['status'])
+        return AppacitiveResponse(api_response['status'])
 
     @classmethod
     @user_auth_required
@@ -466,7 +466,7 @@ class AppacitiveUser(Entity):
         headers = urlfactory.get_user_headers()
 
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_users = api_response.get('users', None)

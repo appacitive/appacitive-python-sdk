@@ -1,5 +1,5 @@
 from pyappacitive.utilities import http, urlfactory, customjson
-from response import Response
+from response import AppacitiveResponse
 
 __author__ = 'sathley'
 
@@ -135,7 +135,7 @@ class AppacitiveConnection(Entity):
 
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         if response.status_code == '200':
             self.__set_self(api_resp['connection'])
             self._reset_update_commands()
@@ -154,7 +154,7 @@ class AppacitiveConnection(Entity):
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             response.connection = cls(api_response['connection'])
@@ -165,7 +165,7 @@ class AppacitiveConnection(Entity):
         url = urlfactory.connection_urls["get"](self.relation_type, self.id)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             self._set_self(api_response['connection'])
             self._reset_update_commands()
@@ -182,7 +182,7 @@ class AppacitiveConnection(Entity):
         url = urlfactory.connection_urls["delete"](self.relation_type if self.relation_type is not None else self.relation_id, self.id)
         headers = urlfactory.get_headers()
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     @classmethod
@@ -202,7 +202,7 @@ class AppacitiveConnection(Entity):
             payload["idlist"].append(str(connection_id))
 
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     @classmethod
@@ -219,7 +219,7 @@ class AppacitiveConnection(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             return_connections = []
@@ -245,7 +245,7 @@ class AppacitiveConnection(Entity):
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
 
         if response.status_code == '200':
             self.__set_self(api_resp['connection'])
@@ -261,7 +261,7 @@ class AppacitiveConnection(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_connections = api_response.get('connections', None)
@@ -283,7 +283,7 @@ class AppacitiveConnection(Entity):
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_connections = api_response.get('connections', None)
@@ -308,7 +308,7 @@ class AppacitiveConnection(Entity):
             payload['object2ids'].append(str(object_id))
 
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_connections = api_response.get('connections', None)
@@ -332,7 +332,7 @@ class AppacitiveConnection(Entity):
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_connections = api_response.get('connections', None)
@@ -352,7 +352,7 @@ class AppacitiveConnection(Entity):
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_objects = api_response.get('nodes', None)

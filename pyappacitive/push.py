@@ -2,7 +2,7 @@ __author__ = 'sathley'
 
 from utilities import urlfactory, http, customjson
 from error import ValidationError
-from response import Response
+from response import AppacitiveResponse
 
 
 class PushNotification(object):
@@ -163,7 +163,7 @@ class PushNotification(object):
         payload = customjson.serialize(push_request)
 
         api_response = http.post(url, headers, payload)
-        return Response(api_response['status'])
+        return AppacitiveResponse(api_response['status'])
 
 
     @staticmethod
@@ -187,7 +187,7 @@ class PushNotification(object):
         payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
-        return Response(response['status'])
+        return AppacitiveResponse(response['status'])
 
     @staticmethod
     def send_to_specific_devices(device_ids, platform_options=None, data=None, expire_after=None):
@@ -210,7 +210,7 @@ class PushNotification(object):
         payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
-        return Response(response['status'])
+        return AppacitiveResponse(response['status'])
 
     @staticmethod
     def send_using_query(query, platform_options=None, data=None, expire_after=None):
@@ -233,7 +233,7 @@ class PushNotification(object):
         payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
-        return Response(response['status'])
+        return AppacitiveResponse(response['status'])
 
     @staticmethod
     def send(platform_options, data, expire_after, **kwargs):
@@ -256,7 +256,7 @@ class PushNotification(object):
         payload = customjson.serialize(push_request)
 
         response = http.post(url, headers, payload)
-        return Response(response['status'])
+        return AppacitiveResponse(response['status'])
 
     @staticmethod
     def get_notification_by_id(notification_id):
@@ -268,7 +268,7 @@ class PushNotification(object):
         headers = urlfactory.get_headers()
 
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             response.notification = PushNotification(api_response['pushnotification'])
@@ -280,7 +280,7 @@ class PushNotification(object):
         headers = urlfactory.get_headers()
 
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             return_notifications = []

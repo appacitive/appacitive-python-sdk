@@ -3,7 +3,7 @@ from pyappacitive.utilities import http, urlfactory
 __author__ = 'sathley'
 
 from utilities import customjson
-from response import Response
+from response import AppacitiveResponse
 
 
 class GraphSearch(object):
@@ -19,7 +19,7 @@ class GraphSearch(object):
             'placeholders': query_dict
         }
         resp = http.post(url, headers, customjson.serialize(payload))
-        response = Response(resp['status'])
+        response = AppacitiveResponse(resp['status'])
         if response.status_code == '200':
             for k, v in resp.iteritems():
                 if k is not 'status':
@@ -35,7 +35,7 @@ class GraphSearch(object):
         }
 
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             response.ids = api_response['ids']
         return response

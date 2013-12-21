@@ -4,7 +4,7 @@ from object import AppacitiveObject
 from entity import Entity, object_system_properties
 from error import ValidationError, UserAuthError
 from utilities import http, urlfactory, appcontext, customjson
-from response import Response
+from response import AppacitiveResponse
 
 
 class AppacitiveDevice(Entity):
@@ -127,7 +127,7 @@ class AppacitiveDevice(Entity):
 
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
 
         if response.status_code == '200':
             self.__set_self(api_resp['device'])
@@ -146,7 +146,7 @@ class AppacitiveDevice(Entity):
 
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
 
         if response.status_code == '200':
             response.device = cls(api_response['device'])
@@ -156,7 +156,7 @@ class AppacitiveDevice(Entity):
         url = urlfactory.device_urls["get"](self.id)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
             self._set_self(api_response['device'])
             self._reset_update_commands()
@@ -172,7 +172,7 @@ class AppacitiveDevice(Entity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_devices = api_response.get('devices', None)
@@ -200,7 +200,7 @@ class AppacitiveDevice(Entity):
 
         payload = self.get_update_command()
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
 
         if response.status_code == '200':
             self.__set_self(api_resp['device'])
@@ -217,7 +217,7 @@ class AppacitiveDevice(Entity):
         headers = urlfactory.get_user_headers()
 
         api_resp = http.delete(url, headers)
-        response = Response(api_resp['status'])
+        response = AppacitiveResponse(api_resp['status'])
         return response
 
     def delete(self, delete_connections=False):
@@ -231,7 +231,7 @@ class AppacitiveDevice(Entity):
         headers = urlfactory.get_user_headers()
 
         api_response = http.get(url, headers)
-        response = Response(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
         if response.status_code == '200':
 
             api_devices = api_response.get('devices', None)

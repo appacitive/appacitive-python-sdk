@@ -6,7 +6,7 @@ from file import FileHelper
 from graphsearch import GraphSearch
 from push import PushNotification
 from appacitive_email import AppacitiveEmail
-from response import Response
+from response import AppacitiveResponse
 from entity import Entity
 from object import AppacitiveObject
 from endpoint import AppacitiveEndpoint
