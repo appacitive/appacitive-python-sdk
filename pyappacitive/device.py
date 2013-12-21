@@ -159,6 +159,8 @@ class AppacitiveDevice(Entity):
         response = Response(api_response['status'])
         if response.status_code == '200':
             self._set_self(api_response['device'])
+            self._reset_update_commands()
+        return response
 
     @classmethod
     def multi_get(cls, device_ids):

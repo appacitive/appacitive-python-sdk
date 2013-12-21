@@ -1,8 +1,5 @@
 __author__ = 'sathley'
 
-from datetime import datetime
-
-
 connection_system_properties = ['__relationtype', '__relationid', '__id', '__createdby', '__lastmodifiedby',
                                 '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties',
                                 '__revision', '__endpointa', '__endpointb']
@@ -44,7 +41,6 @@ class Entity(object):
             for k, v in entity.iteritems():
                 if k not in connection_system_properties:
                     self.__properties[k] = v
-
 
     def _set_self(self, obj):
 
@@ -105,12 +101,6 @@ class Entity(object):
 
     def tag_exists(self, tag):
         return tag in self.__tags
-
-    def discard_changes(self):
-        pass
-
-    def get_updated(self):
-        pass
 
     def get_update_command(self):
         update_command = {}

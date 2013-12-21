@@ -48,13 +48,19 @@ def __object_delete_with_connections_url(object_type, object_id):
                                                               object_id)
 
 
-def __object_get_url(object_type, object_id):
-    return '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
+def __object_get_url(object_type, object_id, fields):
+    url = '{0}/object/{1}/{2}'.format(base_url, object_type, object_id)
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
-def __object_multiget_url(object_type, object_ids):
-    return '{0}/object/{1}/multiget/{2}'.format(base_url, object_type,
+def __object_multiget_url(object_type, object_ids, fields):
+    url = '{0}/object/{1}/multiget/{2}'.format(base_url, object_type,
                                                 ','.join([str(object_id) for object_id in object_ids]))
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
 def __object_update_url(object_type, object_id):
@@ -66,8 +72,11 @@ def __object_find_all_url(object_type, query):
                                                 str(query))
 
 
-def __object_find_between_two_objects_url(object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b):
-    return '{0}/object/{1}/{2}/{3}/{4}/{5}/{6}/{7}'.format(base_url, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b)
+def __object_find_between_two_objects_url(object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b, fields):
+    url = '{0}/object/{1}/{2}/{3}/{4}/{5}/{6}/{7}'.format(base_url, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b)
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 #endregion
 
@@ -78,14 +87,21 @@ def __connection_create_url(relation_type):
     return '{0}/connection/{1}'.format(base_url, relation_type)
 
 
-def __connection_get_url(relation_type, connection_id):
-    return '{0}/connection/{1}/{2}'.format(base_url, relation_type,
+def __connection_get_url(relation_type, connection_id, fields):
+    url = '{0}/connection/{1}/{2}'.format(base_url, relation_type,
                                            connection_id)
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
-def __connection_multiget_url(relation_type, connection_ids):
-    return '{0}/connection/{1}/multiget/{2}'.format(base_url, relation_type,
+
+def __connection_multiget_url(relation_type, connection_ids, fields):
+    url = '{0}/connection/{1}/multiget/{2}'.format(base_url, relation_type,
                                                     ','.join([str(connection_id) for connection_id in connection_ids]))
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
 def __connection_delete_url(relation_type, connection_id):
@@ -107,24 +123,36 @@ def __connection_find_all_url(relation_type, query):
                                                     str(query))
 
 
-def __connection_find_for_objects_url(object_id1, object_id2):
-    return '{0}/connection/find/{1}/{2}'.format(base_url, str(object_id1),
-                                                str(object_id2))
+def __connection_find_for_objects_url(object_id1, object_id2, fields):
+    url = '{0}/connection/find/{1}/{2}'.format(base_url, str(object_id1),
+                                               str(object_id2), fields)
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
 def __connection_find_for_objects_and_relation_url(relation_type, object_id1,
-                                                   object_id2):
-    return '{0}/connection/{1}/find/{2}/{3}'.format(base_url, relation_type,
+                                                   object_id2, fields):
+    url = '{0}/connection/{1}/find/{2}/{3}'.format(base_url, relation_type,
                                                     str(object_id1),
                                                     str(object_id2))
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
-def __connection_find_interconnects_url():
-    return '{0}/connection/interconnects'.format(base_url)
+def __connection_find_interconnects_url(fields):
+    url = '{0}/connection/interconnects'.format(base_url)
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
-def __connection_find_connected_objects_url(relation, object_type, object_id):
-    return '{0}/connection/{1}/{2}/{3}/find'.format(base_url, relation, object_type, object_id)
+def __connection_find_connected_objects_url(relation, object_type, object_id, fields):
+    url = '{0}/connection/{1}/{2}/{3}/find'.format(base_url, relation, object_type, object_id)
+    if fields is not None:
+        url += '?fields=' + ','.join(fields)
+    return url
 
 
 def __update__password_url(user_id, identification_type):

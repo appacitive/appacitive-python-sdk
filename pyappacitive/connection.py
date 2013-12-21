@@ -150,10 +150,7 @@ class AppacitiveConnection(Entity):
         if connection_id is None:
             raise ValidationError('Connection id is missing.')
 
-        url = urlfactory.connection_urls["get"](relation_type, connection_id)
-
-        if fields is not None:
-            url += '?fields=' + ','.join(fields)
+        url = urlfactory.connection_urls["get"](relation_type, connection_id, fields)
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
@@ -171,6 +168,8 @@ class AppacitiveConnection(Entity):
         response = Response(api_response['status'])
         if response.status_code == '200':
             self._set_self(api_response['connection'])
+            self._reset_update_commands()
+        return response
 
     def delete(self):
 
@@ -215,9 +214,8 @@ class AppacitiveConnection(Entity):
         if connection_ids is None:
             raise ValidationError('Connection ids are missing.')
 
-        url = urlfactory.connection_urls["multiget"](relation_type, connection_ids)
-        if fields is not None:
-            url += '?fields=' + ','.join(fields)
+        url = urlfactory.connection_urls["multiget"](relation_type, connection_ids, fields)
+
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
 
@@ -277,11 +275,11 @@ class AppacitiveConnection(Entity):
             return response
 
     @classmethod
-    def find_by_objects(cls, object_id_1, object_id_2, relation=None):
+    def find_by_objects(cls, object_id_1, object_id_2, relation=None, fields=None):
         if relation is None:
-            url = urlfactory.connection_urls["find_for_objects"](object_id_1, object_id_2)
+            url = urlfactory.connection_urls["find_for_objects"](object_id_1, object_id_2, fields)
         else:
-            url = urlfactory.connection_urls["find_for_objects_and_relation"](relation, object_id_1, object_id_2)
+            url = urlfactory.connection_urls["find_for_objects_and_relation"](relation, object_id_1, object_id_2, fields)
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
@@ -299,9 +297,9 @@ class AppacitiveConnection(Entity):
             return response
 
     @classmethod
-    def find_interconnects(cls, object_1_id, object_2_ids):
+    def find_interconnects(cls, object_1_id, object_2_ids, fields=None):
 
-        url = urlfactory.connection_urls["find_interconnects"]()
+        url = urlfactory.connection_urls["find_interconnects"](fields)
         headers = urlfactory.get_headers()
 
         payload = {"object1id": str(object_1_id), "object2ids": []}
@@ -324,9 +322,12 @@ class AppacitiveConnection(Entity):
             return response
 
     @classmethod
-    def find_by_object_and_label(cls, relation, object_id, label):
+    def find_by_object_and_label(cls, relation, object_id, label, fields=None):
 
         query = '?objectid={1}&label={2}'.format(object_id, label)
+        if fields is not None:
+            query += '&fields=' + ','.join(fields)
+
         url = urlfactory.connection_urls["find_all"](relation, object_id, query)
 
         headers = urlfactory.get_headers()
@@ -345,9 +346,9 @@ class AppacitiveConnection(Entity):
             return response
 
     @classmethod
-    def find_connected_objects(cls, relation, object_type, object_id):
+    def find_connected_objects(cls, relation, object_type, object_id, fields=None):
 
-        url = urlfactory.connection_urls["find_connected_objects"](relation, object_type, object_id)
+        url = urlfactory.connection_urls["find_connected_objects"](relation, object_type, object_id, fields)
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
