@@ -18,9 +18,9 @@ class AppacitiveFile(object):
         url = urlfactory.file_urls['get_upload_url'](content_type)
 
         if filename is not None:
-            url+'&filename='+filename
+            url += '&filename='+filename
         if expires is not None:
-            url+'&expires='+expires
+            url += '&expires='+expires
 
         headers = urlfactory.get_headers()
 
@@ -40,7 +40,7 @@ class AppacitiveFile(object):
         url = urlfactory.file_urls['get_download_url'](file_id)
 
         if expires is not None:
-            url+'?expires='+expires
+            url += '?expires='+expires
 
         headers = urlfactory.get_headers()
 

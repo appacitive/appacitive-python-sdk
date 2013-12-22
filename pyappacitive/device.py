@@ -8,13 +8,15 @@ from response import AppacitiveResponse, PagingInfo
 
 class AppacitiveDevice(AppacitiveEntity):
     def __init__(self, device=None):
-        super(AppacitiveDevice, self).__init__()
         self.type = 'device'
         self.type_id = 0
 
         if device is not None:
+            super(AppacitiveDevice, self).__init__(device)
             self.type = device.get('__type', None)
             self.type_id = int(device.get('__typeid', 0))
+        else:
+            super(AppacitiveDevice, self).__init__()
 
     def __set_self(self, device):
         super(AppacitiveDevice, self)._set_self(device)
@@ -93,11 +95,11 @@ class AppacitiveDevice(AppacitiveEntity):
 
     @property
     def badge(self):
-        return self.get_property('badge')
+        return int(self.get_property('badge'))
 
     @badge.setter
     def badge(self, value):
-        self.set_property('badge', value)
+        str(self.set_property('badge', value))
 
     @property
     def timezone(self):
@@ -174,7 +176,7 @@ class AppacitiveDevice(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_devices = api_response.get('devices', None)
+            api_devices = api_response.get('objects', None)
 
             return_devices = []
             for device in api_devices:
@@ -233,7 +235,7 @@ class AppacitiveDevice(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_devices = api_response.get('devices', None)
+            api_devices = api_response.get('objects', None)
 
             return_devices = []
             for device in api_devices:

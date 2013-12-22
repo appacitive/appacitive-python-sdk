@@ -150,3 +150,5 @@ def checkin_user_test():
     assert user.location == '10.1,20.2'
 
 
+
+
