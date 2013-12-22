@@ -7,12 +7,17 @@ from utilities import customjson
 from response import AppacitiveResponse, PagingInfo
 
 # add file upload support using urllib2
-# logging and nosetests
+# logging with custom data and filters
+# file.py response structuring 
+# call set self in init
+# complete object base 
+# incrementally build get dict
 # add license file
 # run pylint, pyflakes, sphynx
 # give graph response proper structure
 # session token management
 # add code for baseobject
+# query and utilities don't have to be modules- remove init.py
 
 
 class AppacitiveObject(AppacitiveEntity):
