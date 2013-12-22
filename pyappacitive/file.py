@@ -2,6 +2,7 @@ __author__ = 'sathley'
 
 from utilities import urlfactory, http
 from error import ValidationError
+from response import AppacitiveResponse
 
 
 class AppacitiveFile(object):
@@ -23,11 +24,12 @@ class AppacitiveFile(object):
 
         headers = urlfactory.get_headers()
 
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
-            return None
-
-        return response['id'], response['url']
+        api_response = http.get(url, headers)
+        response = AppacitiveResponse(api_response['status'])
+        if response.status.code == '200':
+            response.id = api_response['id']
+            response.url = api_response['url']
+        return response
 
     @staticmethod
     def get_download_url(file_id, expires=None):
@@ -42,11 +44,11 @@ class AppacitiveFile(object):
 
         headers = urlfactory.get_headers()
 
-        response = http.get(url, headers)
-        if response['status']['code'] != '200':
-            return None
-
-        return response['uri']
+        api_response = http.get(url, headers)
+        response = AppacitiveResponse(api_response['status'])
+        if response.status.code == '200':
+            response.url = api_response['uri']
+        return response
 
     @staticmethod
     def delete_file(file_id):
@@ -58,8 +60,7 @@ class AppacitiveFile(object):
 
         headers = urlfactory.get_headers()
 
-        response = http.delete(url, headers)
-        if response['status']['code'] != '200':
-            return None
+        api_response = http.delete(url, headers)
+        return AppacitiveResponse(api_response['status'])
 
 
