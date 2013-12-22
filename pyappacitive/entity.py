@@ -34,8 +34,8 @@ class AppacitiveEntity(object):
             self.last_modified_by = entity.get('__lastmodifiedby', None)
             self.utc_date_created = entity.get('__utcdatecreated', None)
             self.utc_last_updated_date = entity.get('__utclastupdateddate', None)
-            self._tags = entity.get('__tags', None)
-            self._attributes = entity.get('__attributes', None)
+            self.__tags = entity.get('__tags', None)
+            self.__attributes = entity.get('__attributes', None)
             self.revision = int(entity.get('__revision', 0))
 
             for k, v in entity.iteritems():
@@ -58,6 +58,36 @@ class AppacitiveEntity(object):
         for k, v in obj.iteritems():
             if k not in object_system_properties:
                 self.__properties[k] = v
+
+    def get_dict(self):
+        native = {}
+
+        if self.id is not None:
+            native['__id'] = str(self.id)
+
+        if self.revision is not 0:
+            native['__revision'] = str(self.revision)
+
+        if self.created_by is not None:
+            native['__createdby'] = self.created_by
+
+        if self.last_modified_by is not None:
+            native['__lastmodifiedby'] = self.last_modified_by
+
+        if self.utc_date_created is not None:
+            native['__utcdatecreated'] = self.utc_date_created
+
+        if self.utc_last_updated_date is not None:
+            native['__utclastupdateddate'] = self.utc_last_updated_date
+
+        tags = self.get_all_tags()
+        if tags is not None:
+            native['__tags'] = tags
+
+        native['__attributes'] = self.__attributes
+
+        native.update(self.__properties)
+        return native
 
     def get_all_properties(self):
         return self.__properties
@@ -124,7 +154,7 @@ class AppacitiveEntity(object):
         return update_command
 
     def _reset_update_commands(self):
-        # update observers
+        # reset observers
         self.__properties_changed = {}
         self.__attributes_changed = {}
         self.__tags_added = []

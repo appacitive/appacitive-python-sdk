@@ -50,40 +50,14 @@ class AppacitiveObject(AppacitiveEntity):
 
     def get_dict(self):
 
-        native = {}
+        native = super(AppacitiveObject, self).get_dict()
+
         if self.type is not None:
             native['__type'] = self.type
 
         if self.type_id is not None:
             native['__typeid'] = str(self.type_id)
 
-        if self.id is not None:
-            native['__id'] = str(self.id)
-
-        if self.revision is not 0:
-            native['__revision'] = str(self.revision)
-
-        if self.created_by is not None:
-            native['__createdby'] = self.created_by
-
-        if self.last_modified_by is not None:
-            native['__lastmodifiedby'] = self.last_modified_by
-
-        if self.utc_date_created is not None:
-            native['__utcdatecreated'] = self.utc_date_created
-
-        if self.utc_last_updated_date is not None:
-            native['__utclastupdateddate'] = self.utc_last_updated_date
-
-        tags = self.get_all_tags()
-        if tags is not None:
-            native['__tags'] = tags
-
-        attributes = self.get_all_attributes()
-        if attributes is not None:
-            native['__attributes'] = attributes
-
-        native.update(self.get_all_properties())
         return native
 
     def create(self):

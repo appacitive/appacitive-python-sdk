@@ -19,7 +19,6 @@ class AppacitiveConnection(AppacitiveEntity):
         self.endpoint_b = AppacitiveEndpoint()
 
         if isinstance(connection, str):
-
             super(AppacitiveConnection, self).__init__()
             self.relation_type = connection
             return
@@ -48,42 +47,12 @@ class AppacitiveConnection(AppacitiveEntity):
 
     def get_dict(self):
 
-        native = {}
+        native = super(AppacitiveConnection, self).get_dict()
         if self.relation_type is not None:
             native['__relationtype'] = self.relation_type
 
         if self.relation_id is not None:
             native['__relationid'] = str(self.relation_id)
-
-        if self.id is not None:
-            native['__id'] = str(self.id)
-
-        if self.revision is not 0:
-            native['__revision'] = str(self.revision)
-
-        if self.created_by is not None:
-            native['__createdby'] = self.created_by
-
-        if self.last_modified_by is not None:
-            native['__lastmodifiedby'] = self.last_modified_by
-
-        if self.utc_date_created is not None:
-            native['__utcdatecreated'] = self.utc_date_created
-
-        if self.utc_last_updated_date is not None:
-            native['__utclastupdateddate'] = self.utc_last_updated_date
-
-        tags = self.get_all_tags()
-        if tags is not None:
-            native['__tags'] = tags
-
-        attributes = self.get_all_attributes()
-        if attributes is not None:
-            native['__attributes'] = attributes
-
-        properties = self.get_all_properties()
-        for property_name, property_value in properties.iteritems():
-            native[property_name] = property_value
 
         native['__endpointa'] = {
             'label': self.endpoint_a.label,
