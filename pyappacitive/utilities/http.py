@@ -4,13 +4,17 @@ from . import customjson
 import requests
 import logging
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def put(url, headers, payload):
+    logger.debug('HTTP PUT')
+    logger.debug('HEADERS : ' + ','.join([key for key in headers.iterkeys()]))
+    logger.debug('URL : ' + url)
+    logger.debug('PAYLOAD : ' + payload)
     response_from_api = requests.put(url, payload, headers=headers)
     response = to_dict(response_from_api)
+    logger.debug('RESPONSE : ' + str(response))
     return response
 
 

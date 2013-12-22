@@ -5,16 +5,16 @@ from pyappacitive.entity import AppacitiveEntity
 from pyappacitive.error import *
 from utilities import customjson
 from response import AppacitiveResponse, PagingInfo
-
+import logging
 # add file upload support using urllib2
 # logging with custom data and filters
-# file.py response structuring 
-# call set self in init
+## file.py response structuring
+## call set self in init
 # complete object base 
-# incrementally build get dict
+## incrementally build get dict
 # add license file
 # run pylint, pyflakes, sphynx
-# give graph response proper structure
+## give graph response proper structure
 # session token management
 # add code for baseobject
 # query and utilities don't have to be modules- remove init.py
@@ -67,7 +67,6 @@ class AppacitiveObject(AppacitiveEntity):
 
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
-
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = AppacitiveResponse(api_resp['status'])
