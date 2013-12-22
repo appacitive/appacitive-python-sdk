@@ -6,18 +6,12 @@ from pyappacitive.error import *
 from utilities import customjson
 from response import AppacitiveResponse, PagingInfo
 import logging
+
 # add file upload support using urllib2
 # logging with custom data and filters
-## file.py response structuring
-## call set self in init
-# complete object base 
-## incrementally build get dict
+# complete object base
 # add license file
 # run pylint, pyflakes, sphynx
-## give graph response proper structure
-# session token management
-# add code for baseobject
-# query and utilities don't have to be modules- remove init.py
 
 
 class AppacitiveObject(AppacitiveEntity):

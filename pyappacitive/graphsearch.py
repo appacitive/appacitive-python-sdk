@@ -42,7 +42,7 @@ class AppacitiveGraphSearch(object):
         api_response = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
-            response.ids = api_response['ids']
+            response.ids = [int(id) for id in api_response['ids']]
         return response
 
     @staticmethod

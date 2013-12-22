@@ -60,3 +60,24 @@ def projection_test():
     assert level2children[0].connection.id == level2edge.id
     assert level2children[0].connection.endpoint_a.objectid == level1child.id
     assert level2children[0].connection.endpoint_b.objectid == level2child.id
+
+
+def filter_test():
+
+    parent = AppacitiveObject('object')
+    parent.create()
+    unique = get_random_string()
+    child = AppacitiveObject('object')
+    child.set_property('stringfield', unique)
+    conn = AppacitiveConnection('link')
+    conn.endpoint_a.label = 'parent'
+    conn.endpoint_a.objectid = parent.id
+
+    conn.endpoint_b.label = 'child'
+    conn.endpoint_b.object = child
+    conn.create()
+
+    response = AppacitiveGraphSearch.filter('sample_filter', {'search_value': unique})
+    assert response.status.code == '200'
+    assert len(response.ids) == 1
+    assert response.ids[0] == parent.id

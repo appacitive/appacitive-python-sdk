@@ -259,7 +259,7 @@ def __update__password_url(user_id, identification_type='id'):
 #region MISC URLS
 
 def __graph_filter_url(filter_query_name):
-    return '{0}/search/filter/{1}'.format(base_url, filter_query_name)
+    return '{0}/search/{1}/filter'.format(base_url, filter_query_name)
 
 
 def __graph_project_url(project_query_name):
