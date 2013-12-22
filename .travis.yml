@@ -4,8 +4,8 @@ python:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
-script: nosetests --nocapture -v -w tests
-notifications:
-  email:
-    - sathley@appacitive.com
-    - singhalvibhor05@gmail.com
+script: nosetests --nocapture -v --with-coverage --cover-package=pyappacitive -w tests
+
+after_success:
+  coveralls
+
