@@ -3,7 +3,7 @@ __author__ = 'sathley'
 
 from error import ValidationError, UserAuthError
 from file import AppacitiveFile
-from graphsearch import AppacitiveGraphSearch
+
 from push import AppacitivePushNotification
 from appacitive_email import AppacitiveEmail
 from response import AppacitiveResponse, PagingInfo, Status
@@ -15,6 +15,8 @@ from user import AppacitiveUser
 from device import AppacitiveDevice
 from appcontext import ApplicationContext
 from objectbase import ObjectBase
+from node import GraphNode
+from graphsearch import AppacitiveGraphSearch
 
 from query import PropertyFilter, TagFilter, AttributeFilter, AggregateFilter
 from query import BooleanOperator

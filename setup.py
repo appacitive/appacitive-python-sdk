@@ -2,11 +2,11 @@ from distutils.core import setup
 
 setup(
     name='appacitive-python-sdk',
-    version='',
+    version='1.0dev',
     packages=['tests', 'pyappacitive', 'pyappacitive.query', 'pyappacitive.utilities'],
-    url='',
+    url='www.appacitive.com',
     license='',
     author='sathley',
     author_email='sathley@appacitive.com',
-    description=''
+    description='Python SDK for Appacitive.'
 )

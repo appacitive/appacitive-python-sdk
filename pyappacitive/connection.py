@@ -9,6 +9,7 @@ from pyappacitive.object import AppacitiveObject
 from endpoint import AppacitiveEndpoint
 from response import AppacitiveResponse, PagingInfo
 
+
 class AppacitiveConnection(AppacitiveEntity):
 
     def __init__(self, connection):
@@ -21,11 +22,9 @@ class AppacitiveConnection(AppacitiveEntity):
 
             super(AppacitiveConnection, self).__init__()
             self.relation_type = connection
-            self.relation_id = 0
             return
         if isinstance(connection, int):
             super(AppacitiveConnection, self).__init__()
-            self.relation_type = None
             self.relation_id = connection
             return
 

@@ -263,7 +263,7 @@ def __graph_filter_url(filter_query_name):
 
 
 def __graph_project_url(project_query_name):
-    return '{0}/search/projection/{1}'.format(base_url, project_query_name)
+    return '{0}/search/{1}/project'.format(base_url, project_query_name)
 
 
 def __email_send_url():

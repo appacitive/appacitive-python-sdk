@@ -12,6 +12,7 @@ from response import AppacitiveResponse, PagingInfo
 # run pylint, pyflakes, sphynx
 # give graph response proper structure
 # session token management
+# add code for baseobject
 
 
 class AppacitiveObject(AppacitiveEntity):
@@ -22,14 +23,11 @@ class AppacitiveObject(AppacitiveEntity):
         self.type_id = 0
 
         if isinstance(obj, str):
-
             super(AppacitiveObject, self).__init__()
             self.type = obj
-            self.type_id = 0
             return
         if isinstance(obj, int):
             super(AppacitiveObject, self).__init__()
-            self.type = None
             self.type_id = obj
             return
 
