@@ -1,4 +1,4 @@
-from pyappacitive import AppacitiveObject, AppacitiveConnection
+from pyappacitive import AppacitiveObject, AppacitiveConnection, AppacitiveQuery, TagFilter
 import datetime
 import nose
 
@@ -187,5 +187,34 @@ def update_connection_test():
     assert conn.get_attribute('a2') == 'v2'
     assert conn.tag_exists('1') == False
     assert conn.tag_exists('2') == True
+
+
+def find_connetion_test():
+    obj1 = AppacitiveObject('object')
+    obj1.create()
+
+    obj2 = AppacitiveObject('object')
+    obj2.create()
+
+    conn = AppacitiveConnection('sibling')
+    conn.set_property('field1', 'hello')
+    conn.set_property('field2', 101)
+    conn.endpoint_a.objectid = obj1.id
+    conn.endpoint_a.label = 'object'
+    conn.add_tags(['1', '4', '5'])
+    conn.set_attribute('a1', 'v1')
+    conn.endpoint_b.objectid = obj2.id
+    conn.endpoint_b.label = 'object'
+    conn.create()
+
+    query = AppacitiveQuery()
+    query.filter = TagFilter.match_one_or_more(['1', '2', '3'])
+    response = AppacitiveConnection.find('sibling', query)
+    assert response.status.code == '200'
+    assert hasattr(response, 'connections')
+    assert len(response.connections) > 0
+
+
+
 
 

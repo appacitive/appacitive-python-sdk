@@ -127,7 +127,7 @@ def __connection_find_all_url(relation_type, query, fields=None):
                                                     str(query))
     if fields is not None:
         url += '&fields=' + ','.join(fields)
-        return url
+    return url
 
 
 def __connection_find_for_objects_url(object_id1, object_id2, fields=None):
