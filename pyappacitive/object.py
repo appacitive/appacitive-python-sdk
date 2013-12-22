@@ -8,7 +8,7 @@ from response import AppacitiveResponse, PagingInfo
 import logging
 
 # add file upload support using urllib2
-# logging with custom data and filters
+## logging with custom data and filters
 # complete object base
 # add license file
 # run pylint, pyflakes, sphynx

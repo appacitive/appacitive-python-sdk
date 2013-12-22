@@ -129,7 +129,7 @@ class AppacitiveDevice(AppacitiveEntity):
 
         url = urlfactory.device_urls["register"]()
         headers = urlfactory.get_headers()
-
+        device_logger.info('Registering device')
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = AppacitiveResponse(api_resp['status'])
@@ -148,7 +148,7 @@ class AppacitiveDevice(AppacitiveEntity):
         url = urlfactory.device_urls["get"](device_id)
 
         headers = urlfactory.get_headers()
-
+        device_logger.info('Fetching device')
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
@@ -160,6 +160,7 @@ class AppacitiveDevice(AppacitiveEntity):
     def fetch_latest(self):
         url = urlfactory.device_urls["get"](self.id)
         headers = urlfactory.get_headers()
+        device_logger.info('Fetching latest device')
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -175,6 +176,7 @@ class AppacitiveDevice(AppacitiveEntity):
 
         url = urlfactory.object_urls["multiget"]('device', device_ids)
         headers = urlfactory.get_headers()
+        device_logger.info('Fetching multiple devices')
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
@@ -204,6 +206,7 @@ class AppacitiveDevice(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
 
         payload = self.get_update_command()
+        device_logger.info('Updating device')
         api_resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_resp['status'])
 
@@ -220,7 +223,7 @@ class AppacitiveDevice(AppacitiveEntity):
         url = urlfactory.device_urls["delete"](device_id, delete_connections)
 
         headers = urlfactory.get_user_headers()
-
+        device_logger.info('Deleting device')
         api_resp = http.delete(url, headers)
         response = AppacitiveResponse(api_resp['status'])
         return response
@@ -234,7 +237,7 @@ class AppacitiveDevice(AppacitiveEntity):
         url = urlfactory.device_urls["find_all"](query, fields)
 
         headers = urlfactory.get_user_headers()
-
+        device_logger.info('Searching devices')
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':

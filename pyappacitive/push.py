@@ -5,8 +5,8 @@ from error import ValidationError
 from response import AppacitiveResponse
 import json, logging
 
-logger = logging.getLogger(__name__)
-logger.addHandler(logging.NullHandler())
+push_logger = logging.getLogger(__name__)
+push_logger.addHandler(logging.NullHandler())
 
 
 class AppacitivePushNotification(object):
@@ -60,7 +60,7 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
 
         payload = json.dumps(push_request)
-
+        push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -87,7 +87,7 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
 
         payload = json.dumps(push_request)
-
+        push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -113,7 +113,7 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
 
         payload = json.dumps(push_request)
-
+        push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -139,7 +139,7 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
 
         payload = json.dumps(push_request)
-
+        push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -154,7 +154,7 @@ class AppacitivePushNotification(object):
 
         url = urlfactory.push_urls['get'](notification_id)
         headers = urlfactory.get_headers()
-
+        push_logger.info('Fetch Push notification')
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
 
@@ -167,7 +167,7 @@ class AppacitivePushNotification(object):
 
         url = urlfactory.push_urls['get_all']()
         headers = urlfactory.get_headers()
-
+        push_logger.info('Fetch all notifications')
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
 

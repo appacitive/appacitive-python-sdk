@@ -10,7 +10,7 @@ def create_object_test():
     #
     #logger.setLevel(logging.DEBUG)
     #sh = logging.StreamHandler()
-    #sh.addFilter(logfilter.SlowCallLogFilter(3.0))
+    #sh.addFilter(logfilter.FailedRequestsLogFilter())
     #logger.addHandler(sh)
     obj = AppacitiveObject('object')
     obj.set_property('intfield', 100)

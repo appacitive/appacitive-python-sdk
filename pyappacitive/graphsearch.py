@@ -7,8 +7,8 @@ from utilities import customjson
 from response import AppacitiveResponse
 import logging
 
-logger = logging.getLogger(__name__)
-logger.addHandler(logging.NullHandler())
+graph_logger = logging.getLogger(__name__)
+graph_logger.addHandler(logging.NullHandler())
 
 
 class AppacitiveGraphSearch(object):
@@ -24,6 +24,7 @@ class AppacitiveGraphSearch(object):
             'ids': stringified_id_list,
             'placeholders': query_dict
         }
+        graph_logger.info('Projection graph query')
         resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(resp['status'])
 
@@ -42,7 +43,7 @@ class AppacitiveGraphSearch(object):
         payload = {
             'placeholders': query_dict
         }
-
+        graph_logger.info('Filter graph query')
         api_response = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':

@@ -27,7 +27,7 @@ class AppacitiveFile(object):
             url += '&expires='+expires
 
         headers = urlfactory.get_headers()
-
+        logging.info('Getting upload URL')
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -47,7 +47,7 @@ class AppacitiveFile(object):
             url += '?expires='+expires
 
         headers = urlfactory.get_headers()
-
+        logging.info('Getting download URL')
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -63,7 +63,7 @@ class AppacitiveFile(object):
         url = urlfactory.file_urls['file_delete'](file_id)
 
         headers = urlfactory.get_headers()
-
+        logging.info('Deleting file')
         api_response = http.delete(url, headers)
         return AppacitiveResponse(api_response['status'])
 
