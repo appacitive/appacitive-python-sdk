@@ -19,6 +19,9 @@ class GraphNode(object):
 
         self.children[name].append(node)
 
+    def get_children(self, name):
+        return self.children.get(name, [])
+
 
 
 

@@ -1,6 +1,6 @@
 __author__ = 'sathley'
 
-from pyappacitive import AppacitiveGraphSearch
+from pyappacitive import AppacitiveGraphSearch, AppacitiveObject, AppacitiveConnection
 import nose, random
 
 
@@ -13,51 +13,50 @@ def get_random_string(number_of_characters=10):
 def projection_test():
     val1 = get_random_string()
     val2 = get_random_string()
+    root = AppacitiveObject('object')
+    root.create()
 
+    level1child = AppacitiveObject('object')
+    level1child.set_property('stringfield', val1)
+    level1child.create()
 
+    level1edge = AppacitiveConnection('link')
+    level1edge.endpoint_a.label = 'parent'
+    level1edge.endpoint_a.objectid = root.id
+    level1edge.endpoint_b.label = 'child'
+    level1edge.endpoint_b.objectid = level1child.id
+    level1edge.create()
 
+    level2child = AppacitiveObject('object')
+    level2child.set_property('stringfield', val2)
+    level2child.create()
 
+    level2edge = AppacitiveConnection('link')
+    level2edge.endpoint_a.label = 'parent'
+    level2edge.endpoint_a.objectid = level1child.id
+    level2edge.endpoint_b.label = 'child'
+    level2edge.endpoint_b.objectid = level2child.id
+    level2edge.create()
 
+    response = AppacitiveGraphSearch.project('sample_project', [root.id], {'level1_filter': val1, 'level2_filter': val2})
+    assert response.status.code == '200'
+    assert len(response.nodes) == 1
+    assert response.nodes[0].object is not None
+    assert response.nodes[0].object.id == root.id
+    level1children = response.nodes[0].get_children('level1_children')
+    assert len(level1children) == 1
+    assert level1children[0].object is not None
+    assert level1children[0].object.id == level1child.id
+    assert level1children[0].connection is not None
+    assert level1children[0].connection.id == level1edge.id
+    assert level1children[0].connection.endpoint_a.objectid == root.id
+    assert level1children[0].connection.endpoint_b.objectid == level1child.id
 
-
-'''
-
-string val1 = Unique.String, val2 = Unique.String;
-            var root = await ObjectHelper.CreateNewAsync();
-            var level1Child = ObjectHelper.NewInstance();
-            level1Child.Set<string>("stringfield", val1);
-            var level1Edge = Connection.New("link").FromExistingArticle("parent", root.Id).ToNewArticle("child", level1Child);
-            await level1Edge.SaveAsync();
-
-            var level2Child = ObjectHelper.NewInstance();
-            level2Child.Set<string>("stringfield", val2);
-            var level2Edge = Connection.New("link").FromExistingArticle("parent", level1Child.Id).ToNewArticle("child", level2Child);
-            await level2Edge.SaveAsync();
-
-            // Run filter
-            var results = await Graph.Project("sample_project",
-                new [] { root.Id },
-                new Dictionary<string, string> { { "level1_filter", val1 }, { "level2_filter", val2 } });
-
-            Assert.IsTrue(results.Count == 1);
-            Assert.IsTrue(results[0].Article != null);
-            Assert.IsTrue(results[0].Article.Id == root.Id);
-
-            var level1Children = results[0].GetChildren("level1_children");
-            Assert.IsTrue(level1Children.Count == 1);
-            Assert.IsTrue(level1Children[0].Article != null);
-            Assert.IsTrue(level1Children[0].Article.Id == level1Child.Id);
-            Assert.IsTrue(level1Children[0].Connection != null);
-            Assert.IsTrue(level1Children[0].Connection.Id == level1Edge.Id);
-            Assert.IsTrue(level1Children[0].Connection.Endpoints["parent"].ArticleId == root.Id);
-            Assert.IsTrue(level1Children[0].Connection.Endpoints["child"].ArticleId == level1Child.Id);
-
-            var level2Children = level1Children[0].GetChildren("level2_children");
-            Assert.IsTrue(level2Children.Count == 1);
-            Assert.IsTrue(level2Children[0].Article != null);
-            Assert.IsTrue(level2Children[0].Article.Id == level2Child.Id);
-            Assert.IsTrue(level2Children[0].Connection != null);
-            Assert.IsTrue(level2Children[0].Connection.Id == level2Edge.Id);
-            Assert.IsTrue(level2Children[0].Connection.Endpoints["parent"].ArticleId == level1Child.Id);
-            Assert.IsTrue(level2Children[0].Connection.Endpoints["child"].ArticleId == level2Child.Id);
-'''
+    level2children = level1children[0].get_children('level2_children')
+    assert len(level2children) == 1
+    assert level2children[0].object is not None
+    assert level2children[0].object.id == level2child.id
+    assert level2children[0].connection is not None
+    assert level2children[0].connection.id == level2edge.id
+    assert level2children[0].connection.endpoint_a.objectid == level1child.id
+    assert level2children[0].connection.endpoint_b.objectid == level2child.id
