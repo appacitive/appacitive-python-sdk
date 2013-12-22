@@ -189,7 +189,40 @@ def update_connection_test():
     assert conn.tag_exists('2') == True
 
 
-def find_connetion_test():
+def fetch_latest_test():
+    obj1 = AppacitiveObject('object')
+    obj1.create()
+
+    obj2 = AppacitiveObject('object')
+    obj2.create()
+
+    conn = AppacitiveConnection('sibling')
+    conn.set_property('field1', 'hello')
+    conn.set_property('field2', 101)
+    conn.endpoint_a.objectid = obj1.id
+    conn.endpoint_a.label = 'object'
+    conn.add_tag('1')
+    conn.set_attribute('a1', 'v1')
+    conn.endpoint_b.objectid = obj2.id
+    conn.endpoint_b.label = 'object'
+    conn.create()
+
+    resp = AppacitiveConnection.get('sibling', conn.id)
+    conn1 = resp.connection
+    conn1.add_tag('2')
+    conn1.remove_tag('1')
+
+    conn1.update()
+
+    conn.add_tag('3')
+    response = conn.fetch_latest()
+    assert response.status.code == '200'
+    assert conn.tag_exists('2')
+    assert conn.tag_exists('1') is False
+    assert conn.tag_exists('3') is False
+
+
+def find_connection_test():
     obj1 = AppacitiveObject('object')
     obj1.create()
 

@@ -3,6 +3,7 @@ __author__ = 'sathley'
 from utilities import urlfactory, http, customjson
 from error import ValidationError
 from response import AppacitiveResponse
+import json
 
 
 class AppacitivePushNotification(object):
@@ -37,113 +38,8 @@ class AppacitivePushNotification(object):
             self.timestamp = None
             self.lastmodifieddate = None
 
-
-    @property
-    def id(self):
-        return self.get_property('id')
-
-    @id.setter
-    def id(self, value):
-        self.set_property('id', value)
-
-    @property
-    def isbroadcast(self):
-        return self.get_property('isbroadcast')
-
-    @isbroadcast.setter
-    def isbroadcast(self, value):
-        self.set_property('isbroadcast', value)
-
-    @property
-    def alert(self):
-        return self.get_property('alert')
-
-    @alert.setter
-    def alert(self, value):
-        self.set_property('alert', value)
-
-    @property
-    def badge(self):
-        return self.get_property('badge')
-
-    @badge.setter
-    def badge(self, value):
-        self.set_property('badge', value)
-
-    @property
-    def expireafter(self):
-        return self.get_property('expireafter')
-
-    @expireafter.setter
-    def expireafter(self, value):
-        self.set_property('expireafter', value)
-
-    @property
-    def customdata(self):
-        return self.get_property('customdata')
-
-    @customdata.setter
-    def customdata(self, value):
-        self.set_property('customdata', value)
-
-    @property
-    def devicedata(self):
-        return self.get_property('devicedata')
-
-    @devicedata.setter
-    def devicedata(self, value):
-        self.set_property('devicedata', value)
-
-    @property
-    def devicecount(self):
-        return self.get_property('devicecount')
-
-    @devicecount.setter
-    def devicecount(self, value):
-        self.set_property('devicecount', value)
-
-    @property
-    def successfulcount(self):
-        return self.get_property('successfulcount')
-
-    @successfulcount.setter
-    def successfulcount(self, value):
-        self.set_property('successfulcount', value)
-
-    @property
-    def failurecount(self):
-        return self.get_property('failurecount')
-
-    @failurecount.setter
-    def failurecount(self, value):
-        self.set_property('failurecount', value)
-
-    @property
-    def status(self):
-        return self.get_property('status')
-
-    @status.setter
-    def status(self, value):
-        self.set_property('status', value)
-
-    @property
-    def timestamp(self):
-        return self.get_property('timestamp')
-
-    @timestamp.setter
-    def timestamp(self, value):
-        self.set_property('timestamp', value)
-
-    @property
-    def lastmodifieddate(self):
-        return self.get_property('lastmodifieddate')
-
-    @lastmodifieddate.setter
-    def lastmodifieddate(self, value):
-        self.set_property('lastmodifieddate', value)
-
     @staticmethod
-    def broadcast(platform_options=None, data=None, expire_after=None):
+    def broadcast(data, platform_options=None, expire_after=None):
         push_request = {
             'broadcast': True
         }
@@ -160,14 +56,17 @@ class AppacitivePushNotification(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = customjson.serialize(push_request)
+        payload = json.dumps(push_request)
 
         api_response = http.post(url, headers, payload)
-        return AppacitiveResponse(api_response['status'])
+        response = AppacitiveResponse(api_response['status'])
+        if response.status.code == '200':
+            response.id = int(api_response['id'])
+        return response
 
 
     @staticmethod
-    def send_to_channels(channels, platform_options=None, data=None, expire_after=None):
+    def send_to_channels(channels, data, platform_options=None, expire_after=None):
         push_request = {
             'channels': channels
         }
@@ -184,13 +83,16 @@ class AppacitivePushNotification(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = customjson.serialize(push_request)
+        payload = json.dumps(push_request)
 
-        response = http.post(url, headers, payload)
-        return AppacitiveResponse(response['status'])
+        api_response = http.post(url, headers, payload)
+        response = AppacitiveResponse(api_response['status'])
+        if response.status.code == '200':
+            response.id = int(api_response['id'])
+        return response
 
     @staticmethod
-    def send_to_specific_devices(device_ids, platform_options=None, data=None, expire_after=None):
+    def send_to_specific_devices(device_ids, data, platform_options=None, expire_after=None):
         push_request = {
             'deviceids': device_ids
         }
@@ -207,13 +109,16 @@ class AppacitivePushNotification(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = customjson.serialize(push_request)
+        payload = json.dumps(push_request)
 
-        response = http.post(url, headers, payload)
-        return AppacitiveResponse(response['status'])
+        api_response = http.post(url, headers, payload)
+        response = AppacitiveResponse(api_response['status'])
+        if response.status.code == '200':
+            response.id = int(api_response['id'])
+        return response
 
     @staticmethod
-    def send_using_query(query, platform_options=None, data=None, expire_after=None):
+    def send_using_query(query, data, platform_options=None, expire_after=None):
         push_request = {
             'query': str(query)
         }
@@ -230,33 +135,13 @@ class AppacitivePushNotification(object):
         url = urlfactory.push_urls['send']()
         headers = urlfactory.get_headers()
 
-        payload = customjson.serialize(push_request)
+        payload = json.dumps(push_request)
 
-        response = http.post(url, headers, payload)
-        return AppacitiveResponse(response['status'])
-
-    @staticmethod
-    def send(platform_options, data, expire_after, **kwargs):
-        push_request = {}
-        for key, val in kwargs:
-            push_request[key] = val
-
-        if platform_options is not None:
-            push_request['platformoptions'] = platform_options
-
-        if data is not None:
-            push_request['data'] = data
-
-        if expire_after is not None:
-            push_request['expire_after'] = expire_after
-
-        url = urlfactory.push_urls['send']()
-        headers = urlfactory.get_headers()
-
-        payload = customjson.serialize(push_request)
-
-        response = http.post(url, headers, payload)
-        return AppacitiveResponse(response['status'])
+        api_response = http.post(url, headers, payload)
+        response = AppacitiveResponse(api_response['status'])
+        if response.status.code == '200':
+            response.id = int(api_response['id'])
+        return response
 
     @staticmethod
     def get_notification_by_id(notification_id):
@@ -270,8 +155,9 @@ class AppacitivePushNotification(object):
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             response.notification = AppacitivePushNotification(api_response['pushnotification'])
+        return response
 
     @staticmethod
     def get_all_notification():
@@ -282,12 +168,12 @@ class AppacitivePushNotification(object):
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
 
-        if response.status_code == '200':
+        if response.status.code == '200':
             return_notifications = []
             for notification in api_response['pushnotifications']:
                 if notification:
                     return_notifications.append(AppacitivePushNotification(notification))
             response.notifications = return_notifications
-            return response
+        return response
 
 

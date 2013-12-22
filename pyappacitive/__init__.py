@@ -14,7 +14,7 @@ from connection import AppacitiveConnection
 from user import AppacitiveUser
 from device import AppacitiveDevice
 from appcontext import ApplicationContext
-from objectbase import ObjectBase
+#from objectbase import ObjectBase
 from node import GraphNode
 from graphsearch import AppacitiveGraphSearch
 

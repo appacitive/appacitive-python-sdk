@@ -26,7 +26,7 @@ class AppacitiveGraphSearch(object):
         if response.status.code == '200':
             for k, v in resp.iteritems():
                 if k != 'status':
-                    response.nodes = AppacitiveGraphSearch.parse_projection_result(v['values'])
+                    response.nodes = AppacitiveGraphSearch.__parse_projection_result(v['values'])
 
         return response
 
@@ -46,7 +46,7 @@ class AppacitiveGraphSearch(object):
         return response
 
     @staticmethod
-    def parse_projection_result(values):
+    def __parse_projection_result(values):
         nodes = []
         for val in values:
             nodes.append(nodehelper.convert_node(val))

@@ -283,7 +283,7 @@ def __get_file_delete_url(file_id):
 
 
 def __get_send_push_url():
-    return '{0}/push/send'.format(base_url)
+    return '{0}/push'.format(base_url)
 
 
 def __get_push_url(notification_id):

@@ -38,13 +38,6 @@ class AppacitiveConnection(AppacitiveEntity):
             if '__endpointb' in connection:
                 self.endpoint_b = AppacitiveEndpoint(connection['__endpointb'])
 
-    @staticmethod
-    def _get_object_dict(obj):
-
-        if obj is None:
-            return None
-        return obj.get_dict()
-
     def get_dict(self):
 
         native = super(AppacitiveConnection, self).get_dict()
@@ -58,15 +51,15 @@ class AppacitiveConnection(AppacitiveEntity):
             'label': self.endpoint_a.label,
             'type': self.endpoint_a.type,
             'objectid': str(self.endpoint_a.objectid),
-            'object': self._get_object_dict(self.endpoint_a.object)
         }
+        native['__endpointa']['object'] = self.endpoint_a.object.get_dict() if self.endpoint_a.object is not None else None
 
         native['__endpointb'] = {
             'label': self.endpoint_b.label,
             'type': self.endpoint_b.type,
             'objectid': str(self.endpoint_b.objectid),
-            'object': self._get_object_dict(self.endpoint_b.object)
         }
+        native['__endpointb']['object'] = self.endpoint_b.object.get_dict() if self.endpoint_b.object is not None else None
 
         return native
 
