@@ -223,11 +223,11 @@ def __user_update_url(user_id):
     return '{0}/user/{1}'.format(base_url, user_id)
 
 
-def __user_find_all_url(query, fields):
+def __user_find_all_url(query, fields=None):
     url = '{0}/object/user/find/all?{1}'.format(base_url, str(query))
     if fields is not None:
         url += '&fields=' + ','.join(fields)
-        return url
+    return url
 
 
 def __user_authenticate_url():

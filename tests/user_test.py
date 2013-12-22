@@ -1,6 +1,6 @@
 __author__ = 'sathley'
 
-from pyappacitive import AppacitiveUser
+from pyappacitive import AppacitiveUser, AppacitiveQuery, PropertyFilter
 import random
 import datetime
 
@@ -148,6 +148,17 @@ def checkin_user_test():
 
     user.fetch_latest()
     assert user.location == '10.1,20.2'
+
+def find_user_test():
+    user = get_random_user()
+    user.create()
+    user.authenticate('test123!@#')
+    query = AppacitiveQuery()
+    query.filter = PropertyFilter.is_equal_to('firstname', 'Jon')
+    response = AppacitiveUser.find(query)
+    assert response.status.code == '200'
+    assert hasattr(response,  'users')
+    assert len(response.users) > 0
 
 
 
