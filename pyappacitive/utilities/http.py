@@ -7,6 +7,7 @@ import logging, time
 logger = logging.getLogger('pyappacitive')
 logger.addHandler(logging.NullHandler())
 
+
 def put(url, headers, payload):
 
     start_time = time.time()

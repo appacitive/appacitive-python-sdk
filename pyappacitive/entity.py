@@ -1,4 +1,5 @@
 __author__ = 'sathley'
+from abc import ABCMeta
 
 connection_system_properties = ['__relationtype', '__relationid', '__id', '__createdby', '__lastmodifiedby',
                                 '__utcdatecreated', '__utclastupdateddate', '__tags', '__attributes', '__properties',
@@ -9,6 +10,8 @@ object_system_properties = ['__type', '__typeid', '__id', '__createdby', '__last
 
 
 class AppacitiveEntity(object):
+
+    __metaclass__ = ABCMeta
 
     def __init__(self, entity=None):
         self.__properties = {}
