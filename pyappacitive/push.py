@@ -3,7 +3,10 @@ __author__ = 'sathley'
 from utilities import urlfactory, http, customjson
 from error import ValidationError
 from response import AppacitiveResponse
-import json
+import json, logging
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class AppacitivePushNotification(object):

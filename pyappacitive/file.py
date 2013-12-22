@@ -3,6 +3,10 @@ __author__ = 'sathley'
 from utilities import urlfactory, http
 from error import ValidationError
 from response import AppacitiveResponse
+import logging
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class AppacitiveFile(object):

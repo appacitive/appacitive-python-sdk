@@ -13,7 +13,9 @@ import logging
 # add license file
 # run pylint, pyflakes, sphynx
 
-logger = logging.getLogger(__name__)
+
+object_logger = logging.getLogger(__name__)
+object_logger.addHandler(logging.NullHandler())
 
 
 class AppacitiveObject(AppacitiveEntity):
@@ -63,9 +65,8 @@ class AppacitiveObject(AppacitiveEntity):
 
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
-
+        object_logger.info('Creating object')
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
-
         response = AppacitiveResponse(api_resp['status'])
 
         if response.status.code == '200':
@@ -84,7 +85,7 @@ class AppacitiveObject(AppacitiveEntity):
 
         url = urlfactory.object_urls["delete"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
-
+        object_logger.info('Deleting object')
         api_resp = http.delete(url, headers)
         response = AppacitiveResponse(api_resp['status'])
         return response
@@ -100,6 +101,7 @@ class AppacitiveObject(AppacitiveEntity):
         url = urlfactory.object_urls["delete_with_connections"](self.type if self.type is not None else self.type_id,
                                                                self.id)
         headers = urlfactory.get_headers()
+        object_logger.info('Deleting object with connections')
         api_resp = http.delete(url, headers)
         response = AppacitiveResponse(api_resp['status'])
         return response
@@ -119,7 +121,7 @@ class AppacitiveObject(AppacitiveEntity):
         payload = {"idlist": []}
         for object_id in object_ids:
             payload["idlist"].append(str(object_id))
-
+        object_logger.info('Deleting multiple objects')
         api_resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_resp['status'])
         return response
@@ -138,7 +140,7 @@ class AppacitiveObject(AppacitiveEntity):
 
         headers = urlfactory.get_headers()
         payload = self.get_update_command()
-
+        object_logger.info('Updating object')
         api_resp = http.post(url, headers, customjson.serialize(payload))
         response = AppacitiveResponse(api_resp['status'])
 
@@ -162,7 +164,7 @@ class AppacitiveObject(AppacitiveEntity):
             url += '?fields=' + ','.join(fields)
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-
+        object_logger.info('Fetching object')
         response = AppacitiveResponse(api_response['status'])
 
         if response.status.code == '200':
@@ -173,6 +175,7 @@ class AppacitiveObject(AppacitiveEntity):
     def fetch_latest(self):
         url = urlfactory.object_urls["get"](self.type, self.id)
         headers = urlfactory.get_headers()
+        object_logger.info('Fetching latest object')
         api_response = http.get(url, headers)
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
@@ -192,6 +195,7 @@ class AppacitiveObject(AppacitiveEntity):
         url = urlfactory.object_urls["multiget"](object_type, object_ids, fields)
 
         headers = urlfactory.get_headers()
+        object_logger.info('Fetching multiple objects')
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
@@ -214,6 +218,7 @@ class AppacitiveObject(AppacitiveEntity):
 
         url = urlfactory.object_urls["find_all"](object_type, query, fields)
         headers = urlfactory.get_headers()
+        object_logger.info('Searching objects')
         api_response = http.get(url, headers)
 
         response = AppacitiveResponse(api_response['status'])
@@ -239,7 +244,7 @@ class AppacitiveObject(AppacitiveEntity):
 
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
-
+        object_logger.info('Searching objects between two objects')
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 

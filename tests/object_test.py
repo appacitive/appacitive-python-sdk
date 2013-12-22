@@ -1,10 +1,17 @@
 from pyappacitive import AppacitiveObject
+from pyappacitive.utilities import logfilter
 import datetime
 import nose
 import logging
 
 
 def create_object_test():
+    #logger = logging.getLogger('pyappacitive')
+    #
+    #logger.setLevel(logging.DEBUG)
+    #sh = logging.StreamHandler()
+    #sh.addFilter(logfilter.SlowCallLogFilter(3.0))
+    #logger.addHandler(sh)
     obj = AppacitiveObject('object')
     obj.set_property('intfield', 100)
     obj.set_property('decimalfield', 20.250)

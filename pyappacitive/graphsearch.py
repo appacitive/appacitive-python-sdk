@@ -5,6 +5,10 @@ __author__ = 'sathley'
 
 from utilities import customjson
 from response import AppacitiveResponse
+import logging
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class AppacitiveGraphSearch(object):
