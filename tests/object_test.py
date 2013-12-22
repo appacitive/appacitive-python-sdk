@@ -2,9 +2,6 @@ from pyappacitive import AppacitiveObject
 import datetime
 import nose
 import logging
-logger = logging.getLogger('pyappacitive')
-
-logger.setLevel(logging.INFO)
 
 
 def create_object_test():

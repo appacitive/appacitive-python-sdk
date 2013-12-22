@@ -13,6 +13,8 @@ import logging
 # add license file
 # run pylint, pyflakes, sphynx
 
+logger = logging.getLogger(__name__)
+
 
 class AppacitiveObject(AppacitiveEntity):
 
@@ -61,6 +63,7 @@ class AppacitiveObject(AppacitiveEntity):
 
         url = urlfactory.object_urls["create"](self.type if self.type is not None else self.type_id)
         headers = urlfactory.get_headers()
+
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
         response = AppacitiveResponse(api_resp['status'])

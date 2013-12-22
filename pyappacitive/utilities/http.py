@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def put(url, headers, payload):
     logger.debug('HTTP PUT')
-    logger.debug('HEADERS : ' + ','.join([key for key in headers.iterkeys()]))
+    logger.debug('HEADER KEYS : ' + ','.join([key for key in headers.iterkeys()]))
     logger.debug('URL : ' + url)
     logger.debug('PAYLOAD : ' + payload)
     response_from_api = requests.put(url, payload, headers=headers)
