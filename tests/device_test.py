@@ -76,7 +76,7 @@ def find_device_test():
     device = get_random_device()
     device.register()
     query = AppacitiveQuery()
-    query.filter = PropertyFilter.is_equal_to('devicetype', 'ios')
+    query.filter = PropertyFilter('devicetype').is_equal_to('ios')
     response = AppacitiveDevice.find(query)
     assert response.status.code == '200'
     assert hasattr(response, 'devices')

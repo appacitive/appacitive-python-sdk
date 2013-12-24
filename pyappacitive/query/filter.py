@@ -15,12 +15,9 @@ class FilterBase(object):
 
 
 class PropertyFilter(FilterBase):
-    def __init__(self, operator, property_name, value):
+    def __init__(self, property_name):
         super(PropertyFilter, self).__init__()
-        self.operator = operator
         self.key = property_name
-        self.value = value
-        self.value_datatype = None
 
     def __repr__(self):
 
@@ -34,14 +31,6 @@ class PropertyFilter(FilterBase):
             else:
                 self.value = "datetime('{0}')".format(str(self.value))
 
-        if self.operator == 'within_circle':
-            geo_code, distance = self.value
-            return "*{0} {1} {2},{3}".format(self.key, self.operator, str(geo_code), str(distance))
-
-        if self.operator == 'within_polygon':
-            geo_codes = self.value
-            return "*{0} {1} {2}".format(self.key, self.operator, ' | '.join(geo_codes))
-
         if self.operator == 'between':
             value1, value2 = self.value
             return "*{0} {1} ({2},{3})".format(self.key, self.operator, str(value1), str(value2))
@@ -51,137 +40,177 @@ class PropertyFilter(FilterBase):
 
         return "*{0} {1} {2}".format(self.key, self.operator, str(self.value))
 
-    @staticmethod
-    def is_equal_to(property_name, value):
-        return PropertyFilter('==', property_name, value)
+    def is_equal_to(self, value):
+        self.value = value
+        self.operator = '=='
+        return self
 
-    @staticmethod
-    def is_not_equal_to(property_name, value):
-        return PropertyFilter('!=', property_name, value)
+    def is_not_equal_to(self, value):
 
-    @staticmethod
-    def is_greater_than(property_name, value):
-        return PropertyFilter('>', property_name, value)
+        self.value = value
+        self.operator = '!='
+        return self
 
-    @staticmethod
-    def is_less_than(property_name, value):
-        return PropertyFilter('<', property_name, value)
+    def is_greater_than(self, value):
 
-    @staticmethod
-    def is_greater_than_equal_to(property_name, value):
-        return PropertyFilter('>=', property_name, value)
+        self.value = value
+        self.operator = '>'
+        return self
 
-    @staticmethod
-    def is_less_than_equal_to(property_name, value):
-        return PropertyFilter('<=', property_name, value)
+    def is_less_than(self, value):
 
-    @staticmethod
-    def like(property_name, value):
-        return PropertyFilter('like', property_name, value)
+        self.value = value
+        self.operator = '<'
+        return self
 
-    @staticmethod
-    def starts_with(property_name, value):
-        return PropertyFilter('like', property_name, '*'+value)
+    def is_greater_than_equal_to(self, value):
 
-    @staticmethod
-    def ends_with(property_name, value):
-        return PropertyFilter('like', property_name, value+'*')
+        self.value = value
+        self.operator = '>='
+        return self
 
-    @staticmethod
-    def between(property_name, value1, value2):
-        return PropertyFilter('between', property_name, (value1, value2))
+    def is_less_than_equal_to(self, value):
 
-    # Move geo searches to GeoFilter
-    @staticmethod
-    def within_circle(property_name, geo_code, distance):
-        return PropertyFilter('within_circle', property_name, (geo_code, distance))
+        self.value = value
+        self.operator = '<='
+        return self
 
-    @staticmethod
-    def within_polygon(property_name, geo_codes):
-        return PropertyFilter('within_polygon', property_name, geo_codes)
+    def like(self, value):
+
+        self.value = value
+        self.operator = 'like'
+        return self
+
+    def starts_with(self, value):
+
+        self.value = '*'+value
+        self.operator = 'like'
+        return self
+
+    def ends_with(self, value):
+
+        self.value = value+'*'
+        self.operator = 'like'
+        return self
+
+    def between(self, start, end):
+        self.value = (start, end)
+        self.operator = 'between'
+        return self
+
+
+class GeoFilter(FilterBase):
+    def __init__(self, property_name):
+        super(GeoFilter, self).__init__()
+        self.key = property_name
+
+    def __repr__(self):
+
+        if self.operator == 'within_circle':
+            geo_code, distance = self.value
+            return "*{0} {1} {2},{3}".format(self.key, self.operator, str(geo_code), str(distance))
+
+        if self.operator == 'within_polygon':
+            geo_codes = self.value
+            return "*{0} {1} {2}".format(self.key, self.operator, ' | '.join(geo_codes))
+
+    def within_circle(self, geo_code, distance):
+        self.operator = 'within_circle'
+        self.value = (geo_code, distance)
+        return self
+
+    def within_polygon(self, geo_codes):
+        self.operator = 'within_polygon'
+        self.value = geo_codes
+        return self
 
 
 class AttributeFilter(FilterBase):
-    def __init__(self, operator, attribute_key, value):
+    def __init__(self, attribute_key):
         super(AttributeFilter, self).__init__()
-        self.operator = operator
         self.key = attribute_key
-        self.value = value
 
     def __repr__(self):
-        if isinstance(self.value, str) is False:
-            raise TypeError('Value should be string.')
-        return "@{0} {1} '{2}'".format(self.key, self.operator, self.value)
+        return "@{0} {1} '{2}'".format(self.key, self.operator, str(self.value))
 
-    @staticmethod
-    def is_equal_to(attribute_key, value):
-        return AttributeFilter('==', attribute_key, value)
+    def is_equal_to(self, value):
+        self.operator = '=='
+        self.value = value
+        return self
 
-    @staticmethod
-    def like(attribute_key, value):
-        return AttributeFilter('like', attribute_key, value)
+    def like(self, value):
+        self.operator = 'like'
+        self.value = value
+        return self
 
-    @staticmethod
-    def starts_with(attribute_key, value):
-        return AttributeFilter('like', attribute_key, '*'+value)
+    def starts_with(self, value):
+        self.operator = 'like'
+        self.value = '*'+value
+        return self
 
-    @staticmethod
-    def ends_with(attribute_key, value):
-        return AttributeFilter('like', attribute_key, value+'*')
+    def ends_with(self, value):
+        self.operator = 'like'
+        self.value = value+'*'
+        return self
 
 
 class AggregateFilter(FilterBase):
-    def __init__(self, operator, property_name, value):
+    def __init__(self, property_name):
         super(AggregateFilter, self).__init__()
-        self.operator = operator
         self.key = property_name
-        self.value = value
 
     def __repr__(self):
         return "${0} {1} {2}".format(self.key, self.operator, str(self.value))
 
-    @staticmethod
-    def is_equal_to(aggregate_name, value):
-        return AggregateFilter('==', aggregate_name, value)
+    def is_equal_to(self, value):
+        self.operator = '=='
+        self.value = value
+        return self
 
-    @staticmethod
-    def is_not_equal_to(aggregate_name, value):
-        return AggregateFilter('!=', aggregate_name, value)
+    def is_not_equal_to(self, value):
+        self.operator = '!='
+        self.value = value
+        return self
 
-    @staticmethod
-    def is_greater_than(aggregate_name, value):
-        return AggregateFilter('>', aggregate_name, value)
+    def is_greater_than(self, value):
+        self.operator = '>'
+        self.value = value
+        return self
 
-    @staticmethod
-    def is_less_than(aggregate_name, value):
-        return AggregateFilter('<', aggregate_name, value)
+    def is_less_than(self, value):
+        self.operator = '<'
+        self.value = value
+        return self
 
-    @staticmethod
-    def is_greater_than_equal_to(aggregate_name, value):
-        return AggregateFilter('>=', aggregate_name, value)
+    def is_greater_than_equal_to(self, value):
+        self.operator = '>='
+        self.value = value
+        return self
 
-    @staticmethod
-    def is_less_than_equal_to(aggregate_name, value):
-        return AggregateFilter('<=', aggregate_name, value)
+    def is_less_than_equal_to(self, value):
+        self.operator = '<='
+        self.value = value
+        return self
 
 
 class TagFilter(FilterBase):
 
-    def __init__(self, operator, tags):
+    def __init__(self):
         super(TagFilter, self).__init__()
-        self.tags = tags
-        self.operator = operator
+        self.tags = []
+        self.operator = None
 
     def __repr__(self):
         if isinstance(self.tags, types.ListType) is False:
             raise TypeError('Expected list of string tags.')
         return "{0}('{1}')".format(self.operator, ','.join(self.tags))
 
-    @staticmethod
-    def match_one_or_more(tags):
-        return TagFilter('tagged_with_one_or_more', tags)
+    def match_one_or_more(self, tags):
+        self.tags = tags
+        self.operator = 'tagged_with_one_or_more'
+        return self
 
-    @staticmethod
-    def match_all(tags):
-        return TagFilter('tagged_with_all', tags)
-
+    def match_all(self, tags):
+        self.tags = tags
+        self.operator = 'tagged_with_all'
+        return self

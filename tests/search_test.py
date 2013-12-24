@@ -41,7 +41,7 @@ def search_with_integer_property_filter_test():
     obj.create()
 
     query = AppacitiveQuery()
-    query.filter = PropertyFilter.is_equal_to('intfield', random_num)
+    query.filter = PropertyFilter('intfield').is_equal_to(random_num)
 
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
@@ -58,7 +58,7 @@ def search_with_decimal_property_filter_test():
     obj.create()
 
     query = AppacitiveQuery()
-    query.filter = PropertyFilter.is_equal_to('decimalfield', random_float)
+    query.filter = PropertyFilter('decimalfield').is_equal_to(random_float)
 
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
@@ -72,7 +72,7 @@ def search_with_bool_property_filter_test():
     obj.create()
 
     query = AppacitiveQuery()
-    query.filter = PropertyFilter.is_equal_to('boolfield', False)
+    query.filter = PropertyFilter('boolfield').is_equal_to(False)
 
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
@@ -86,7 +86,7 @@ def search_with_like_filter_test():
     obj.create()
 
     query = AppacitiveQuery()
-    query.filter = PropertyFilter.like('stringfield', '*ssissi*')
+    query.filter = PropertyFilter('stringfield').like('*ssissi*')
 
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
@@ -113,14 +113,14 @@ def search_on_tags_test():
     obj.create()
 
     query = AppacitiveQuery()
-    query.filter = TagFilter.match_all(['moon', 'stars'])
+    query.filter = TagFilter().match_all(['moon', 'stars'])
 
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
     assert hasattr(response, 'paging_info')
     assert response.paging_info.total_records > 0
 
-    query.filter = TagFilter.match_one_or_more(['stars', 'sky', 'moonlight', 'cloudy'])
+    query.filter = TagFilter().match_one_or_more(['stars', 'sky', 'moonlight', 'cloudy'])
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
     assert hasattr(response, 'paging_info')
@@ -138,7 +138,7 @@ def search_with_fields_test():
     query = AppacitiveQuery()
     query.page_number = 1
     query.page_size = 3
-    query.filter = PropertyFilter.is_equal_to('decimalfield', random_float)
+    query.filter = PropertyFilter('decimalfield').is_equal_to(random_float)
     response = AppacitiveObject.find('object', query, ['__createdby', '__revision', 'stringfield'])
     assert response.status.code == '200'
     assert hasattr(response, 'objects')
@@ -157,7 +157,7 @@ def search_geo_within_circle_test():
 
     query = AppacitiveQuery()
     query.page_size = 5
-    query.filter = PropertyFilter.within_circle('geofield', '10.10,20.21', '10 mi')
+    query.filter = GeoFilter('geofield').within_circle('10.10,20.21', '10 mi')
 
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
@@ -171,7 +171,7 @@ def search_geo_within_polygon_test():
 
     query = AppacitiveQuery()
     query.page_size = 5
-    query.filter = PropertyFilter.within_polygon('geofield', ['0.0,0.0', '0.0,50.0', '50.0,0.0'])
+    query.filter = GeoFilter('geofield').within_polygon(['0.0,0.0', '0.0,50.0', '50.0,0.0'])
 
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
@@ -190,10 +190,10 @@ def search_aggregated_queries_test():
     obj.set_property('intfield', 5)
     obj.create()
     query = AppacitiveQuery()
-    filter1 = PropertyFilter.is_equal_to('stringfield', 'gangnam')
-    filter2 = PropertyFilter.is_greater_than('intfield', 0)
+    filter1 = PropertyFilter('stringfield').is_equal_to('gangnam')
+    filter2 = PropertyFilter('intfield').is_greater_than(0)
 
-    filter3 = AttributeFilter.is_equal_to('Gangnam', 'Style')
+    filter3 = AttributeFilter('Gangnam').is_equal_to('Style')
     query.free_text_tokens = ['Shahrukh', 'Khan', 'Salman']
     query.filter = BooleanOperator.or_query([filter3, BooleanOperator.and_query([filter1, filter2])])
 

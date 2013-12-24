@@ -58,7 +58,7 @@ def create_using_fluent_syntax_test():
     obj2 = AppacitiveObject('object')
     obj2.create()
 
-    conn = AppacitiveConnection('sibling').from_existing_object_id('object', obj1.id).to_created_object_id('object', obj2.id)
+    conn = AppacitiveConnection('sibling').from_existing_object_id('object', obj1.id).to_existing_object_id('object', obj2.id)
     resp = conn.create()
     assert resp.status.code == '200'
     assert conn.id != 0
@@ -262,7 +262,7 @@ def find_connection_test():
     conn.create()
 
     query = AppacitiveQuery()
-    query.filter = TagFilter.match_one_or_more(['1', '2', '3'])
+    query.filter = TagFilter().match_one_or_more(['1', '2', '3'])
     response = AppacitiveConnection.find('sibling', query)
     assert response.status.code == '200'
     assert hasattr(response, 'connections')

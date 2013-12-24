@@ -18,7 +18,7 @@ from appcontext import ApplicationContext
 from node import GraphNode
 from graphsearch import AppacitiveGraphSearch
 
-from query import PropertyFilter, TagFilter, AttributeFilter, AggregateFilter
+from query import PropertyFilter, TagFilter, AttributeFilter, AggregateFilter, GeoFilter
 from query import BooleanOperator
 from query import AppacitiveQuery
 

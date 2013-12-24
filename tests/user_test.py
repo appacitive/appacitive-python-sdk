@@ -154,7 +154,7 @@ def find_user_test():
     user.create()
     user.authenticate('test123!@#')
     query = AppacitiveQuery()
-    query.filter = PropertyFilter.is_equal_to('firstname', 'Jon')
+    query.filter = PropertyFilter('firstname').is_equal_to('Jon')
     response = AppacitiveUser.find(query)
     assert response.status.code == '200'
     assert hasattr(response,  'users')
