@@ -20,8 +20,15 @@ def serialize(obj):
                 # convert datetime to iso
                 obj[k] = obj[k].strftime('%Y-%m-%dT%H:%M:%S.%f') + '0Z'
 
-    stringified_object = {k: str(v) if not isinstance(v, types.ListType) and not isinstance(v, types.DictionaryType) else v for k, v in
-                               obj.iteritems()}
+    stringified_object = {}
+    for k, v in obj.iteritems():
+        if not isinstance(v, types.ListType) and not isinstance(v, types.DictionaryType):
+            stringified_object[k] = str(v)
+        else:
+            stringified_object[k] = v
+
+    #stringified_object = {k: str(v) if not isinstance(v, types.ListType) and not isinstance(v, types.DictionaryType) else v for k, v in
+    #                           obj.iteritems()}
 
     return dumps(stringified_object)
 
