@@ -58,7 +58,7 @@ def create_using_fluent_syntax_test():
     obj2 = AppacitiveObject('object')
     obj2.create()
 
-    conn = AppacitiveConnection('sibling').from_created_object_id('object', obj1.id).to_created_object_id('object', obj2.id)
+    conn = AppacitiveConnection('sibling').from_existing_object_id('object', obj1.id).to_created_object_id('object', obj2.id)
     resp = conn.create()
     assert resp.status.code == '200'
     assert conn.id != 0

@@ -110,7 +110,7 @@ class AppacitiveConnection(AppacitiveEntity):
         self.endpoint_a.object = obj
         return self
 
-    def from_created_object_id(self, label, object_id):
+    def from_existing_object_id(self, label, object_id):
         self.endpoint_a.label = label
         self.endpoint_a.objectid = object_id
         return self
@@ -120,7 +120,7 @@ class AppacitiveConnection(AppacitiveEntity):
         self.endpoint_b.object = obj
         return self
 
-    def to_created_object_id(self, label, object_id):
+    def to_existing_object_id(self, label, object_id):
         self.endpoint_b.label = label
         self.endpoint_b.objectid = object_id
         return self
