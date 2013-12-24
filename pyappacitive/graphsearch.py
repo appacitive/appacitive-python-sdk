@@ -16,13 +16,13 @@ class AppacitiveGraphSearch(object):
         pass
 
     @staticmethod
-    def project(query_name, id_list, query_dict=None):
+    def project(query_name, id_list, place_holder_fillers=None):
         url = urlfactory.graph_search_urls['project'](query_name)
         headers = urlfactory.get_headers()
         stringified_id_list = [str(i) for i in id_list]
         payload = {
             'ids': stringified_id_list,
-            'placeholders': query_dict
+            'placeholders': place_holder_fillers
         }
         graph_logger.info('Projection graph query')
         resp = http.post(url, headers, customjson.serialize(payload))
@@ -37,11 +37,11 @@ class AppacitiveGraphSearch(object):
 
 
     @staticmethod
-    def filter(query_name, query_dict=None):
+    def filter(query_name, place_holder_fillers=None):
         url = urlfactory.graph_search_urls['filter'](query_name)
         headers = urlfactory.get_headers()
         payload = {
-            'placeholders': query_dict
+            'placeholders': place_holder_fillers
         }
         graph_logger.info('Filter graph query')
         api_response = http.post(url, headers, customjson.serialize(payload))

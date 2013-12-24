@@ -182,7 +182,7 @@ class AppacitiveDevice(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_devices = api_response.get('objects', None)
+            api_devices = api_response.get('objects', [])
 
             return_devices = []
             for device in api_devices:
@@ -242,7 +242,7 @@ class AppacitiveDevice(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_devices = api_response.get('objects', None)
+            api_devices = api_response.get('objects', [])
 
             return_devices = []
             for device in api_devices:

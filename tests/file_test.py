@@ -2,6 +2,7 @@ __author__ = 'sathley'
 
 from pyappacitive import AppacitiveFile
 
+
 def get_file_upload_url_test():
     response = AppacitiveFile.get_upload_url('image/jpeg', 'foto.jpeg')
     assert response.status.code == '200'

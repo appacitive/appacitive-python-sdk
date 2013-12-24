@@ -342,7 +342,7 @@ class AppacitiveUser(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_users = api_response.get('objects', None)
+            api_users = api_response.get('objects', [])
 
             return_users = []
             for user in api_users:
@@ -498,7 +498,7 @@ class AppacitiveUser(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_users = api_response.get('objects', None)
+            api_users = api_response.get('objects', [])
 
             return_users = []
             for user in api_users:

@@ -24,7 +24,7 @@ The object api allows you to store, retrieve and manage all the data that you st
     obj.set_property('timefield', datetime.time.min)
     obj.set_property('datetimefield', datetime.datetime(2005,5,5,5))
     obj.set_property('geofield', '10.10,20.20')
-    obj.set_property('multifield', ['val1', 'val2', 'val3'])
+    obj.set_property('multifield', ['val1', 500, False])
 
     resp = obj.create()
     assert resp.status.code == '200'

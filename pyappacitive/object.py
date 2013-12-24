@@ -201,7 +201,7 @@ class AppacitiveObject(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_objects = api_response.get('objects', None)
+            api_objects = api_response.get('objects', [])
 
             return_objects = []
             for obj in api_objects:
@@ -224,7 +224,7 @@ class AppacitiveObject(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_objects = api_response.get('objects', None)
+            api_objects = api_response.get('objects', [])
 
             return_objects = []
             for obj in api_objects:
@@ -248,7 +248,7 @@ class AppacitiveObject(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_objects = api_response.get('objects', None)
+            api_objects = api_response.get('objects', [])
 
             return_objects = []
             for obj in api_objects:

@@ -211,7 +211,7 @@ class AppacitiveConnection(AppacitiveEntity):
         if response.status.code == '200':
 
             return_connections = []
-            for connection in api_response.get('connections', None):
+            for connection in api_response.get('connections', []):
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
@@ -254,7 +254,7 @@ class AppacitiveConnection(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_connections = api_response.get('connections', None)
+            api_connections = api_response.get('connections', [])
 
             return_connections = []
             for connection in api_connections:
@@ -265,11 +265,8 @@ class AppacitiveConnection(AppacitiveEntity):
             return response
 
     @classmethod
-    def find_by_objects(cls, object_id_1, object_id_2, relation=None, fields=None):
-        if relation is None:
-            url = urlfactory.connection_urls["find_for_objects"](object_id_1, object_id_2, fields)
-        else:
-            url = urlfactory.connection_urls["find_for_objects_and_relation"](relation, object_id_1, object_id_2, fields)
+    def find_by_objects(cls, object_id_1, object_id_2, fields=None):
+        url = urlfactory.connection_urls["find_for_objects"](object_id_1, object_id_2, fields)
 
         headers = urlfactory.get_headers()
         connection_logger.info('Searching connections by objects')
@@ -277,15 +274,29 @@ class AppacitiveConnection(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_connections = api_response.get('connections', None)
+            api_connections = api_response.get('connections', [])
 
             return_connections = []
             for connection in api_connections:
                 appacitive_connection = cls(connection)
                 return_connections.append(appacitive_connection)
             response.connections = return_connections
-            response.paging_info = PagingInfo(api_response['paginginfo'])
+            response.paging_info = PagingInfo(api_response.get('paginginfo', None))
             return response
+
+
+    @classmethod
+    def find_by_objects_and_relation(cls, object_id_1, object_id_2, relation, fields=None):
+        url = urlfactory.connection_urls["find_for_objects_and_relation"](relation, object_id_1, object_id_2, fields)
+
+        headers = urlfactory.get_headers()
+        connection_logger.info('Searching connections by objects')
+        api_response = http.get(url, headers)
+        response = AppacitiveResponse(api_response['status'])
+        if response.status.code == '200':
+            connection = api_response.get('connection', None)
+            response.connection = cls(connection)
+        return response
 
     @classmethod
     def find_interconnects(cls, object_1_id, object_2_ids, fields=None):
@@ -302,7 +313,7 @@ class AppacitiveConnection(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_connections = api_response.get('connections', None)
+            api_connections = api_response.get('connections', [])
 
             return_connections = []
             for connection in api_connections:
@@ -327,7 +338,7 @@ class AppacitiveConnection(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_connections = api_response.get('connections', None)
+            api_connections = api_response.get('connections', [])
 
             return_connections = []
             for connection in api_connections:
@@ -337,8 +348,8 @@ class AppacitiveConnection(AppacitiveEntity):
             response.paging_info = PagingInfo(api_response['paginginfo'])
             return response
 
-    @classmethod
-    def find_connected_objects(cls, relation, object_type, object_id, fields=None):
+    @staticmethod
+    def find_connected_objects(relation, object_type, object_id, fields=None):
 
         url = urlfactory.connection_urls["find_connected_objects"](relation, object_type, object_id, fields)
 
@@ -348,13 +359,13 @@ class AppacitiveConnection(AppacitiveEntity):
         response = AppacitiveResponse(api_response['status'])
         if response.status.code == '200':
 
-            api_objects = api_response.get('nodes', None)
+            api_objects = api_response.get('nodes', [])
 
             return_objects = []
             for obj in api_objects:
                 appacitive_object = AppacitiveObject(obj)
                 return_objects.append(appacitive_object)
-            response.nodes = return_objects
+            response.objects = return_objects
             response.paging_info = PagingInfo(api_response['paginginfo'])
             response.parent = api_response['parent']
             return response

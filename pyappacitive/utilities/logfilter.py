@@ -4,6 +4,7 @@ import logging
 
 class SlowCallLogFilter(logging.Filter):
     def __init__(self, duration):
+        super(SlowCallLogFilter, self).__init__()
         self.duration = duration
 
     def filter(self, rec):
@@ -16,8 +17,6 @@ class SlowCallLogFilter(logging.Filter):
 
 
 class FailedRequestsLogFilter(logging.Filter):
-    def __init__(self):
-        pass
 
     def filter(self, rec):
         if hasattr(rec, 'RESPONSE') is False:

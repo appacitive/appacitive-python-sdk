@@ -7,6 +7,9 @@ import types
 def serialize(obj):
 
     for k in obj.iterkeys():
+        #if isinstance(obj, types.ListType):
+        #    obj = [str(item) for item in obj]
+
         if isinstance(obj[k], datetime.time):
             # convert time to hh:mm:ss:ffffff and the add a trailing 0
             obj[k] = obj[k].strftime('%H:%M:%S.%f') + '0'
@@ -24,5 +27,4 @@ def serialize(obj):
 
 
 def deserialize(obj):
-    # I am here ladies !!!
     return loads(obj)

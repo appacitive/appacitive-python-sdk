@@ -75,7 +75,6 @@ def create_using_fluent_syntax_test_2():
     assert conn.id != 0
 
 
-
 def get_connection_test():
     obj1 = AppacitiveObject('object')
     obj1.create()

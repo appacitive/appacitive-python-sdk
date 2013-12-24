@@ -9,9 +9,7 @@ from response import AppacitiveResponse, PagingInfo
 
 class ObjectBase(AppacitiveEntity):
     def __init__(self, obj):
+        super(ObjectBase, self).__init__()
         pass
 
 
-class Restaurant(ObjectBase):
-    def __init__(self):
-        super(Restaurant, self).__init__('restaurant')

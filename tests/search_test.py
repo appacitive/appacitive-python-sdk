@@ -200,3 +200,40 @@ def search_aggregated_queries_test():
     response = AppacitiveObject.find('object', query)
     assert response.status.code == '200'
     assert response.paging_info.total_records > 0
+
+
+def search_connected_objects_test():
+    obj1 = AppacitiveObject('object')
+    obj1.create()
+    obj2 = AppacitiveObject('object')
+
+    conn = AppacitiveConnection('sibling').from_existing_object_id('object', obj1.id).to_new_object('object', obj2)
+    conn.create()
+    conn2 = AppacitiveConnection('sibling').from_existing_object_id('object', obj1.id).to_new_object('object', AppacitiveObject('object'))
+    conn2.create()
+    response = AppacitiveConnection.find_connected_objects('sibling', 'object', obj1.id)
+    assert response.status.code == '200'
+    assert hasattr(response, 'objects')
+    assert len(response.objects) == 2
+
+
+def search_connections_for_objects_test():
+    conn = AppacitiveConnection('sibling').from_new_object('object', AppacitiveObject('object')).to_new_object('object', AppacitiveObject('object'))
+    conn.create()
+
+    response = AppacitiveConnection.find_by_objects(conn.endpoint_a.objectid, conn.endpoint_b.objectid)
+    assert response.status.code == '200'
+    assert hasattr(response, 'connections')
+    assert len(response.connections) == 1
+
+    response = AppacitiveConnection.find_by_objects_and_relation(conn.endpoint_a.objectid, conn.endpoint_b.objectid, 'sibling')
+    assert response.status.code == '200'
+    assert hasattr(response, 'connection')
+    assert response.connection.id == conn.id
+
+
+def search_objects_between_two_objects_test():
+    pass
+
+
+
