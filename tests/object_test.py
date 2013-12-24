@@ -1,4 +1,4 @@
-from pyappacitive import AppacitiveObject
+from pyappacitive import AppacitiveObject, AppacitiveConnection
 from pyappacitive.utilities import logfilter
 import datetime
 import nose
@@ -66,7 +66,15 @@ def delete_object_test():
 
 
 def delete_object_with_connection_test():
-    assert True
+    conn = AppacitiveConnection('sibling').from_new_object('object', AppacitiveObject('object')).to_new_object('object', AppacitiveObject('object'))
+    conn.create()
+    conn_id = conn.id
+    obj = conn.endpoint_a.object
+    response = obj.delete_with_connections()
+    assert response.status.code == '200'
+
+    response = AppacitiveConnection.get('sibling', conn_id)
+    assert response.status.code != '200'
 
 
 def multi_delete_object_test():
@@ -126,5 +134,17 @@ def update_object_test():
     assert resp.status.code == '200'
 
 
+def find_object_between_two_objects_test():
+    conn = AppacitiveConnection('sibling').from_new_object('object', AppacitiveObject('object')).to_new_object('object', AppacitiveObject('object'))
+    conn.create()
+
+    conn1 = AppacitiveConnection('sibling').from_existing_object_id('object', conn.endpoint_a.objectid).to_new_object('object', AppacitiveObject('object'))
+    conn1.create()
+
+    response = AppacitiveObject.find_in_between_two_objects('object', conn.endpoint_b.objectid, 'sibling', 'object', conn1.endpoint_b.objectid, 'sibling', 'object')
+    assert response.status.code == '200'
+
+    assert hasattr(response, 'objects')
+    assert len(response.objects) == 1
 
 
