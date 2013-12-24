@@ -1,6 +1,6 @@
 __author__ = 'sathley'
 
-from pyappacitive import AppacitiveUser, AppacitiveQuery, PropertyFilter, UserAuthError
+from pyappacitive import AppacitiveUser, AppacitiveQuery, PropertyFilter, UserAuthError, ApplicationContext
 import random
 import datetime
 from nose.tools import *
@@ -221,7 +221,7 @@ def authenticate_user_test():
 def get_user_without_token_test():
     user = get_random_user()
     user.create()
-
+    AppacitiveUser.invalidate_session()
     response = AppacitiveUser.get_by_username(user.username)
     assert response.status.code != '200'
 

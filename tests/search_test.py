@@ -236,4 +236,12 @@ def search_objects_between_two_objects_test():
     pass
 
 
+def query_dsl_test():
+    assert str(PropertyFilter('p').is_not_equal_to('v')) == "*p != 'v'"
+    assert str(PropertyFilter('p').is_greater_than('v')) == "*p > 'v'"
+    assert str(PropertyFilter('p').is_less_than('v')) == "*p < 'v'"
+    assert str(PropertyFilter('p').is_greater_than_equal_to('v')) == "*p >= 'v'"
+    assert str(PropertyFilter('p').is_less_than_equal_to('v')) == "*p <= 'v'"
 
+    assert str(AttributeFilter('a').ends_with('v')) == "@a like '*v'"
+    assert str(AttributeFilter('a').starts_with('v')) == "@a like 'v*'"

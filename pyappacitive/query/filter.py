@@ -2,6 +2,7 @@ __author__ = 'sathley'
 
 import types
 import datetime
+from pyappacitive import ValidationError
 
 
 class FilterBase(object):
@@ -83,13 +84,13 @@ class PropertyFilter(FilterBase):
 
     def starts_with(self, value):
 
-        self.value = '*'+value
+        self.value = value+'*'
         self.operator = 'like'
         return self
 
     def ends_with(self, value):
 
-        self.value = value+'*'
+        self.value = '*'+value
         self.operator = 'like'
         return self
 
@@ -110,9 +111,12 @@ class GeoFilter(FilterBase):
             geo_code, distance = self.value
             return "*{0} {1} {2},{3}".format(self.key, self.operator, str(geo_code), str(distance))
 
-        if self.operator == 'within_polygon':
+        elif self.operator == 'within_polygon':
             geo_codes = self.value
             return "*{0} {1} {2}".format(self.key, self.operator, ' | '.join(geo_codes))
+
+        else:
+            raise ValidationError('Incorrect geo filter')
 
     def within_circle(self, geo_code, distance):
         self.operator = 'within_circle'
@@ -145,12 +149,12 @@ class AttributeFilter(FilterBase):
 
     def starts_with(self, value):
         self.operator = 'like'
-        self.value = '*'+value
+        self.value = value+'*'
         return self
 
     def ends_with(self, value):
         self.operator = 'like'
-        self.value = value+'*'
+        self.value = '*'+value
         return self
 
 
