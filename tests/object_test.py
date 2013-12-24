@@ -1,7 +1,7 @@
-from pyappacitive import AppacitiveObject, AppacitiveConnection
+from pyappacitive import AppacitiveObject, AppacitiveConnection, ValidationError
 from pyappacitive.utilities import logfilter
 import datetime
-import nose
+from nose.tools import *
 import logging
 
 
@@ -148,3 +148,8 @@ def find_object_between_two_objects_test():
     assert len(response.objects) == 1
 
 
+@raises(ValidationError)
+def create_object_without_type_test():
+    obj = AppacitiveObject(None)
+    response = obj.create()
+    assert response is None
