@@ -51,6 +51,31 @@ def create_connection_with_objects_test():
     assert conn.endpoint_b.object.id > 0
 
 
+def create_using_fluent_syntax_test():
+    obj1 = AppacitiveObject('object')
+    obj1.create()
+
+    obj2 = AppacitiveObject('object')
+    obj2.create()
+
+    conn = AppacitiveConnection('sibling').from_created_object_id('object', obj1.id).to_created_object_id('object', obj2.id)
+    resp = conn.create()
+    assert resp.status.code == '200'
+    assert conn.id != 0
+
+
+def create_using_fluent_syntax_test_2():
+    obj1 = AppacitiveObject('object')
+
+    obj2 = AppacitiveObject('object')
+
+    conn = AppacitiveConnection('sibling').from_new_object('object', obj1).to_new_object('object', obj2)
+    resp = conn.create()
+    assert resp.status.code == '200'
+    assert conn.id != 0
+
+
+
 def get_connection_test():
     obj1 = AppacitiveObject('object')
     obj1.create()
@@ -59,8 +84,6 @@ def get_connection_test():
     obj2.create()
 
     conn = AppacitiveConnection('sibling')
-    conn.set_property('field1', 'hello')
-    conn.set_property('field2', 101)
 
     conn.endpoint_a.objectid = obj1.id
     conn.endpoint_a.label = 'object'
@@ -102,8 +125,6 @@ def delete_connection_test():
     obj2.create()
 
     conn = AppacitiveConnection('sibling')
-    conn.set_property('field1', 'hello')
-    conn.set_property('field2', 101)
 
     conn.endpoint_a.objectid = obj1.id
     conn.endpoint_a.label = 'object'

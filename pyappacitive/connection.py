@@ -105,6 +105,26 @@ class AppacitiveConnection(AppacitiveEntity):
             self._reset_update_commands()
         return response
 
+    def from_new_object(self, label, obj):
+        self.endpoint_a.label = label
+        self.endpoint_a.object = obj
+        return self
+
+    def from_created_object_id(self, label, object_id):
+        self.endpoint_a.label = label
+        self.endpoint_a.objectid = object_id
+        return self
+
+    def to_new_object(self, label, obj):
+        self.endpoint_b.label = label
+        self.endpoint_b.object = obj
+        return self
+
+    def to_created_object_id(self, label, object_id):
+        self.endpoint_b.label = label
+        self.endpoint_b.objectid = object_id
+        return self
+
     @classmethod
     def get(cls, relation_type, connection_id, fields=None):
 
