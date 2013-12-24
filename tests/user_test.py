@@ -221,8 +221,15 @@ def authenticate_user_test():
 def get_user_without_token_test():
     user = get_random_user()
     user.create()
-    AppacitiveUser.invalidate_session()
+    ApplicationContext.set_user_token(None)
     response = AppacitiveUser.get_by_username(user.username)
     assert response.status.code != '200'
 
 
+def get_user_with_invalid_token_test():
+    user = get_random_user()
+    user.create()
+    user.authenticate('test123!@#')
+    AppacitiveUser.invalidate_session()
+    response = AppacitiveUser.get_by_username(user.username)
+    assert response.status.code != '200'
