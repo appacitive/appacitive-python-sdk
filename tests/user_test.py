@@ -55,6 +55,25 @@ def get_user_by_id_test():
     assert user.id == resp.user.id
 
 
+def get_user_by_username_test():
+    user = get_random_user()
+    user.create()
+    user.authenticate('test123!@#')
+    resp = AppacitiveUser.get_by_username(user.username)
+    assert resp.status.code == '200'
+    assert hasattr(resp, 'user')
+    assert user.id == resp.user.id
+
+
+def get_logged_in_user_test():
+    user = get_random_user()
+    user.create()
+    user.authenticate('test123!@#')
+    resp = AppacitiveUser.get_logged_in_user()
+    assert hasattr(resp, 'user')
+    assert user.id == resp.user.id
+
+
 def multiget_user_test():
     user_ids = []
     for i in range(2):
@@ -74,6 +93,32 @@ def delete_user_test():
     user_id = user.id
     user.authenticate('test123!@#')
     response = user.delete()
+    assert response.status.code == '200'
+
+    response = AppacitiveUser.get_by_id(user_id)
+    assert response.status.code != '200'
+    assert hasattr(response, 'user') is False
+
+
+def delete_by_username_test():
+    user = get_random_user()
+    user.create()
+    user_id = user.id
+    user.authenticate('test123!@#')
+    response = AppacitiveUser.delete_by_username(user.username)
+    assert response.status.code == '200'
+
+    response = AppacitiveUser.get_by_id(user_id)
+    assert response.status.code != '200'
+    assert hasattr(response, 'user') is False
+
+
+def delete_logged_in_user_test():
+    user = get_random_user()
+    user.create()
+    user_id = user.id
+    user.authenticate('test123!@#')
+    response = AppacitiveUser.delete_logged_in_user()
     assert response.status.code == '200'
 
     response = AppacitiveUser.get_by_id(user_id)
@@ -149,6 +194,7 @@ def checkin_user_test():
     user.fetch_latest()
     assert user.location == '10.1,20.2'
 
+
 def find_user_test():
     user = get_random_user()
     user.create()
@@ -161,5 +207,12 @@ def find_user_test():
     assert len(response.users) > 0
 
 
+def authenticate_user_test():
+    user = get_random_user()
+    user.create()
+    response = AppacitiveUser.authenticate_user(user.username, 'test123!@#')
+    assert response.status.code == '200'
+    assert response.user is not None
+    assert response.user.id == user.id
 
 

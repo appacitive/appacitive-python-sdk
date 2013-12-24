@@ -262,11 +262,11 @@ class AppacitiveUser(AppacitiveEntity):
     @user_auth_required
     def get_logged_in_user(cls):
 
-        if ApplicationContext.get_logged_in_user() is not None:
-            return ApplicationContext.get_logged_in_user()
-
-        if ApplicationContext.get_user_token() is None:
-            raise UserAuthError('No logged in user found.')
+        #if ApplicationContext.get_logged_in_user() is not None:
+        #    return ApplicationContext.get_logged_in_user()
+        #
+        #if ApplicationContext.get_user_token() is None:
+        #    raise UserAuthError('No logged in user found.')
 
         url = urlfactory.user_urls["get"]('me', 'token')
 
