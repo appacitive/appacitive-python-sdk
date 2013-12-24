@@ -67,7 +67,6 @@ class AppacitivePushNotification(object):
             response.id = int(api_response['id'])
         return response
 
-
     @staticmethod
     def send_to_channels(channels, data, platform_options=None, expire_after=None):
         push_request = {
