@@ -35,8 +35,7 @@ class AppacitiveEmail(object):
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()
 
-        api_response = http.post(url, headers, customjson.serialize(payload))
-        return AppacitiveResponse(api_response['status'])
+        http.post(url, headers, customjson.serialize(payload))
 
     @staticmethod
     def send_templated_email(to, subject, template_name, template_fillers, cc=[], bcc=[], is_body_html=False, smtp=None, from_email=None, reply_to_email=None):
@@ -61,7 +60,6 @@ class AppacitiveEmail(object):
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()
 
-        api_response = http.post(url, headers, customjson.serialize(payload))
-        return AppacitiveResponse(api_response['status'])
+        http.post(url, headers, customjson.serialize(payload))
 
 

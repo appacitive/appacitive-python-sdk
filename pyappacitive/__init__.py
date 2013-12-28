@@ -6,7 +6,7 @@ from file import AppacitiveFile
 
 from push import AppacitivePushNotification
 from appacitive_email import AppacitiveEmail
-from response import AppacitiveResponse, PagingInfo, Status
+from response import AppacitiveResponse, PagingInfo
 from entity import AppacitiveEntity
 from object import AppacitiveObject
 from endpoint import AppacitiveEndpoint

@@ -39,7 +39,6 @@ def projection_test():
     level2edge.create()
 
     response = AppacitiveGraphSearch.project('sample_project', [root.id], {'level1_filter': val1, 'level2_filter': val2})
-    assert response.status.code == '200'
     assert len(response.nodes) == 1
     assert response.nodes[0].object is not None
     assert response.nodes[0].object.id == root.id
@@ -78,6 +77,5 @@ def filter_test():
     conn.create()
 
     response = AppacitiveGraphSearch.filter('sample_filter', {'search_value': unique})
-    assert response.status.code == '200'
     assert len(response.ids) == 1
     assert response.ids[0] == parent.id

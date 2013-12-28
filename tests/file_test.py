@@ -5,7 +5,6 @@ from pyappacitive import AppacitiveFile
 
 def get_file_upload_url_test():
     response = AppacitiveFile.get_upload_url('image/jpeg', 'foto.jpeg')
-    assert response.status.code == '200'
     assert hasattr(response, 'url')
     assert response.url is not None
     assert hasattr(response, 'id')
@@ -14,11 +13,9 @@ def get_file_upload_url_test():
 
 def get_download_url_test():
     response = AppacitiveFile.get_download_url('random_file_id')
-    assert response.status.code == '200'
     assert hasattr(response, 'url')
     assert response.url is not None
 
 
 def delete_file_test():
-    response = AppacitiveFile.delete_file('random_file_id')
-    assert response.status.code == '200'
+    AppacitiveFile.delete_file('random_file_id')

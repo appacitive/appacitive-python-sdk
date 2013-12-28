@@ -30,7 +30,6 @@ def search_with_freetext_tokens_test():
     query.free_text_tokens = ['Shahrukh', 'Khan', 'Salman']
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert len(response.objects) > 0
 
 
@@ -44,7 +43,6 @@ def search_with_integer_property_filter_test():
     query.filter = PropertyFilter('intfield').is_equal_to(random_num)
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert response.paging_info.total_records == 1
     assert len(response.objects) == 1
 
@@ -61,7 +59,6 @@ def search_with_decimal_property_filter_test():
     query.filter = PropertyFilter('decimalfield').is_equal_to(random_float)
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert response.paging_info.total_records == 1
     assert len(response.objects) == 1
 
@@ -75,7 +72,6 @@ def search_with_bool_property_filter_test():
     query.filter = PropertyFilter('boolfield').is_equal_to(False)
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert response.paging_info.total_records >= 1
     assert len(response.objects) >= 1
 
@@ -89,7 +85,6 @@ def search_with_like_filter_test():
     query.filter = PropertyFilter('stringfield').like('*ssissi*')
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert len(response.objects) >= 1
 
 
@@ -122,7 +117,6 @@ def search_on_tags_test():
 
     query.filter = TagFilter().match_one_or_more(['stars', 'sky', 'moonlight', 'cloudy'])
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert hasattr(response, 'paging_info')
     assert response.paging_info.total_records > 0
 
@@ -140,7 +134,6 @@ def search_with_fields_test():
     query.page_size = 3
     query.filter = PropertyFilter('decimalfield').is_equal_to(random_float)
     response = AppacitiveObject.find('object', query, ['__createdby', '__revision', 'stringfield'])
-    assert response.status.code == '200'
     assert hasattr(response, 'objects')
     for obj in response.objects:
         assert obj.get_property('stringfield') is not None
@@ -160,7 +153,6 @@ def search_geo_within_circle_test():
     query.filter = GeoFilter('geofield').within_circle('10.10,20.21', '10 mi')
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert response.paging_info.total_records > 0
 
 
@@ -174,7 +166,6 @@ def search_geo_within_polygon_test():
     query.filter = GeoFilter('geofield').within_polygon(['0.0,0.0', '0.0,50.0', '50.0,0.0'])
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert response.paging_info.total_records > 0
 
 
@@ -198,7 +189,6 @@ def search_aggregated_queries_test():
     query.filter = BooleanOperator.or_query([filter3, BooleanOperator.and_query([filter1, filter2])])
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert response.paging_info.total_records > 0
 
 
@@ -212,7 +202,6 @@ def search_connected_objects_test():
     conn2 = AppacitiveConnection('sibling').from_existing_object_id('object', obj1.id).to_new_object('object', AppacitiveObject('object'))
     conn2.create()
     response = AppacitiveConnection.find_connected_objects('sibling', 'object', obj1.id)
-    assert response.status.code == '200'
     assert hasattr(response, 'objects')
     assert len(response.objects) == 2
 
@@ -222,12 +211,10 @@ def search_connections_for_objects_test():
     conn.create()
 
     response = AppacitiveConnection.find_by_objects(conn.endpoint_a.objectid, conn.endpoint_b.objectid)
-    assert response.status.code == '200'
     assert hasattr(response, 'connections')
     assert len(response.connections) == 1
 
     response = AppacitiveConnection.find_by_objects_and_relation(conn.endpoint_a.objectid, conn.endpoint_b.objectid, 'sibling')
-    assert response.status.code == '200'
     assert hasattr(response, 'connection')
     assert response.connection.id == conn.id
 

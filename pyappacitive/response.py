@@ -1,20 +1,20 @@
 __author__ = 'sathley'
 
 
-class Status(object):
-    def __init__(self, status=None):
-        self.code = None
-        self.message = None
-        self.additional_messages = None
-        self.reference_id = None
-        self.version = None
-
-        if status is not None:
-            self.code = status.get('code', 0)
-            self.message = status.get('message', None)
-            self.additional_messages = status.get('additionalmessages', [])
-            self.reference_id = status['referenceid']
-            self.version = status['version']
+#class Status(object):
+#    def __init__(self, status=None):
+#        self.code = None
+#        self.message = None
+#        self.additional_messages = None
+#        self.reference_id = None
+#        self.version = None
+#
+#        if status is not None:
+#            self.code = status.get('code', 0)
+#            self.message = status.get('message', None)
+#            self.additional_messages = status.get('additionalmessages', [])
+#            self.reference_id = status['referenceid']
+#            self.version = status['version']
 
 
 class PagingInfo(object):
@@ -30,10 +30,7 @@ class PagingInfo(object):
 
 
 class AppacitiveResponse(object):
-    def __init__(self, status, paging_info=None):
-        self.status = Status(status)
-        self.paging_info = None
-
+    def __init__(self, paging_info=None):
         if paging_info is not None:
             self.paging_info = PagingInfo(paging_info)
 

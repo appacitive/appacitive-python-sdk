@@ -26,8 +26,7 @@ The object api allows you to store, retrieve and manage all the data that you st
     obj.set_property('geofield', '10.10,20.20')
     obj.set_property('multifield', ['val1', 500, False])
 
-    resp = obj.create()
-    assert resp.status.code == '200'
+    obj.create()
     assert obj.id > 0
 
 
@@ -36,8 +35,9 @@ def get_object_test():
     obj.create()
 
     resp = AppacitiveObject.get('object', obj.id)
-    assert resp.status.code == '200'
+    assert hasattr(resp, 'object')
     assert resp.object is not None
+    assert resp.object.id == obj.id
 
 
 def multiget_object_test():
@@ -48,7 +48,6 @@ def multiget_object_test():
         object_ids.append(obj.id)
 
     resp = AppacitiveObject.multi_get('object', object_ids)
-    assert resp.status.code == '200'
     assert hasattr(resp, 'objects')
     assert len(resp.objects) == 12
 
@@ -57,24 +56,24 @@ def delete_object_test():
     obj = AppacitiveObject('object')
     obj.create()
     id = obj.id
-    resp = obj.delete()
-    assert resp.status.code == '200'
+    obj.delete()
+    try:
+        resp = AppacitiveObject.get('object', id)
+    except AppacitiveError as e:
+        assert e.code == '404'
 
-    resp = AppacitiveObject.get('object', id)
-    assert resp.status.code != '200'
-    assert not hasattr(resp, 'object')
-
-
+@raises(AppacitiveError)
 def delete_object_with_connection_test():
     conn = AppacitiveConnection('sibling').from_new_object('object', AppacitiveObject('object')).to_new_object('object', AppacitiveObject('object'))
     conn.create()
     conn_id = conn.id
     obj = conn.endpoint_a.object
-    response = obj.delete_with_connections()
-    assert response.status.code == '200'
-
-    response = AppacitiveConnection.get('sibling', conn_id)
-    assert response.status.code != '200'
+    obj.delete_with_connections()
+    try:
+        response = AppacitiveConnection.get('sibling', conn_id)
+    except AppacitiveError as e:
+        assert e.code != '200'
+        raise e
 
 
 def multi_delete_object_test():
@@ -84,12 +83,13 @@ def multi_delete_object_test():
         obj.create()
         object_ids.append(obj.id)
 
-    resp = AppacitiveObject.multi_delete('object', object_ids)
-    assert resp.status.code == '200'
+    AppacitiveObject.multi_delete('object', object_ids)
 
     for object_id in object_ids:
-        resp = AppacitiveObject.get('object', object_id)
-        assert resp.status.code != '200'
+        try:
+            resp = AppacitiveObject.get('object', object_id)
+        except AppacitiveError as e:
+            assert e.code == '404'
 
 
 def update_object_test():
@@ -126,12 +126,13 @@ def update_object_test():
     actually changed.''')
     obj.set_property('datefield', datetime.date(1990, 5, 20))
     obj.set_property('timefield', datetime.time.max)
-    obj.set_property('datetimefield', datetime.datetime(2000,2,3))
+    obj.set_property('datetimefield', datetime.datetime(2000, 2, 3))
     obj.set_property('geofield', '30.30, 40.40')
     obj.set_property('multifield', ['val4', 'val5', 'val6'])
 
-    resp = obj.update()
-    assert resp.status.code == '200'
+    obj.update()
+    assert obj.get_property('intfield') == str(200)
+    assert obj.get_property('boolfield') == str(True)
 
 
 def find_object_between_two_objects_test():
@@ -142,8 +143,6 @@ def find_object_between_two_objects_test():
     conn1.create()
 
     response = AppacitiveObject.find_in_between_two_objects('object', conn.endpoint_b.objectid, 'sibling', 'object', conn1.endpoint_b.objectid, 'sibling', 'object')
-    assert response.status.code == '200'
-
     assert hasattr(response, 'objects')
     assert len(response.objects) == 1
 
@@ -154,10 +153,11 @@ def create_object_without_type_test():
     response = obj.create()
     assert response is None
 
-
+@raises(AppacitiveError)
 def create_invalid_object_test():
     obj = AppacitiveObject('non_existent_schema')
     try:
-        response = obj.create()
+        obj.create()
     except AppacitiveError as e:
         assert e.code == '404'
+        raise e

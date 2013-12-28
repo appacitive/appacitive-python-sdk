@@ -66,13 +66,8 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         object_logger.info('Creating object')
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
-        response = AppacitiveResponse(api_resp['status'])
-
-        if response.status.code == '200':
-            self.__set_self(api_resp['object'])
-            self._reset_update_commands()
-
-        return response
+        self.__set_self(api_resp['object'])
+        self._reset_update_commands()
 
     def delete(self):
 
@@ -85,9 +80,7 @@ class AppacitiveObject(AppacitiveEntity):
         url = urlfactory.object_urls["delete"](self.type if self.type is not None else self.type_id, self.id)
         headers = urlfactory.get_headers()
         object_logger.info('Deleting object')
-        api_resp = http.delete(url, headers)
-        response = AppacitiveResponse(api_resp['status'])
-        return response
+        http.delete(url, headers)
 
     def delete_with_connections(self):
 
@@ -101,9 +94,7 @@ class AppacitiveObject(AppacitiveEntity):
                                                                self.id)
         headers = urlfactory.get_headers()
         object_logger.info('Deleting object with connections')
-        api_resp = http.delete(url, headers)
-        response = AppacitiveResponse(api_resp['status'])
-        return response
+        http.delete(url, headers)
 
     @classmethod
     def multi_delete(cls, object_type, object_ids):
@@ -121,9 +112,7 @@ class AppacitiveObject(AppacitiveEntity):
         for object_id in object_ids:
             payload["idlist"].append(str(object_id))
         object_logger.info('Deleting multiple objects')
-        api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_resp['status'])
-        return response
+        http.post(url, headers, customjson.serialize(payload))
 
     def update(self, with_revision=False):
 
@@ -141,13 +130,7 @@ class AppacitiveObject(AppacitiveEntity):
         payload = self.get_update_command()
         object_logger.info('Updating object')
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_resp['status'])
-
-        if response.status.code == '200':
-            updated_object = api_resp['object']
-            self.__set_self(updated_object)
-
-        return response
+        self.__set_self(api_resp['object'])
 
     @classmethod
     def get(cls, object_type, object_id, fields=None):
@@ -164,11 +147,8 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         object_logger.info('Fetching object')
-        response = AppacitiveResponse(api_response['status'])
-
-        if response.status.code == '200':
-            obj = api_response['object']
-            response.object = cls(obj)
+        response = AppacitiveResponse()
+        response.object = cls(api_response['object'])
         return response
 
     def fetch_latest(self):
@@ -176,11 +156,8 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         object_logger.info('Fetching latest object')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            self._set_self(api_response['object'])
-            self._reset_update_commands()
-        return response
+        self._set_self(api_response['object'])
+        self._reset_update_commands()
 
     @classmethod
     def multi_get(cls, object_type, object_ids, fields=None):
@@ -197,17 +174,16 @@ class AppacitiveObject(AppacitiveEntity):
         object_logger.info('Fetching multiple objects')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
+        response = AppacitiveResponse()
 
-            api_objects = api_response.get('objects', [])
+        api_objects = api_response.get('objects', [])
 
-            return_objects = []
-            for obj in api_objects:
-                appacitive_object = cls(obj)
-                return_objects.append(appacitive_object)
-            response.objects = return_objects
-            return response
+        return_objects = []
+        for obj in api_objects:
+            appacitive_object = cls(obj)
+            return_objects.append(appacitive_object)
+        response.objects = return_objects
+        return response
 
     @classmethod
     def find(cls, object_type, query, fields=None):
@@ -220,18 +196,15 @@ class AppacitiveObject(AppacitiveEntity):
         object_logger.info('Searching objects')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
+        response = AppacitiveResponse(api_response['paginginfo'])
+        api_objects = api_response.get('objects', [])
 
-            api_objects = api_response.get('objects', [])
-
-            return_objects = []
-            for obj in api_objects:
-                appacitive_object = cls(obj)
-                return_objects.append(appacitive_object)
-            response.objects = return_objects
-            response.paging_info = PagingInfo(api_response['paginginfo'])
-            return response
+        return_objects = []
+        for obj in api_objects:
+            appacitive_object = cls(obj)
+            return_objects.append(appacitive_object)
+        response.objects = return_objects
+        return response
 
     @classmethod
     def find_in_between_two_objects(cls, object_type, object_a_id, relation_a, label_a, object_b_id, relation_b, label_b, fields=None):
@@ -244,17 +217,15 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         object_logger.info('Searching objects between two objects')
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
+        response = AppacitiveResponse(api_response['paginginfo'])
 
-            api_objects = api_response.get('objects', [])
+        api_objects = api_response.get('objects', [])
 
-            return_objects = []
-            for obj in api_objects:
-                appacitive_object = cls(obj)
-                return_objects.append(appacitive_object)
-            response.objects = return_objects
-            response.paging_info = PagingInfo(api_response['paginginfo'])
-            return response
+        return_objects = []
+        for obj in api_objects:
+            appacitive_object = cls(obj)
+            return_objects.append(appacitive_object)
+        response.objects = return_objects
+        return response
 
 

@@ -1,8 +1,9 @@
 __author__ = 'sathley'
 
-from pyappacitive import AppacitiveDevice
+from pyappacitive import AppacitiveDevice, AppacitiveError
 import random
 from pyappacitive import AppacitiveQuery, PropertyFilter
+from nose.tools import *
 
 
 def get_random_string(number_of_characters=10):
@@ -21,8 +22,7 @@ def get_random_device():
 
 def register_device_test():
     device = get_random_device()
-    response = device.register()
-    assert response.status.code == '200'
+    device.register()
     assert device.id > 0
 
 
@@ -31,7 +31,6 @@ def get_device_test():
     device.register()
 
     response = AppacitiveDevice.get(device.id)
-    assert response.status.code == '200'
     assert hasattr(response, 'device')
     assert response.device is not None
     assert response.device.id == device.id
@@ -44,7 +43,6 @@ def multi_get_device_test():
         device.register()
         device_ids.append(device.id)
     response = AppacitiveDevice.multi_get(device_ids)
-    assert response.status.code == '200'
     assert hasattr(response, 'devices')
     assert len(response.devices) == 12
 
@@ -55,21 +53,17 @@ def device_update_test():
     device.register()
 
     device.badge = 200
-    response = device.update()
-    assert response.status.code == '200'
+    device.update()
     assert device.badge == 200
 
-
+@raises(AppacitiveError)
 def delete_device_test():
     device = get_random_device()
     device.register()
     device_id = device.id
-    response = device.delete()
-    assert response.status.code == '200'
+    device.delete()
 
-    response = AppacitiveDevice.get(device_id)
-    assert response.status.code != '200'
-    assert hasattr(response, 'device') is False
+    AppacitiveDevice.get(device_id)
 
 
 def find_device_test():
@@ -78,6 +72,5 @@ def find_device_test():
     query = AppacitiveQuery()
     query.filter = PropertyFilter('devicetype').is_equal_to('ios')
     response = AppacitiveDevice.find(query)
-    assert response.status.code == '200'
     assert hasattr(response, 'devices')
     assert len(response.devices) > 0

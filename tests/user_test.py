@@ -1,6 +1,6 @@
 __author__ = 'sathley'
 
-from pyappacitive import AppacitiveUser, AppacitiveQuery, PropertyFilter, UserAuthError, ApplicationContext
+from pyappacitive import AppacitiveUser, AppacitiveQuery, PropertyFilter, UserAuthError, ApplicationContext, AppacitiveError
 import random
 import datetime
 from nose.tools import *
@@ -41,8 +41,7 @@ def create_user_test():
     user.secretquestion = 'Favourite programming language?'
     user.secretanswer = 'python'
 
-    resp = user.create()
-    assert resp.status.code == '200'
+    user.create()
     assert user.id > 0
 
 
@@ -51,7 +50,6 @@ def get_user_by_id_test():
     user.create()
     user.authenticate('test123!@#')
     resp = AppacitiveUser.get_by_id(user.id)
-    assert resp.status.code == '200'
     assert hasattr(resp, 'user')
     assert user.id == resp.user.id
 
@@ -61,7 +59,6 @@ def get_user_by_username_test():
     user.create()
     user.authenticate('test123!@#')
     resp = AppacitiveUser.get_by_username(user.username)
-    assert resp.status.code == '200'
     assert hasattr(resp, 'user')
     assert user.id == resp.user.id
 
@@ -84,34 +81,32 @@ def multiget_user_test():
     user.authenticate('test123!@#')
 
     response = AppacitiveUser.multi_get(user_ids)
-    assert response.status.code == '200'
     assert len(response.users) == 2
 
-
+@raises(AppacitiveError)
 def delete_user_test():
     user = get_random_user()
     user.create()
     user_id = user.id
     user.authenticate('test123!@#')
-    response = user.delete()
-    assert response.status.code == '200'
-
-    response = AppacitiveUser.get_by_id(user_id)
-    assert response.status.code != '200'
-    assert hasattr(response, 'user') is False
-
+    user.delete()
+    try:
+        response = AppacitiveUser.get_by_id(user_id)
+    except AppacitiveError as e:
+        assert e.code == '404'
+        raise e
 
 def delete_by_username_test():
     user = get_random_user()
     user.create()
     user_id = user.id
     user.authenticate('test123!@#')
-    response = AppacitiveUser.delete_by_username(user.username)
-    assert response.status.code == '200'
-
-    response = AppacitiveUser.get_by_id(user_id)
-    assert response.status.code != '200'
-    assert hasattr(response, 'user') is False
+    AppacitiveUser.delete_by_username(user.username)
+    try:
+        AppacitiveUser.get_by_id(user_id)
+    except AppacitiveError as e:
+        assert e.code == '404'
+        pass
 
 
 def delete_logged_in_user_test():
@@ -119,12 +114,12 @@ def delete_logged_in_user_test():
     user.create()
     user_id = user.id
     user.authenticate('test123!@#')
-    response = AppacitiveUser.delete_logged_in_user()
-    assert response.status.code == '200'
-
-    response = AppacitiveUser.get_by_id(user_id)
-    assert response.status.code != '200'
-    assert hasattr(response, 'user') is False
+    AppacitiveUser.delete_logged_in_user()
+    try:
+        response = AppacitiveUser.get_by_id(user_id)
+    except AppacitiveError as e:
+        assert e.code == '404'
+        pass
 
 
 def update_user_test():
@@ -144,8 +139,7 @@ def update_user_test():
     user.set_attribute('a3', 'v3')
     user.lastname = 'LN2'
 
-    response = user.update()
-    assert response.status.code == '200'
+    user.update()
     assert user.tag_exists('t1') is False
     assert user.tag_exists('t4')
     assert user.get_attribute('a1') is None
@@ -158,14 +152,13 @@ def update_password_user_test():
     user.create()
     user.authenticate('test123!@#')
 
-    response = user.update_password('test123!@#', 'zaq1ZAQ!')
-    assert response.status.code == '200'
-
-    response = user.authenticate('test123!@#')
-    assert response.status.code != '200'
-
-    response = user.authenticate('zaq1ZAQ!')
-    assert response.status.code == '200'
+    user.update_password('test123!@#', 'zaq1ZAQ!')
+    user.authenticate('zaq1ZAQ!')
+    try:
+        user.authenticate('test123!@#')
+    except AppacitiveError as e:
+        assert e.code != '200'
+        pass
 
 
 def validate_session_user_test():
@@ -173,25 +166,21 @@ def validate_session_user_test():
     user.create()
     user.authenticate('test123!@#')
 
-    response = AppacitiveUser.validate_session()
-    assert response.status.code == '200'
-    assert response.result is True
+    AppacitiveUser.validate_session()
 
-    response = AppacitiveUser.invalidate_session()
-    assert response.status.code == '200'
+    AppacitiveUser.invalidate_session()
 
-    response = AppacitiveUser.validate_session()
-    assert response.status.code != '200'
+    try:
+        AppacitiveUser.validate_session()
+    except AppacitiveError as e:
+        pass
 
 
 def checkin_user_test():
     user = get_random_user()
     user.create()
     user.authenticate('test123!@#')
-
-    response = user.checkin(10.10, 20.20)
-    assert response.status.code == '200'
-
+    user.checkin(10.10, 20.20)
     user.fetch_latest()
     assert user.location == '10.1,20.2'
 
@@ -203,7 +192,6 @@ def find_user_test():
     query = AppacitiveQuery()
     query.filter = PropertyFilter('firstname').is_equal_to('Jon')
     response = AppacitiveUser.find(query)
-    assert response.status.code == '200'
     assert hasattr(response,  'users')
     assert len(response.users) > 0
 
@@ -212,7 +200,6 @@ def authenticate_user_test():
     user = get_random_user()
     user.create()
     response = AppacitiveUser.authenticate_user(user.username, 'test123!@#')
-    assert response.status.code == '200'
     assert response.user is not None
     assert response.user.id == user.id
 
@@ -223,13 +210,11 @@ def get_user_without_token_test():
     user.create()
     ApplicationContext.set_user_token(None)
     response = AppacitiveUser.get_by_username(user.username)
-    assert response.status.code != '200'
 
-
+@raises(AppacitiveError)
 def get_user_with_invalid_token_test():
     user = get_random_user()
     user.create()
     user.authenticate('test123!@#')
     AppacitiveUser.invalidate_session()
     response = AppacitiveUser.get_by_username(user.username)
-    assert response.status.code != '200'

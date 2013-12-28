@@ -62,9 +62,8 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.id = int(api_response['id'])
+        response = AppacitiveResponse()
+        response.id = int(api_response['id'])
         return response
 
     @staticmethod
@@ -88,9 +87,8 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.id = int(api_response['id'])
+        response = AppacitiveResponse()
+        response.id = int(api_response['id'])
         return response
 
     @staticmethod
@@ -114,9 +112,8 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.id = int(api_response['id'])
+        response = AppacitiveResponse()
+        response.id = int(api_response['id'])
         return response
 
     @staticmethod
@@ -140,9 +137,8 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.id = int(api_response['id'])
+        response = AppacitiveResponse()
+        response.id = int(api_response['id'])
         return response
 
     @staticmethod
@@ -155,10 +151,8 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
         push_logger.info('Fetch Push notification')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-
-        if response.status.code == '200':
-            response.notification = AppacitivePushNotification(api_response['pushnotification'])
+        response = AppacitiveResponse()
+        response.notification = AppacitivePushNotification(api_response['pushnotification'])
         return response
 
     @staticmethod
@@ -168,14 +162,13 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
         push_logger.info('Fetch all notifications')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
+        response = AppacitiveResponse()
 
-        if response.status.code == '200':
-            return_notifications = []
-            for notification in api_response['pushnotifications']:
-                if notification:
-                    return_notifications.append(AppacitivePushNotification(notification))
-            response.notifications = return_notifications
+        return_notifications = []
+        for notification in api_response['pushnotifications']:
+            if notification:
+                return_notifications.append(AppacitivePushNotification(notification))
+        response.notifications = return_notifications
         return response
 
 

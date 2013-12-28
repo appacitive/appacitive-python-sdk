@@ -201,12 +201,8 @@ class AppacitiveUser(AppacitiveEntity):
         user_logger.info('Creating user')
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
-        response = AppacitiveResponse(api_resp['status'])
-
-        if response.status.code == '200':
-            self.__set_self(api_resp['user'])
-            self._reset_update_commands()
-        return response
+        self.__set_self(api_resp['user'])
+        self._reset_update_commands()
 
     @classmethod
     @user_auth_required
@@ -220,12 +216,8 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Fetching user')
         api_response = http.get(url, headers)
-
-        response = AppacitiveResponse(api_response['status'])
-
-        if response.status.code == '200':
-            response.user = cls(api_response['user'])
-
+        response = AppacitiveResponse()
+        response.user = cls(api_response['user'])
         return response
 
     def fetch_latest(self):
@@ -233,11 +225,8 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_headers()
         user_logger.info('Fetching latest user')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            self._set_self(api_response['user'])
-            self._reset_update_commands()
-        return response
+        self._set_self(api_response['user'])
+        self._reset_update_commands()
 
     @classmethod
     @user_auth_required
@@ -250,12 +239,8 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Fetching user')
         api_response = http.get(url, headers)
-
-        response = AppacitiveResponse(api_response['status'])
-
-        if response.status.code == '200':
-            response.user = cls(api_response['user'])
-
+        response = AppacitiveResponse()
+        response.user = cls(api_response['user'])
         return response
 
     @classmethod
@@ -273,12 +258,8 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Fetching logged-in user')
         api_response = http.get(url, headers)
-
-        response = AppacitiveResponse(api_response['status'])
-
-        if response.status.code == '200':
-            response.user = cls(api_response['user'])
-
+        response = AppacitiveResponse()
+        response.user = cls(api_response['user'])
         return response
 
     @staticmethod
@@ -297,12 +278,11 @@ class AppacitiveUser(AppacitiveEntity):
         user_logger.info('Authenticating user')
         api_response = http.post(url, headers, customjson.serialize(payload))
 
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.token = api_response['token']
-            ApplicationContext.set_user_token(response.token)
-            response.user = AppacitiveUser(api_response['user'])
-            ApplicationContext.set_logged_in_user(response.user)
+        response = AppacitiveResponse()
+        response.token = api_response['token']
+        ApplicationContext.set_user_token(response.token)
+        response.user = AppacitiveUser(api_response['user'])
+        ApplicationContext.set_logged_in_user(response.user)
         return response
 
     def authenticate(self, password,  expiry=None, attempts=None):
@@ -319,13 +299,10 @@ class AppacitiveUser(AppacitiveEntity):
             payload['attempts'] = attempts
         user_logger.info('Authenticating user')
         api_response = http.post(url, headers, customjson.serialize(payload))
-
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.token = api_response['token']
-            ApplicationContext.set_user_token(response.token)
-            response.user = AppacitiveUser(api_response['user'])
-            ApplicationContext.set_logged_in_user(response.user)
+        response = AppacitiveResponse()
+        response.token = api_response['token']
+        ApplicationContext.set_user_token(response.token)
+        ApplicationContext.set_logged_in_user(self)
         return response
 
     @classmethod
@@ -338,18 +315,14 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_headers()
         user_logger.info('Fetching multiple users')
         api_response = http.get(url, headers)
-
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-
-            api_users = api_response.get('objects', [])
-
-            return_users = []
-            for user in api_users:
-                appacitive_user = cls(user)
-                return_users.append(appacitive_user)
-            response.users = return_users
-            return response
+        response = AppacitiveResponse()
+        api_users = api_response.get('objects', [])
+        return_users = []
+        for user in api_users:
+            appacitive_user = cls(user)
+            return_users.append(appacitive_user)
+        response.users = return_users
+        return response
 
     @classmethod
     @user_auth_required
@@ -362,9 +335,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         headers = urlfactory.get_user_headers()
         user_logger.info('Deleting user')
-        api_resp = http.delete(url, headers)
-        response = AppacitiveResponse(api_resp['status'])
-        return response
+        http.delete(url, headers)
 
     @classmethod
     @user_auth_required
@@ -377,9 +348,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         headers = urlfactory.get_user_headers()
         user_logger.info('Deleting user')
-        api_resp = http.delete(url, headers)
-        response = AppacitiveResponse(api_resp['status'])
-        return response
+        http.delete(url, headers)
 
     @classmethod
     @user_auth_required
@@ -389,9 +358,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         headers = urlfactory.get_user_headers()
         user_logger.info('Deleting logged-in user')
-        api_resp = http.delete(url, headers)
-        response = AppacitiveResponse(api_resp['status'])
-        return response
+        http.delete(url, headers)
 
     def delete(self, delete_connections=False):
         return AppacitiveUser.delete_by_id(self.id, delete_connections)
@@ -413,11 +380,7 @@ class AppacitiveUser(AppacitiveEntity):
         payload = self.get_update_command()
         user_logger.info('Updating user')
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_resp['status'])
-
-        if response.status.code == '200':
-            self.__set_self(api_resp['user'])
-        return response
+        self.__set_self(api_resp['user'])
 
     @user_auth_required
     def update_password(self, old_password, new_password):
@@ -434,8 +397,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         json_payload = customjson.serialize(payload)
         user_logger.info('Updating password')
-        api_response = http.post(url, headers, json_payload)
-        return AppacitiveResponse(api_response['status'])
+        http.post(url, headers, json_payload)
 
     @staticmethod
     def send_reset_password_email(username, email_subject):
@@ -450,8 +412,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         json_payload = customjson.serialize(payload)
         user_logger.info('Sending reset password email')
-        api_response = http.post(url, headers, json_payload)
-        return AppacitiveResponse(api_response['status'])
+        http.post(url, headers, json_payload)
 
     @staticmethod
     @user_auth_required
@@ -460,11 +421,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         payload = {}
         user_logger.info('Validating session')
-        api_response = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.result = api_response['result']
-        return response
+        http.post(url, headers, customjson.serialize(payload))
 
     @staticmethod
     @user_auth_required
@@ -473,9 +430,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         payload = {}
         user_logger.info('Invalidating session')
-        api_response = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_response['status'])
-        return response
+        http.post(url, headers, customjson.serialize(payload))
 
     @user_auth_required
     def checkin(self, latitude, longitude):
@@ -483,8 +438,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         payload = {}
         user_logger.info('User checkin')
-        api_response = http.post(url, headers, None)
-        return AppacitiveResponse(api_response['status'])
+        http.post(url, headers, None)
 
     @classmethod
     @user_auth_required
@@ -495,16 +449,14 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Searching users')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
+        response = AppacitiveResponse(api_response['paginginfo'])
 
-            api_users = api_response.get('objects', [])
+        api_users = api_response.get('objects', [])
 
-            return_users = []
-            for user in api_users:
-                appacitive_user = cls(user)
-                return_users.append(appacitive_user)
-            response.users = return_users
-            response.paging_info = PagingInfo(api_response['paginginfo'])
-            return response
+        return_users = []
+        for user in api_users:
+            appacitive_user = cls(user)
+            return_users.append(appacitive_user)
+        response.users = return_users
+        return response
 

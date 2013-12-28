@@ -1,7 +1,7 @@
-from pyappacitive import AppacitiveObject, AppacitiveConnection, AppacitiveQuery, TagFilter
+from pyappacitive import AppacitiveObject, AppacitiveConnection, AppacitiveQuery, TagFilter, AppacitiveError
 import datetime
+from nose.tools import *
 import nose
-
 
 def create_connection_with_object_ids_test():
     obj1 = AppacitiveObject('object')
@@ -18,9 +18,7 @@ def create_connection_with_object_ids_test():
     conn.endpoint_a.label = 'object'
     conn.endpoint_b.objectid = obj2.id
     conn.endpoint_b.label = 'object'
-    resp = conn.create()
-
-    assert resp.status.code == '200'
+    conn.create()
     assert conn.id != 0
 
 
@@ -37,9 +35,8 @@ def create_connection_with_objects_test():
     conn.endpoint_a.label = 'object'
     conn.endpoint_b.object = obj2
     conn.endpoint_b.label = 'object'
-    resp = conn.create()
+    conn.create()
 
-    assert resp.status.code == '200'
     assert conn.id != 0
     assert conn.endpoint_a.objectid > 0
     assert conn.endpoint_b.objectid > 0
@@ -59,8 +56,7 @@ def create_using_fluent_syntax_test():
     obj2.create()
 
     conn = AppacitiveConnection('sibling').from_existing_object_id('object', obj1.id).to_existing_object_id('object', obj2.id)
-    resp = conn.create()
-    assert resp.status.code == '200'
+    conn.create()
     assert conn.id != 0
 
 
@@ -70,8 +66,7 @@ def create_using_fluent_syntax_test_2():
     obj2 = AppacitiveObject('object')
 
     conn = AppacitiveConnection('sibling').from_new_object('object', obj1).to_new_object('object', obj2)
-    resp = conn.create()
-    assert resp.status.code == '200'
+    conn.create()
     assert conn.id != 0
 
 
@@ -92,8 +87,8 @@ def get_connection_test():
 
     resp = AppacitiveConnection.get('sibling', conn.id)
 
-    assert resp.status.code == '200'
     assert hasattr(resp, 'connection')
+    assert resp.connection is not None
     assert resp.connection.id == conn.id
 
 
@@ -107,15 +102,16 @@ def multiget_connection_test():
         conn.endpoint_a.label = 'object'
         conn.endpoint_b.object = obj2
         conn.endpoint_b.label = 'object'
-        resp = conn.create()
+        conn.create()
         conn_ids.append(conn.id)
 
     resp = AppacitiveConnection.multi_get('sibling', conn_ids)
-    assert resp.status.code == '200'
     assert hasattr(resp, 'connections')
+    assert resp.connections is not None
     assert len(resp.connections) == 12
 
 
+@raises(AppacitiveError)
 def delete_connection_test():
     obj1 = AppacitiveObject('object')
     obj1.create()
@@ -132,11 +128,12 @@ def delete_connection_test():
     conn.create()
     id = conn.id
 
-    resp = conn.delete()
-    assert resp.status.code == '200'
-
-    resp = AppacitiveConnection.get('sibling', id)
-    assert resp.status.code != '200'
+    conn.delete()
+    try:
+        resp = AppacitiveConnection.get('sibling', id)
+    except AppacitiveError as e:
+        assert e.code == '404'
+        raise e
 
 
 def multi_delete_connection_test():
@@ -160,12 +157,13 @@ def multi_delete_connection_test():
         conn.create()
         conn_ids.append(conn.id)
 
-    resp = AppacitiveConnection.multi_delete('sibling', conn_ids)
-    assert resp.status.code == '200'
+    AppacitiveConnection.multi_delete('sibling', conn_ids)
 
     for conn_id in conn_ids:
-        resp = AppacitiveConnection.get('sibling', conn_id)
-        assert resp.status.code != '200'
+        try:
+            resp = AppacitiveConnection.get('sibling', conn_id)
+        except AppacitiveError as e:
+            assert e.code == '404'
 
 
 def update_connection_test():
@@ -198,15 +196,14 @@ def update_connection_test():
     conn.remove_attribute('random')
     conn.set_attribute('a2', 'v2')
 
-    resp = conn.update()
-    assert resp.status.code == '200'
+    conn.update()
 
     assert conn.get_property('field1') == 'world'
     assert conn.get_property('field2') == '202'
-    assert conn.get_attribute('a1') == None
+    assert conn.get_attribute('a1') is None
     assert conn.get_attribute('a2') == 'v2'
-    assert conn.tag_exists('1') == False
-    assert conn.tag_exists('2') == True
+    assert conn.tag_exists('1') is False
+    assert conn.tag_exists('2') is True
 
 
 def fetch_latest_test():
@@ -235,8 +232,7 @@ def fetch_latest_test():
     conn1.update()
 
     conn.add_tag('3')
-    response = conn.fetch_latest()
-    assert response.status.code == '200'
+    conn.fetch_latest()
     assert conn.tag_exists('2')
     assert conn.tag_exists('1') is False
     assert conn.tag_exists('3') is False
@@ -263,7 +259,6 @@ def find_connection_test():
     query = AppacitiveQuery()
     query.filter = TagFilter().match_one_or_more(['1', '2', '3'])
     response = AppacitiveConnection.find('sibling', query)
-    assert response.status.code == '200'
     assert hasattr(response, 'connections')
     assert len(response.connections) > 0
 

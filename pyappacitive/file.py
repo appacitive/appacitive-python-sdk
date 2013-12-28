@@ -29,11 +29,9 @@ class AppacitiveFile(object):
         headers = urlfactory.get_headers()
         logging.info('Getting upload URL')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.id = api_response['id']
-            response.url = api_response['url']
-        return response
+        response = AppacitiveResponse()
+        response.id = api_response['id']
+        response.url = api_response['url']
 
     @staticmethod
     def get_download_url(file_id, expires=None):
@@ -49,9 +47,8 @@ class AppacitiveFile(object):
         headers = urlfactory.get_headers()
         logging.info('Getting download URL')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.url = api_response['uri']
+        response = AppacitiveResponse()
+        response.url = api_response['uri']
         return response
 
     @staticmethod
@@ -64,7 +61,6 @@ class AppacitiveFile(object):
 
         headers = urlfactory.get_headers()
         logging.info('Deleting file')
-        api_response = http.delete(url, headers)
-        return AppacitiveResponse(api_response['status'])
+        http.delete(url, headers)
 
 

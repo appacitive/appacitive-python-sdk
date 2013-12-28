@@ -132,12 +132,8 @@ class AppacitiveDevice(AppacitiveEntity):
         device_logger.info('Registering device')
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
 
-        response = AppacitiveResponse(api_resp['status'])
-
-        if response.status.code == '200':
-            self.__set_self(api_resp['device'])
-            self._reset_update_commands()
-        return response
+        self.__set_self(api_resp['device'])
+        self._reset_update_commands()
 
     @classmethod
     def get(cls, device_id):
@@ -150,11 +146,8 @@ class AppacitiveDevice(AppacitiveEntity):
         headers = urlfactory.get_headers()
         device_logger.info('Fetching device')
         api_response = http.get(url, headers)
-
-        response = AppacitiveResponse(api_response['status'])
-
-        if response.status.code == '200':
-            response.device = cls(api_response['device'])
+        response = AppacitiveResponse()
+        response.device = cls(api_response['device'])
         return response
 
     def fetch_latest(self):
@@ -162,11 +155,8 @@ class AppacitiveDevice(AppacitiveEntity):
         headers = urlfactory.get_headers()
         device_logger.info('Fetching latest device')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            self._set_self(api_response['device'])
-            self._reset_update_commands()
-        return response
+        self._set_self(api_response['device'])
+        self._reset_update_commands()
 
     @classmethod
     def multi_get(cls, device_ids):
@@ -179,17 +169,16 @@ class AppacitiveDevice(AppacitiveEntity):
         device_logger.info('Fetching multiple devices')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
+        response = AppacitiveResponse()
 
-            api_devices = api_response.get('objects', [])
+        api_devices = api_response.get('objects', [])
 
-            return_devices = []
-            for device in api_devices:
-                appacitive_device = cls(device)
-                return_devices.append(appacitive_device)
-            response.devices = return_devices
-            return response
+        return_devices = []
+        for device in api_devices:
+            appacitive_device = cls(device)
+            return_devices.append(appacitive_device)
+        response.devices = return_devices
+        return response
 
     def update(self, with_revision=False):
         if self.type is None and self.type_id <= 0:
@@ -208,11 +197,7 @@ class AppacitiveDevice(AppacitiveEntity):
         payload = self.get_update_command()
         device_logger.info('Updating device')
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_resp['status'])
-
-        if response.status.code == '200':
-            self.__set_self(api_resp['device'])
-        return response
+        self.__set_self(api_resp['device'])
 
     @classmethod
     def delete_by_id(cls, device_id, delete_connections=False):
@@ -224,9 +209,7 @@ class AppacitiveDevice(AppacitiveEntity):
 
         headers = urlfactory.get_user_headers()
         device_logger.info('Deleting device')
-        api_resp = http.delete(url, headers)
-        response = AppacitiveResponse(api_resp['status'])
-        return response
+        http.delete(url, headers)
 
     def delete(self, delete_connections=False):
         return AppacitiveDevice.delete_by_id(self.id, delete_connections)
@@ -239,15 +222,14 @@ class AppacitiveDevice(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         device_logger.info('Searching devices')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
+        response = AppacitiveResponse(api_response['paginginfo'])
 
-            api_devices = api_response.get('objects', [])
+        api_devices = api_response.get('objects', [])
 
-            return_devices = []
-            for device in api_devices:
-                appacitive_device = cls(device)
-                return_devices.append(appacitive_device)
-            response.devices = return_devices
-            response.paging_info = PagingInfo(api_response['paginginfo'])
-            return response
+        return_devices = []
+        for device in api_devices:
+            appacitive_device = cls(device)
+            return_devices.append(appacitive_device)
+        response.devices = return_devices
+        response.paging_info = PagingInfo()
+        return response

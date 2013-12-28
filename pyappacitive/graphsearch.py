@@ -26,12 +26,11 @@ class AppacitiveGraphSearch(object):
         }
         graph_logger.info('Projection graph query')
         resp = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(resp['status'])
+        response = AppacitiveResponse()
 
-        if response.status.code == '200':
-            for k, v in resp.iteritems():
-                if k != 'status':
-                    response.nodes = AppacitiveGraphSearch.__parse_projection_result(v['values'])
+        for k, v in resp.iteritems():
+            if k != 'status':
+                response.nodes = AppacitiveGraphSearch.__parse_projection_result(v['values'])
 
         return response
 
@@ -45,9 +44,8 @@ class AppacitiveGraphSearch(object):
         }
         graph_logger.info('Filter graph query')
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_response['status'])
-        if response.status.code == '200':
-            response.ids = [int(id) for id in api_response['ids']]
+        response = AppacitiveResponse()
+        response.ids = [int(id) for id in api_response['ids']]
         return response
 
     @staticmethod
