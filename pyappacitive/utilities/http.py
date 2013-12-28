@@ -3,6 +3,7 @@ __author__ = 'sushant'
 from . import customjson
 import requests
 import logging, time
+from pyappacitive import AppacitiveError
 
 logger = logging.getLogger('pyappacitive')
 logger.addHandler(logging.NullHandler())
@@ -25,7 +26,12 @@ def put(url, headers, payload):
             "RESPONSE": response,
             "TIME_TAKEN": float(elapsed_time)
         })
-
+    status = response.get('status', None)
+    if status is not None:
+        code = status.get('code', None)
+        if code is not None:
+            if code != '200':
+                raise AppacitiveError(status)
     return response
 
 
@@ -44,7 +50,12 @@ def post(url, headers, payload):
             "RESPONSE": response,
             "TIME_TAKEN": str(elapsed_time)
         })
-
+    status = response.get('status', None)
+    if status is not None:
+        code = status.get('code', None)
+        if code is not None:
+            if code != '200':
+                raise AppacitiveError(status)
     return response
 
 
@@ -62,7 +73,12 @@ def delete(url, headers):
             "RESPONSE": response,
             "TIME_TAKEN": str(elapsed_time)
         })
-
+    status = response.get('status', None)
+    if status is not None:
+        code = status.get('code', None)
+        if code is not None:
+            if code != '200':
+                raise AppacitiveError(status)
     return response
 
 
@@ -80,7 +96,12 @@ def get(url, headers):
             "RESPONSE": response,
             "TIME_TAKEN": str(elapsed_time)
         })
-
+    status = response.get('status', None)
+    if status is not None:
+        code = status.get('code', None)
+        if code is not None:
+            if code != '200':
+                raise AppacitiveError(status)
     return response
 
 

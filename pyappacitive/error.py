@@ -19,3 +19,17 @@ class UserAuthError(Exception):
         return repr(self.parameter)
 
 
+class AppacitiveError(Exception):
+    def __init__(self, status=None):
+        self.code = None
+        self.message = None
+        self.additional_messages = None
+        self.reference_id = None
+        self.version = None
+
+        if status is not None:
+            self.code = status.get('code', 0)
+            self.message = status.get('message', None)
+            self.additional_messages = status.get('additionalmessages', [])
+            self.reference_id = status['referenceid']
+            self.version = status['version']

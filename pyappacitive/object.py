@@ -7,10 +7,9 @@ from utilities import customjson
 from response import AppacitiveResponse, PagingInfo
 import logging
 
+# conn create from object /to object should initialize sent object
 # add file upload support using urllib2
-## logging with custom data and filters
 # complete object base
-# add license file
 # run pylint, pyflakes, sphynx
 
 

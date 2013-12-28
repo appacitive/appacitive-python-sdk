@@ -1,4 +1,4 @@
-from pyappacitive import AppacitiveObject, AppacitiveConnection, ValidationError
+from pyappacitive import AppacitiveObject, AppacitiveConnection, ValidationError, AppacitiveError
 from pyappacitive.utilities import logfilter
 import datetime
 from nose.tools import *
@@ -153,3 +153,11 @@ def create_object_without_type_test():
     obj = AppacitiveObject(None)
     response = obj.create()
     assert response is None
+
+
+def create_invalid_object_test():
+    obj = AppacitiveObject('non_existent_schema')
+    try:
+        response = obj.create()
+    except AppacitiveError as e:
+        assert e.code == '404'

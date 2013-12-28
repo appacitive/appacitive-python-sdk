@@ -21,11 +21,8 @@ class FailedRequestsLogFilter(logging.Filter):
     def filter(self, rec):
         if hasattr(rec, 'RESPONSE') is False:
             return True
-        status1 = rec.RESPONSE.get('status', None)
-        if status1 is not None:
-            if status1["code"] == '200':
-                return False
-            else:
-                return True
+        status = rec.RESPONSE.get('status', None)
+        if status is not None and status["code"] == '200':
+            return False
         else:
             return True

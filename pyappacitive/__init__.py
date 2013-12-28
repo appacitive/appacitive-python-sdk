@@ -1,7 +1,7 @@
 __author__ = 'sathley'
 
 
-from error import ValidationError, UserAuthError
+from error import ValidationError, UserAuthError, AppacitiveError
 from file import AppacitiveFile
 
 from push import AppacitivePushNotification
