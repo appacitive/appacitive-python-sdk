@@ -16,7 +16,6 @@ def search_objects_pnum_psize_test():
     query.page_size = 15
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert response.paging_info.page_number == 2
     assert response.paging_info.page_size == 15
     assert hasattr(response, 'objects')

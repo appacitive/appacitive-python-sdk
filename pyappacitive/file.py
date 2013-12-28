@@ -32,6 +32,7 @@ class AppacitiveFile(object):
         response = AppacitiveResponse()
         response.id = api_response['id']
         response.url = api_response['url']
+        return response
 
     @staticmethod
     def get_download_url(file_id, expires=None):
