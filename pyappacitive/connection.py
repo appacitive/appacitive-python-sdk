@@ -73,12 +73,8 @@ class AppacitiveConnection(AppacitiveEntity):
 
         self.relation_type = connection.get('__relationtype', None)
         self.relation_id = int(connection.get('__relationid', 0))
-
-        if '__endpointa' in connection:
-                self.endpoint_a = AppacitiveEndpoint(connection['__endpointa'])
-
-        if '__endpointb' in connection:
-                self.endpoint_b = AppacitiveEndpoint(connection['__endpointb'])
+        self.endpoint_a._set_self(connection['__endpointa'])
+        self.endpoint_b._set_self(connection['__endpointb'])
 
     def create(self):
 

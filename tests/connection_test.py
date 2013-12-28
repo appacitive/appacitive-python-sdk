@@ -263,6 +263,19 @@ def find_connection_test():
     assert len(response.connections) > 0
 
 
+def create_fluent_object_id_verification_test():
+
+    obj1 = AppacitiveObject('object')
+    obj2 = AppacitiveObject('object')
+    conn = AppacitiveConnection('sibling').from_new_object('object', obj1).to_new_object('object', obj2)
+    conn.create()
+    assert obj1.id > 0
+    assert obj2.id > 0
+    assert obj1.id == conn.endpoint_a.objectid
+    assert conn.endpoint_a.objectid == conn.endpoint_a.objectid
+    assert obj2.id == conn.endpoint_b.objectid
+    assert conn.endpoint_b.objectid == conn.endpoint_b.objectid
+    assert conn.id != 0
 
 
 

@@ -38,7 +38,7 @@ class AppacitiveObject(AppacitiveEntity):
             self.type = obj.get('__type', None)
             self.type_id = int(obj.get('__typeid', 0))
 
-    def __set_self(self, obj):
+    def _set_self(self, obj):
 
         super(AppacitiveObject, self)._set_self(obj)
 
@@ -66,7 +66,7 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         object_logger.info('Creating object')
         api_resp = http.put(url, headers, customjson.serialize(self.get_dict()))
-        self.__set_self(api_resp['object'])
+        self._set_self(api_resp['object'])
         self._reset_update_commands()
 
     def delete(self):
@@ -130,7 +130,7 @@ class AppacitiveObject(AppacitiveEntity):
         payload = self.get_update_command()
         object_logger.info('Updating object')
         api_resp = http.post(url, headers, customjson.serialize(payload))
-        self.__set_self(api_resp['object'])
+        self._set_self(api_resp['object'])
 
     @classmethod
     def get(cls, object_type, object_id, fields=None):

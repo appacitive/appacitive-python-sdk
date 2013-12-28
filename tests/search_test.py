@@ -93,10 +93,9 @@ def search_with_like_filter_test():
 #    obj.create()
 #
 #    query = AppacitiveQuery()
-#    query.filter = AttributeFilter.starts_with('Gangnam', 'St')
+#    query.filter = AttributeFilter('Gangnam').starts_with('St')
 #
 #    response = AppacitiveObject.find('object', query)
-#    assert response.status.code == '200'
 #    assert hasattr(response, 'paging_info')
 #    assert response.paging_info.total_records > 0
 
@@ -110,7 +109,6 @@ def search_on_tags_test():
     query.filter = TagFilter().match_all(['moon', 'stars'])
 
     response = AppacitiveObject.find('object', query)
-    assert response.status.code == '200'
     assert hasattr(response, 'paging_info')
     assert response.paging_info.total_records > 0
 
