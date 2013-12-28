@@ -7,16 +7,7 @@ environment = "sandbox"
 api_base_url = "https://apis.appacitive.com/v1.0"
 
 # email settings
-email_config = {
-    "smtp": {
-        "username": None,
-        "password": None,
-        "host": "smtp.gmail.com",
-        "port": 465,
-        "enable-ssl": True
-    },
-    "reply-to": None,
-    "from": None}
+
 
 # push settings
 
