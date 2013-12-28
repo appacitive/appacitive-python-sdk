@@ -1,6 +1,6 @@
 __author__ = 'sathley'
 
-from pyappacitive import AppacitiveObject, AppacitiveConnection, GraphNode
+from . import AppacitiveObject, AppacitiveConnection, GraphNode
 import types
 
 

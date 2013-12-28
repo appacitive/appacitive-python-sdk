@@ -1,10 +1,10 @@
 __author__ = 'sathley'
 
-from entity import AppacitiveEntity
-from error import ValidationError, UserAuthError
-from utilities import http, urlfactory, customjson
-from pyappacitive.appcontext import ApplicationContext
-from response import AppacitiveResponse, PagingInfo
+from .entity import AppacitiveEntity
+from .error import ValidationError, UserAuthError
+from .utilities import http, urlfactory, customjson
+from .appcontext import ApplicationContext
+from .response import AppacitiveResponse
 import logging
 
 user_logger = logging.getLogger(__name__)

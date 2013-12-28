@@ -1,6 +1,6 @@
 __author__ = 'sathley'
 
-from pyappacitive.object import AppacitiveObject
+from .object import AppacitiveObject
 
 
 class AppacitiveEndpoint(object):

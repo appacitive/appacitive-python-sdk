@@ -1,13 +1,12 @@
-from pyappacitive.utilities import http, urlfactory, customjson
-from response import AppacitiveResponse
+from .utilities import http, urlfactory, customjson
 
 __author__ = 'sathley'
 
-from pyappacitive.entity import AppacitiveEntity, connection_system_properties
-from pyappacitive.error import *
-from pyappacitive.object import AppacitiveObject
-from endpoint import AppacitiveEndpoint
-from response import AppacitiveResponse, PagingInfo
+from .entity import AppacitiveEntity, connection_system_properties
+from .error import *
+from .object import AppacitiveObject
+from .endpoint import AppacitiveEndpoint
+from .response import AppacitiveResponse
 import logging
 
 connection_logger = logging.getLogger(__name__)

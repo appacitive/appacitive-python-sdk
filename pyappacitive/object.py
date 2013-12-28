@@ -1,10 +1,10 @@
-from pyappacitive.utilities import http, urlfactory
+from .utilities import http, urlfactory
 __author__ = 'sathley'
 
-from pyappacitive.entity import AppacitiveEntity
-from pyappacitive.error import *
-from utilities import customjson
-from response import AppacitiveResponse, PagingInfo
+from .entity import AppacitiveEntity
+from .error import *
+from .utilities import customjson
+from .response import AppacitiveResponse
 import logging
 
 # conn create from object /to object should initialize sent object

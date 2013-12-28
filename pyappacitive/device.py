@@ -1,9 +1,9 @@
 __author__ = 'sathley'
 
-from entity import AppacitiveEntity
-from error import ValidationError
-from utilities import http, urlfactory, customjson
-from response import AppacitiveResponse, PagingInfo
+from .entity import AppacitiveEntity
+from .error import ValidationError
+from .utilities import http, urlfactory, customjson
+from .response import AppacitiveResponse, PagingInfo
 import logging
 
 device_logger = logging.getLogger(__name__)

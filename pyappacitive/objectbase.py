@@ -1,10 +1,6 @@
 __author__ = 'sathley'
 
-from entity import AppacitiveEntity
-from object import AppacitiveObject
-from error import ValidationError
-from utilities import customjson, urlfactory, http
-from response import AppacitiveResponse, PagingInfo
+from . import AppacitiveEntity
 
 
 class ObjectBase(AppacitiveEntity):

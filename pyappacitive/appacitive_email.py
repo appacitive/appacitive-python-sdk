@@ -1,8 +1,7 @@
 __author__ = 'sathley'
 
-from pyappacitive.utilities import http, urlfactory
-from response import AppacitiveResponse
-from utilities import customjson
+from .utilities import http, urlfactory
+from .utilities import customjson
 import logging
 
 logger = logging.getLogger(__name__)

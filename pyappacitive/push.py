@@ -1,8 +1,8 @@
 __author__ = 'sathley'
 
-from utilities import urlfactory, http, customjson
-from error import ValidationError
-from response import AppacitiveResponse
+from .utilities import urlfactory, http, customjson
+from .error import ValidationError
+from .response import AppacitiveResponse
 import json, logging
 
 push_logger = logging.getLogger(__name__)

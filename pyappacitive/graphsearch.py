@@ -1,10 +1,10 @@
-from pyappacitive import nodehelper
-from pyappacitive.utilities import http, urlfactory
+from . import nodehelper
+from .utilities import http, urlfactory
 
 __author__ = 'sathley'
 
-from utilities import customjson
-from response import AppacitiveResponse
+from .utilities import customjson
+from .response import AppacitiveResponse
 import logging
 
 graph_logger = logging.getLogger(__name__)

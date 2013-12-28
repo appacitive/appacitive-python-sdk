@@ -1,8 +1,5 @@
 __author__ = 'sathley'
 
-from object import AppacitiveObject
-from connection import AppacitiveConnection
-
 
 class GraphNode(object):
     def __init__(self, node=None):
