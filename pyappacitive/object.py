@@ -4,7 +4,7 @@ __author__ = 'sathley'
 from .entity import AppacitiveEntity
 from .error import *
 from .utilities import customjson
-from .response import AppacitiveResponse
+from .response import AppacitiveCollection
 import logging
 
 # conn create from object /to object should initialize sent object
@@ -131,6 +131,7 @@ class AppacitiveObject(AppacitiveEntity):
         object_logger.info('Updating object')
         api_resp = http.post(url, headers, customjson.serialize(payload))
         self._set_self(api_resp['object'])
+        self._reset_update_commands()
 
     @classmethod
     def get(cls, object_type, object_id, fields=None):
@@ -147,9 +148,7 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         object_logger.info('Fetching object')
-        response = AppacitiveResponse()
-        response.object = cls(api_response['object'])
-        return response
+        return cls(api_response['object'])
 
     def fetch_latest(self):
         url = urlfactory.object_urls["get"](self.type, self.id)
@@ -174,16 +173,13 @@ class AppacitiveObject(AppacitiveEntity):
         object_logger.info('Fetching multiple objects')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse()
-
         api_objects = api_response.get('objects', [])
 
         return_objects = []
         for obj in api_objects:
             appacitive_object = cls(obj)
             return_objects.append(appacitive_object)
-        response.objects = return_objects
-        return response
+        return return_objects
 
     @classmethod
     def find(cls, object_type, query, fields=None):
@@ -196,7 +192,7 @@ class AppacitiveObject(AppacitiveEntity):
         object_logger.info('Searching objects')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
         api_objects = api_response.get('objects', [])
 
         return_objects = []
@@ -217,7 +213,7 @@ class AppacitiveObject(AppacitiveEntity):
         headers = urlfactory.get_headers()
         api_response = http.get(url, headers)
         object_logger.info('Searching objects between two objects')
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
 
         api_objects = api_response.get('objects', [])
 

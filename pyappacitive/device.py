@@ -3,7 +3,7 @@ __author__ = 'sathley'
 from .entity import AppacitiveEntity
 from .error import ValidationError
 from .utilities import http, urlfactory, customjson
-from .response import AppacitiveResponse, PagingInfo
+from .response import AppacitiveCollection, PagingInfo
 import logging
 
 device_logger = logging.getLogger(__name__)
@@ -146,9 +146,7 @@ class AppacitiveDevice(AppacitiveEntity):
         headers = urlfactory.get_headers()
         device_logger.info('Fetching device')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.device = cls(api_response['device'])
-        return response
+        return cls(api_response['device'])
 
     def fetch_latest(self):
         url = urlfactory.device_urls["get"](self.id)
@@ -169,16 +167,13 @@ class AppacitiveDevice(AppacitiveEntity):
         device_logger.info('Fetching multiple devices')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse()
-
         api_devices = api_response.get('objects', [])
 
         return_devices = []
         for device in api_devices:
             appacitive_device = cls(device)
             return_devices.append(appacitive_device)
-        response.devices = return_devices
-        return response
+        return return_devices
 
     def update(self, with_revision=False):
         if self.type is None and self.type_id <= 0:
@@ -198,6 +193,7 @@ class AppacitiveDevice(AppacitiveEntity):
         device_logger.info('Updating device')
         api_resp = http.post(url, headers, customjson.serialize(payload))
         self.__set_self(api_resp['device'])
+        self._reset_update_commands()
 
     @classmethod
     def delete_by_id(cls, device_id, delete_connections=False):
@@ -222,7 +218,7 @@ class AppacitiveDevice(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         device_logger.info('Searching devices')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
 
         api_devices = api_response.get('objects', [])
 
@@ -231,5 +227,4 @@ class AppacitiveDevice(AppacitiveEntity):
             appacitive_device = cls(device)
             return_devices.append(appacitive_device)
         response.devices = return_devices
-        response.paging_info = PagingInfo()
         return response

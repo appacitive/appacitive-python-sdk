@@ -2,7 +2,7 @@ __author__ = 'sathley'
 
 from .utilities import urlfactory, http, customjson
 from .error import ValidationError
-from .response import AppacitiveResponse
+from .response import AppacitiveCollection
 import json, logging
 
 push_logger = logging.getLogger(__name__)
@@ -62,9 +62,7 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse()
-        response.id = int(api_response['id'])
-        return response
+        return int(api_response['id'])
 
     @staticmethod
     def send_to_channels(channels, data, platform_options=None, expire_after=None):
@@ -87,9 +85,7 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse()
-        response.id = int(api_response['id'])
-        return response
+        return int(api_response['id'])
 
     @staticmethod
     def send_to_specific_devices(device_ids, data, platform_options=None, expire_after=None):
@@ -112,9 +108,7 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse()
-        response.id = int(api_response['id'])
-        return response
+        return int(api_response['id'])
 
     @staticmethod
     def send_using_query(query, data, platform_options=None, expire_after=None):
@@ -137,9 +131,7 @@ class AppacitivePushNotification(object):
         payload = json.dumps(push_request)
         push_logger.info('Send Push notification')
         api_response = http.post(url, headers, payload)
-        response = AppacitiveResponse()
-        response.id = int(api_response['id'])
-        return response
+        return int(api_response['id'])
 
     @staticmethod
     def get_notification_by_id(notification_id):
@@ -151,9 +143,7 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
         push_logger.info('Fetch Push notification')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.notification = AppacitivePushNotification(api_response['pushnotification'])
-        return response
+        return AppacitivePushNotification(api_response['pushnotification'])
 
     @staticmethod
     def get_all_notification():
@@ -162,13 +152,11 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
         push_logger.info('Fetch all notifications')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
 
         return_notifications = []
         for notification in api_response['pushnotifications']:
             if notification:
                 return_notifications.append(AppacitivePushNotification(notification))
-        response.notifications = return_notifications
-        return response
+        return return_notifications
 
 

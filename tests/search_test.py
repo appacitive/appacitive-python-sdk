@@ -211,9 +211,8 @@ def search_connections_for_objects_test():
     assert hasattr(response, 'connections')
     assert len(response.connections) == 1
 
-    response = AppacitiveConnection.find_by_objects_and_relation(conn.endpoint_a.objectid, conn.endpoint_b.objectid, 'sibling')
-    assert hasattr(response, 'connection')
-    assert response.connection.id == conn.id
+    conn1 = AppacitiveConnection.find_by_objects_and_relation(conn.endpoint_a.objectid, conn.endpoint_b.objectid, 'sibling')
+    assert conn1.id == conn.id
 
 
 def search_objects_between_two_objects_test():
@@ -221,7 +220,7 @@ def search_objects_between_two_objects_test():
 
 
 def query_dsl_test():
-    assert str(PropertyFilter('p').is_not_equal_to('v')) == "*p != 'v'"
+    assert str(PropertyFilter('p').is_not_equal_to('v')) == "*p <> 'v'"
     assert str(PropertyFilter('p').is_greater_than('v')) == "*p > 'v'"
     assert str(PropertyFilter('p').is_less_than('v')) == "*p < 'v'"
     assert str(PropertyFilter('p').is_greater_than_equal_to('v')) == "*p >= 'v'"

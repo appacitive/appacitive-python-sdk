@@ -2,7 +2,7 @@ __author__ = 'sathley'
 
 from .utilities import urlfactory, http
 from .error import ValidationError
-from .response import AppacitiveResponse
+from .response import AppacitiveCollection, AppacitiveResponse
 import logging
 
 logger = logging.getLogger(__name__)

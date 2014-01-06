@@ -3,6 +3,7 @@ import datetime
 from nose.tools import *
 import nose
 
+
 def create_connection_with_object_ids_test():
     obj1 = AppacitiveObject('object')
     obj1.create()
@@ -85,11 +86,10 @@ def get_connection_test():
     conn.endpoint_b.label = 'object'
     conn.create()
 
-    resp = AppacitiveConnection.get('sibling', conn.id)
+    conn1 = AppacitiveConnection.get('sibling', conn.id)
 
-    assert hasattr(resp, 'connection')
-    assert resp.connection is not None
-    assert resp.connection.id == conn.id
+    assert conn1 is not None
+    assert conn1.id == conn.id
 
 
 def multiget_connection_test():
@@ -105,10 +105,9 @@ def multiget_connection_test():
         conn.create()
         conn_ids.append(conn.id)
 
-    resp = AppacitiveConnection.multi_get('sibling', conn_ids)
-    assert hasattr(resp, 'connections')
-    assert resp.connections is not None
-    assert len(resp.connections) == 12
+    connections = AppacitiveConnection.multi_get('sibling', conn_ids)
+    assert connections is not None
+    assert len(connections) == 12
 
 
 @raises(AppacitiveError)
@@ -130,7 +129,7 @@ def delete_connection_test():
 
     conn.delete()
     try:
-        resp = AppacitiveConnection.get('sibling', id)
+        conn1 = AppacitiveConnection.get('sibling', id)
     except AppacitiveError as e:
         assert e.code == '404'
         raise e
@@ -161,7 +160,7 @@ def multi_delete_connection_test():
 
     for conn_id in conn_ids:
         try:
-            resp = AppacitiveConnection.get('sibling', conn_id)
+            conn1 = AppacitiveConnection.get('sibling', conn_id)
         except AppacitiveError as e:
             assert e.code == '404'
 
@@ -224,8 +223,7 @@ def fetch_latest_test():
     conn.endpoint_b.label = 'object'
     conn.create()
 
-    resp = AppacitiveConnection.get('sibling', conn.id)
-    conn1 = resp.connection
+    conn1 = AppacitiveConnection.get('sibling', conn.id)
     conn1.add_tag('2')
     conn1.remove_tag('1')
 
@@ -258,9 +256,9 @@ def find_connection_test():
 
     query = AppacitiveQuery()
     query.filter = TagFilter().match_one_or_more(['1', '2', '3'])
-    response = AppacitiveConnection.find('sibling', query)
-    assert hasattr(response, 'connections')
-    assert len(response.connections) > 0
+    responseCollection = AppacitiveConnection.find('sibling', query)
+    assert hasattr(responseCollection, 'connections')
+    assert len(responseCollection.connections) > 0
 
 
 def create_fluent_object_id_verification_test():

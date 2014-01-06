@@ -29,10 +29,15 @@ class PagingInfo(object):
             self.total_records = paging_info['totalrecords']
 
 
-class AppacitiveResponse(object):
+class AppacitiveCollection(object):
     def __init__(self, paging_info=None):
         if paging_info is not None:
             self.paging_info = PagingInfo(paging_info)
+
+
+class AppacitiveResponse(object):
+    def __init__(self):
+        pass
 
 
 

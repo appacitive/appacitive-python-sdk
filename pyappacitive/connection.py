@@ -6,7 +6,7 @@ from .entity import AppacitiveEntity, connection_system_properties
 from .error import *
 from .object import AppacitiveObject
 from .endpoint import AppacitiveEndpoint
-from .response import AppacitiveResponse
+from .response import AppacitiveCollection
 import logging
 
 connection_logger = logging.getLogger(__name__)
@@ -131,9 +131,8 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         connection_logger.info('Fetching connection')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.connection = cls(api_response['connection'])
-        return response
+        connection = cls(api_response['connection'])
+        return connection
 
     def fetch_latest(self):
         url = urlfactory.connection_urls["get"](self.relation_type, self.id)
@@ -189,14 +188,11 @@ class AppacitiveConnection(AppacitiveEntity):
         connection_logger.info('Fetching multiple connections')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse()
-
         return_connections = []
         for connection in api_response.get('connections', []):
             appacitive_connection = cls(connection)
             return_connections.append(appacitive_connection)
-        response.connections = return_connections
-        return response
+        return return_connections
 
     def update(self, with_revision=False):
 
@@ -216,6 +212,7 @@ class AppacitiveConnection(AppacitiveEntity):
         connection_logger.info('Updating connection')
         api_resp = http.post(url, headers, customjson.serialize(payload))
         self.__set_self(api_resp['connection'])
+        self._reset_update_commands()
 
     @classmethod
     def find(cls, relation_type, query, fields=None):
@@ -228,7 +225,7 @@ class AppacitiveConnection(AppacitiveEntity):
         connection_logger.info('Searching connections')
         api_response = http.get(url, headers)
 
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
 
         api_connections = api_response.get('connections', [])
         return_connections = []
@@ -245,7 +242,7 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         connection_logger.info('Searching connections by objects')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response.get('paginginfo', None))
+        response = AppacitiveCollection(api_response.get('paginginfo', None))
 
         api_connections = api_response.get('connections', [])
 
@@ -263,10 +260,8 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         connection_logger.info('Searching connections by objects')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
         connection = api_response.get('connection', None)
-        response.connection = cls(connection)
-        return response
+        return cls(connection)
 
     @classmethod
     def find_interconnects(cls, object_1_id, object_2_ids, fields=None):
@@ -280,7 +275,7 @@ class AppacitiveConnection(AppacitiveEntity):
             payload['object2ids'].append(str(object_id))
         connection_logger.info('Searching interconnects')
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
 
         api_connections = api_response.get('connections', [])
 
@@ -303,7 +298,7 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         connection_logger.info('Searching connections by object and label')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
 
         api_connections = api_response.get('connections', [])
 
@@ -322,7 +317,7 @@ class AppacitiveConnection(AppacitiveEntity):
         headers = urlfactory.get_headers()
         connection_logger.info('Searching connected objects')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
 
         api_objects = api_response.get('nodes', [])
 

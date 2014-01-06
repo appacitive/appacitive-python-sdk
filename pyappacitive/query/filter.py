@@ -49,7 +49,7 @@ class PropertyFilter(FilterBase):
     def is_not_equal_to(self, value):
 
         self.value = value
-        self.operator = '!='
+        self.operator = '<>'
         return self
 
     def is_greater_than(self, value):
@@ -172,7 +172,7 @@ class AggregateFilter(FilterBase):
         return self
 
     def is_not_equal_to(self, value):
-        self.operator = '!='
+        self.operator = '<>'
         self.value = value
         return self
 

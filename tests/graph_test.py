@@ -38,11 +38,11 @@ def projection_test():
     level2edge.endpoint_b.objectid = level2child.id
     level2edge.create()
 
-    response = AppacitiveGraphSearch.project('sample_project', [root.id], {'level1_filter': val1, 'level2_filter': val2})
-    assert len(response.nodes) == 1
-    assert response.nodes[0].object is not None
-    assert response.nodes[0].object.id == root.id
-    level1children = response.nodes[0].get_children('level1_children')
+    nodes = AppacitiveGraphSearch.project('sample_project', [root.id], {'level1_filter': val1, 'level2_filter': val2})
+    assert len(nodes) == 1
+    assert nodes[0].object is not None
+    assert nodes[0].object.id == root.id
+    level1children = nodes[0].get_children('level1_children')
     assert len(level1children) == 1
     assert level1children[0].object is not None
     assert level1children[0].object.id == level1child.id
@@ -76,6 +76,6 @@ def filter_test():
     conn.endpoint_b.object = child
     conn.create()
 
-    response = AppacitiveGraphSearch.filter('sample_filter', {'search_value': unique})
-    assert len(response.ids) == 1
-    assert response.ids[0] == parent.id
+    ids = AppacitiveGraphSearch.filter('sample_filter', {'search_value': unique})
+    assert len(ids) == 1
+    assert ids[0] == parent.id

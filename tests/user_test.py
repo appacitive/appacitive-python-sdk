@@ -49,9 +49,8 @@ def get_user_by_id_test():
     user = get_random_user()
     user.create()
     user.authenticate('test123!@#')
-    resp = AppacitiveUser.get_by_id(user.id)
-    assert hasattr(resp, 'user')
-    assert user.id == resp.user.id
+    user1 = AppacitiveUser.get_by_id(user.id)
+    assert user.id == user1.id
 
 
 def get_user_by_username_test():
@@ -59,8 +58,7 @@ def get_user_by_username_test():
     user.create()
     user.authenticate('test123!@#')
     resp = AppacitiveUser.get_by_username(user.username)
-    assert hasattr(resp, 'user')
-    assert user.id == resp.user.id
+    assert user.id == resp.id
 
 
 def get_logged_in_user_test():
@@ -68,8 +66,7 @@ def get_logged_in_user_test():
     user.create()
     user.authenticate('test123!@#')
     resp = AppacitiveUser.get_logged_in_user()
-    assert hasattr(resp, 'user')
-    assert user.id == resp.user.id
+    assert user.id == resp.id
 
 
 def multiget_user_test():
@@ -80,8 +77,8 @@ def multiget_user_test():
         user_ids.append(user.id)
     user.authenticate('test123!@#')
 
-    response = AppacitiveUser.multi_get(user_ids)
-    assert len(response.users) == 2
+    users = AppacitiveUser.multi_get(user_ids)
+    assert len(users) == 2
 
 @raises(AppacitiveError)
 def delete_user_test():
@@ -91,10 +88,11 @@ def delete_user_test():
     user.authenticate('test123!@#')
     user.delete()
     try:
-        response = AppacitiveUser.get_by_id(user_id)
+        user1 = AppacitiveUser.get_by_id(user_id)
     except AppacitiveError as e:
         assert e.code == '404'
         raise e
+
 
 def delete_by_username_test():
     user = get_random_user()
@@ -103,7 +101,7 @@ def delete_by_username_test():
     user.authenticate('test123!@#')
     AppacitiveUser.delete_by_username(user.username)
     try:
-        AppacitiveUser.get_by_id(user_id)
+        user1 = AppacitiveUser.get_by_id(user_id)
     except AppacitiveError as e:
         assert e.code == '404'
         pass
@@ -116,7 +114,7 @@ def delete_logged_in_user_test():
     user.authenticate('test123!@#')
     AppacitiveUser.delete_logged_in_user()
     try:
-        response = AppacitiveUser.get_by_id(user_id)
+        user1 = AppacitiveUser.get_by_id(user_id)
     except AppacitiveError as e:
         assert e.code == '404'
         pass
@@ -191,9 +189,9 @@ def find_user_test():
     user.authenticate('test123!@#')
     query = AppacitiveQuery()
     query.filter = PropertyFilter('firstname').is_equal_to('Jon')
-    response = AppacitiveUser.find(query)
-    assert hasattr(response,  'users')
-    assert len(response.users) > 0
+    response_collection = AppacitiveUser.find(query)
+    assert hasattr(response_collection,  'users')
+    assert len(response_collection.users) > 0
 
 
 def authenticate_user_test():
@@ -202,14 +200,15 @@ def authenticate_user_test():
     response = AppacitiveUser.authenticate_user(user.username, 'test123!@#')
     assert response.user is not None
     assert response.user.id == user.id
+    assert response.token is not None
 
 
 @raises(UserAuthError)
 def get_user_without_token_test():
     user = get_random_user()
     user.create()
-    ApplicationContext.set_user_token(None)
-    response = AppacitiveUser.get_by_username(user.username)
+    ApplicationContext.set_logged_in_user_token(None)
+    user1 = AppacitiveUser.get_by_username(user.username)
 
 @raises(AppacitiveError)
 def get_user_with_invalid_token_test():
@@ -217,4 +216,4 @@ def get_user_with_invalid_token_test():
     user.create()
     user.authenticate('test123!@#')
     AppacitiveUser.invalidate_session()
-    response = AppacitiveUser.get_by_username(user.username)
+    user1 = AppacitiveUser.get_by_username(user.username)

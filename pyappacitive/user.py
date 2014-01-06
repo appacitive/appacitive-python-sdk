@@ -4,7 +4,7 @@ from .entity import AppacitiveEntity
 from .error import ValidationError, UserAuthError
 from .utilities import http, urlfactory, customjson
 from .appcontext import ApplicationContext
-from .response import AppacitiveResponse
+from .response import AppacitiveCollection, AppacitiveResponse
 import logging
 
 user_logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ def user_auth_required(func):
 
         def inner(*args, **kwargs):
 
-            if ApplicationContext.get_user_token() is None:
+            if ApplicationContext.get_logged_in_user_token() is None:
                 raise UserAuthError('No logged in user found. Call authenticate first.')
             return func(*args, **kwargs)
 
@@ -216,9 +216,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Fetching user')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.user = cls(api_response['user'])
-        return response
+        return cls(api_response['user'])
 
     def fetch_latest(self):
         url = urlfactory.user_urls["get"](self.id)
@@ -239,9 +237,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Fetching user')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.user = cls(api_response['user'])
-        return response
+        return cls(api_response['user'])
 
     @classmethod
     @user_auth_required
@@ -258,9 +254,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Fetching logged-in user')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.user = cls(api_response['user'])
-        return response
+        return cls(api_response['user'])
 
     @staticmethod
     def authenticate_user(username, password, expiry=None, attempts=None):
@@ -280,7 +274,7 @@ class AppacitiveUser(AppacitiveEntity):
 
         response = AppacitiveResponse()
         response.token = api_response['token']
-        ApplicationContext.set_user_token(response.token)
+        ApplicationContext.set_logged_in_user_token(response.token)
         response.user = AppacitiveUser(api_response['user'])
         ApplicationContext.set_logged_in_user(response.user)
         return response
@@ -299,11 +293,10 @@ class AppacitiveUser(AppacitiveEntity):
             payload['attempts'] = attempts
         user_logger.info('Authenticating user')
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse()
-        response.token = api_response['token']
-        ApplicationContext.set_user_token(response.token)
+        token = api_response['token']
+        ApplicationContext.set_logged_in_user_token(token)
         ApplicationContext.set_logged_in_user(self)
-        return response
+        return token
 
     @classmethod
     def multi_get(cls, user_ids):
@@ -315,14 +308,13 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_headers()
         user_logger.info('Fetching multiple users')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
+        response = AppacitiveCollection()
         api_users = api_response.get('objects', [])
         return_users = []
         for user in api_users:
             appacitive_user = cls(user)
             return_users.append(appacitive_user)
-        response.users = return_users
-        return response
+        return return_users
 
     @classmethod
     @user_auth_required
@@ -381,6 +373,7 @@ class AppacitiveUser(AppacitiveEntity):
         user_logger.info('Updating user')
         api_resp = http.post(url, headers, customjson.serialize(payload))
         self.__set_self(api_resp['user'])
+        self._reset_update_commands()
 
     @user_auth_required
     def update_password(self, old_password, new_password):
@@ -388,7 +381,7 @@ class AppacitiveUser(AppacitiveEntity):
         url = urlfactory.user_urls["update_password"](self.id)
 
         headers = urlfactory.get_user_headers()
-        headers[AppacitiveUser.user_auth_header_key] = ApplicationContext.get_user_token()
+        headers[AppacitiveUser.user_auth_header_key] = ApplicationContext.get_logged_in_user_token()
 
         payload = {
             "oldpassword": old_password,
@@ -438,7 +431,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         payload = {}
         user_logger.info('User checkin')
-        http.post(url, headers, None)
+        http.post(url, headers, payload)
 
     @classmethod
     @user_auth_required
@@ -449,7 +442,7 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_user_headers()
         user_logger.info('Searching users')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse(api_response['paginginfo'])
+        response = AppacitiveCollection(api_response['paginginfo'])
 
         api_users = api_response.get('objects', [])
 

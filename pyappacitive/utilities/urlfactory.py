@@ -12,7 +12,7 @@ def get_headers(**headers_key):
         "Appacitive-Environment": settings.environment,
         "Content-Type": "application/json"
     }
-    user_token = appcontext.ApplicationContext.get_user_token()
+    user_token = appcontext.ApplicationContext.get_logged_in_user_token()
     if user_token is not None:
         headers_key['Appacitive-User-Auth'] = user_token
     return headers_key
@@ -22,7 +22,7 @@ def get_user_headers(**headers_key):
     headers_key.update({
         "Appacitive-Apikey": settings.api_key,
         "Appacitive-Environment": settings.environment,
-        "Appacitive-User-Auth": appcontext.ApplicationContext.get_user_token(),
+        "Appacitive-User-Auth": appcontext.ApplicationContext.get_logged_in_user_token(),
         "Content-Type": "application/json"}
     )
     return headers_key

@@ -30,10 +30,9 @@ def get_device_test():
     device = get_random_device()
     device.register()
 
-    response = AppacitiveDevice.get(device.id)
-    assert hasattr(response, 'device')
-    assert response.device is not None
-    assert response.device.id == device.id
+    device1 = AppacitiveDevice.get(device.id)
+    assert device1 is not None
+    assert device1.id == device.id
 
 
 def multi_get_device_test():
@@ -42,9 +41,8 @@ def multi_get_device_test():
         device = get_random_device()
         device.register()
         device_ids.append(device.id)
-    response = AppacitiveDevice.multi_get(device_ids)
-    assert hasattr(response, 'devices')
-    assert len(response.devices) == 12
+    devices = AppacitiveDevice.multi_get(device_ids)
+    assert len(devices) == 12
 
 
 def device_update_test():
@@ -56,6 +54,7 @@ def device_update_test():
     device.update()
     assert device.badge == 200
 
+
 @raises(AppacitiveError)
 def delete_device_test():
     device = get_random_device()
@@ -63,7 +62,7 @@ def delete_device_test():
     device_id = device.id
     device.delete()
 
-    AppacitiveDevice.get(device_id)
+    device1 = AppacitiveDevice.get(device_id)
 
 
 def find_device_test():
@@ -71,6 +70,5 @@ def find_device_test():
     device.register()
     query = AppacitiveQuery()
     query.filter = PropertyFilter('devicetype').is_equal_to('ios')
-    response = AppacitiveDevice.find(query)
-    assert hasattr(response, 'devices')
-    assert len(response.devices) > 0
+    response_collection = AppacitiveDevice.find(query)
+    assert len(response_collection.devices) > 0

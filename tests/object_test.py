@@ -1,5 +1,4 @@
 from pyappacitive import AppacitiveObject, AppacitiveConnection, ValidationError, AppacitiveError
-from pyappacitive.utilities import logfilter
 import datetime
 from nose.tools import *
 import logging
@@ -34,10 +33,9 @@ def get_object_test():
     obj = AppacitiveObject('object')
     obj.create()
 
-    resp = AppacitiveObject.get('object', obj.id)
-    assert hasattr(resp, 'object')
-    assert resp.object is not None
-    assert resp.object.id == obj.id
+    obj1 = AppacitiveObject.get('object', obj.id)
+    assert obj1 is not None
+    assert obj1.id == obj.id
 
 
 def multiget_object_test():
@@ -48,8 +46,7 @@ def multiget_object_test():
         object_ids.append(obj.id)
 
     resp = AppacitiveObject.multi_get('object', object_ids)
-    assert hasattr(resp, 'objects')
-    assert len(resp.objects) == 12
+    assert len(resp) == 12
 
 
 def delete_object_test():
@@ -58,7 +55,7 @@ def delete_object_test():
     id = obj.id
     obj.delete()
     try:
-        resp = AppacitiveObject.get('object', id)
+        obj1 = AppacitiveObject.get('object', id)
     except AppacitiveError as e:
         assert e.code == '404'
 
@@ -70,9 +67,9 @@ def delete_object_with_connection_test():
     obj = conn.endpoint_a.object
     obj.delete_with_connections()
     try:
-        response = AppacitiveConnection.get('sibling', conn_id)
+        conn1 = AppacitiveConnection.get('sibling', conn_id)
     except AppacitiveError as e:
-        assert e.code != '200'
+        assert e.code == '404'
         raise e
 
 
@@ -87,7 +84,7 @@ def multi_delete_object_test():
 
     for object_id in object_ids:
         try:
-            resp = AppacitiveObject.get('object', object_id)
+            obj1 = AppacitiveObject.get('object', object_id)
         except AppacitiveError as e:
             assert e.code == '404'
 
@@ -142,9 +139,9 @@ def find_object_between_two_objects_test():
     conn1 = AppacitiveConnection('sibling').from_existing_object_id('object', conn.endpoint_a.objectid).to_new_object('object', AppacitiveObject('object'))
     conn1.create()
 
-    response = AppacitiveObject.find_in_between_two_objects('object', conn.endpoint_b.objectid, 'sibling', 'object', conn1.endpoint_b.objectid, 'sibling', 'object')
-    assert hasattr(response, 'objects')
-    assert len(response.objects) == 1
+    responseCollection = AppacitiveObject.find_in_between_two_objects('object', conn.endpoint_b.objectid, 'sibling', 'object', conn1.endpoint_b.objectid, 'sibling', 'object')
+    assert hasattr(responseCollection, 'objects')
+    assert len(responseCollection.objects) == 1
 
 
 @raises(ValidationError)

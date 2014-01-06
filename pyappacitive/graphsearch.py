@@ -4,7 +4,6 @@ from .utilities import http, urlfactory
 __author__ = 'sathley'
 
 from .utilities import customjson
-from .response import AppacitiveResponse
 import logging
 
 graph_logger = logging.getLogger(__name__)
@@ -26,13 +25,10 @@ class AppacitiveGraphSearch(object):
         }
         graph_logger.info('Projection graph query')
         resp = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse()
 
         for k, v in resp.iteritems():
             if k != 'status':
-                response.nodes = AppacitiveGraphSearch.__parse_projection_result(v['values'])
-
-        return response
+                return AppacitiveGraphSearch.__parse_projection_result(v['values'])
 
 
     @staticmethod
@@ -44,9 +40,7 @@ class AppacitiveGraphSearch(object):
         }
         graph_logger.info('Filter graph query')
         api_response = http.post(url, headers, customjson.serialize(payload))
-        response = AppacitiveResponse()
-        response.ids = [int(id) for id in api_response['ids']]
-        return response
+        return [int(id) for id in api_response['ids']]
 
     @staticmethod
     def __parse_projection_result(values):
