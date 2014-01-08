@@ -309,7 +309,6 @@ class AppacitiveUser(AppacitiveEntity):
         headers = urlfactory.get_headers()
         user_logger.info('Fetching multiple users')
         api_response = http.get(url, headers)
-        response = AppacitiveCollection()
         api_users = api_response.get('objects', [])
         return_users = []
         for user in api_users:

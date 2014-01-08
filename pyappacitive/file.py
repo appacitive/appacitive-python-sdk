@@ -29,10 +29,7 @@ class AppacitiveFile(object):
         headers = urlfactory.get_headers()
         logging.info('Getting upload URL')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.id = api_response['id']
-        response.url = api_response['url']
-        return response
+        return api_response['id'], api_response['url']
 
     @staticmethod
     def get_download_url(file_id, expires=None):
@@ -48,9 +45,7 @@ class AppacitiveFile(object):
         headers = urlfactory.get_headers()
         logging.info('Getting download URL')
         api_response = http.get(url, headers)
-        response = AppacitiveResponse()
-        response.url = api_response['uri']
-        return response
+        return api_response['uri']
 
     @staticmethod
     def delete_file(file_id):

@@ -133,8 +133,8 @@ class AppacitivePushNotification(object):
         api_response = http.post(url, headers, payload)
         return int(api_response['id'])
 
-    @staticmethod
-    def get_notification_by_id(notification_id):
+    @classmethod
+    def get_notification_by_id(cls, notification_id):
 
         if notification_id is None:
             raise ValidationError('Notification id is required to fetch push notification.')
@@ -143,10 +143,10 @@ class AppacitivePushNotification(object):
         headers = urlfactory.get_headers()
         push_logger.info('Fetch Push notification')
         api_response = http.get(url, headers)
-        return AppacitivePushNotification(api_response['pushnotification'])
+        return cls(api_response['pushnotification'])
 
-    @staticmethod
-    def get_all_notification():
+    @classmethod
+    def get_all_notification(cls):
 
         url = urlfactory.push_urls['get_all']()
         headers = urlfactory.get_headers()
@@ -156,7 +156,7 @@ class AppacitivePushNotification(object):
         return_notifications = []
         for notification in api_response['pushnotifications']:
             if notification:
-                return_notifications.append(AppacitivePushNotification(notification))
+                return_notifications.append(cls(notification))
         return return_notifications
 
 
