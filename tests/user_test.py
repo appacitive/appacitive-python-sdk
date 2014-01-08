@@ -197,10 +197,11 @@ def find_user_test():
 def authenticate_user_test():
     user = get_random_user()
     user.create()
-    response = AppacitiveUser.authenticate_user(user.username, 'test123!@#')
-    assert response.user is not None
-    assert response.user.id == user.id
-    assert response.token is not None
+    token = AppacitiveUser.authenticate_user(user.username, 'test123!@#')
+    assert token is not None
+    assert token == ApplicationContext.get_logged_in_user_token()
+    assert ApplicationContext.get_logged_in_user() is not None
+    assert user.id == ApplicationContext.get_logged_in_user().id
 
 
 @raises(UserAuthError)

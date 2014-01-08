@@ -4,7 +4,7 @@ from .entity import AppacitiveEntity
 from .error import ValidationError, UserAuthError
 from .utilities import http, urlfactory, customjson
 from .appcontext import ApplicationContext
-from .response import AppacitiveCollection, AppacitiveResponse
+from .response import AppacitiveCollection
 from .link import Link
 import logging
 
@@ -16,7 +16,7 @@ def user_auth_required(func):
 
         def inner(*args, **kwargs):
 
-            if ApplicationContext.get_logged_in_user_token() is None:
+            if not ApplicationContext.get_logged_in_user_token():
                 raise UserAuthError('No logged in user found. Call authenticate first.')
             return func(*args, **kwargs)
 
@@ -273,12 +273,11 @@ class AppacitiveUser(AppacitiveEntity):
         user_logger.info('Authenticating user')
         api_response = http.post(url, headers, customjson.serialize(payload))
 
-        response = AppacitiveResponse()
-        response.token = api_response['token']
-        ApplicationContext.set_logged_in_user_token(response.token)
-        response.user = AppacitiveUser(api_response['user'])
-        ApplicationContext.set_logged_in_user(response.user)
-        return response
+        token = api_response['token']
+        ApplicationContext.set_logged_in_user_token(token)
+        user = AppacitiveUser(api_response['user'])
+        ApplicationContext.set_logged_in_user(user)
+        return token
 
     def authenticate(self, password,  expiry=None, attempts=None):
 

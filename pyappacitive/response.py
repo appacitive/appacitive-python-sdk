@@ -35,9 +35,9 @@ class AppacitiveCollection(object):
             self.paging_info = PagingInfo(paging_info)
 
 
-class AppacitiveResponse(object):
-    def __init__(self):
-        pass
-
+#class AppacitiveResponse(object):
+#    def __init__(self):
+#        pass
+#
 
 
