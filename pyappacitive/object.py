@@ -7,10 +7,11 @@ from .utilities import customjson
 from .response import AppacitiveCollection
 import logging
 
-# conn create from object /to object should initialize sent object
 # add file upload support using urllib2
 # complete object base
 # run pylint, pyflakes, sphynx
+# add user link code
+
 
 
 object_logger = logging.getLogger(__name__)
@@ -223,5 +224,6 @@ class AppacitiveObject(AppacitiveEntity):
             return_objects.append(appacitive_object)
         response.objects = return_objects
         return response
+
 
 

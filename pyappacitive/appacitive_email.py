@@ -13,7 +13,7 @@ class AppacitiveEmail(object):
         pass
 
     @staticmethod
-    def send_raw_email(to, subject, body, cc=[], bcc=[], is_body_html=False, smtp=None, from_email=None, reply_to_email=None):
+    def send_raw_email(to, subject, body, cc=[], bcc=[], is_body_html=False, smtp=None, from_email_address=None, reply_to_email_address=None):
         payload = {}
         payload['to'] = to
         payload['cc'] = cc
@@ -26,10 +26,10 @@ class AppacitiveEmail(object):
 
         if smtp is not None:
             payload['smtp'] = smtp
-        if from_email is not None:
-            payload['from'] = from_email
-        if reply_to_email is not None:
-            payload['replyto'] = reply_to_email
+        if from_email_address is not None:
+            payload['from'] = from_email_address
+        if reply_to_email_address is not None:
+            payload['replyto'] = reply_to_email_address
 
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()
@@ -37,7 +37,7 @@ class AppacitiveEmail(object):
         http.post(url, headers, customjson.serialize(payload))
 
     @staticmethod
-    def send_templated_email(to, subject, template_name, template_fillers, cc=[], bcc=[], is_body_html=False, smtp=None, from_email=None, reply_to_email=None):
+    def send_templated_email(to, subject, template_name, template_fillers, cc=[], bcc=[], is_body_html=False, smtp=None, from_email_address=None, reply_to_email_address=None):
         payload = {}
         payload['to'] = to
         payload['cc'] = cc
@@ -51,10 +51,10 @@ class AppacitiveEmail(object):
 
         if smtp is not None:
             payload['smtp'] = smtp
-        if from_email is not None:
-            payload['from'] = from_email
-        if reply_to_email is not None:
-            payload['replyto'] = reply_to_email
+        if from_email_address is not None:
+            payload['from'] = from_email_address
+        if reply_to_email_address is not None:
+            payload['replyto'] = reply_to_email_address
 
         url = urlfactory.email_urls["send"]()
         headers = urlfactory.get_headers()

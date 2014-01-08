@@ -62,7 +62,6 @@ def projection_test():
 
 
 def filter_test():
-
     parent = AppacitiveObject('object')
     parent.create()
     unique = get_random_string()

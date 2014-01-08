@@ -5,6 +5,7 @@ from .error import ValidationError, UserAuthError
 from .utilities import http, urlfactory, customjson
 from .appcontext import ApplicationContext
 from .response import AppacitiveCollection, AppacitiveResponse
+from .link import Link
 import logging
 
 user_logger = logging.getLogger(__name__)
@@ -452,4 +453,69 @@ class AppacitiveUser(AppacitiveEntity):
             return_users.append(appacitive_user)
         response.users = return_users
         return response
+
+    @user_auth_required
+    def link_facebook_account(self, facebook_access_token):
+        if not facebook_access_token:
+            raise ValidationError('facebook access token cannot be empty.')
+        url = urlfactory.user_urls["link"](self.username)
+        headers = urlfactory.get_user_headers()
+        payload = {
+            'authtype': 'facebook',
+            'accesstoken': facebook_access_token
+        }
+        user_logger.info('Linking facebook account')
+        http.post(url, headers, customjson.serialize(payload))
+
+    @user_auth_required
+    def link_twitter_account(self, oauth_token, oauth_token_secret, consumer_key=None, consumer_secret=None):
+        if not oauth_token:
+            raise ValidationError('twitter access token cannot be empty.')
+        if not oauth_token_secret:
+            raise ValidationError('twitter access token secret cannot be empty.')
+        url = urlfactory.user_urls["link"](self.username)
+        headers = urlfactory.get_user_headers()
+        payload = {
+            'authtype': 'twitter',
+            'oauthtoken': oauth_token,
+            'oauthtokensecret': oauth_token_secret,
+        }
+        if consumer_key:
+            payload['consumerkey'] = consumer_key
+        if consumer_secret:
+            payload['consumersecret'] = consumer_secret
+
+        user_logger.info('Linking twitter account')
+        http.post(url, headers, customjson.serialize(payload))
+
+    @user_auth_required
+    def get_linked_account(self, link_name):
+        if not link_name:
+            raise ValidationError('Link name is missing.')
+        url = urlfactory.user_urls['get_link'](self.username, link_name)
+        headers = urlfactory.get_user_headers()
+        response = http.get(url, headers)
+        link = response.get('identity', None)
+        return Link(link)
+
+    @user_auth_required
+    def delink_account(self, link_name):
+        if not link_name:
+            raise ValidationError("Linked account's name is mandatory.")
+        url = urlfactory.user_urls["delink"](self.username, link_name)
+        headers = urlfactory.get_user_headers()
+        payload = {}
+        http.post(url, headers, payload)
+
+    @user_auth_required
+    def get_all_linked_accounts(self):
+        url = urlfactory.user_urls['get_all_links'](self.username)
+        headers = urlfactory.get_user_headers()
+        response = http.get(url, headers)
+        links = response.get('identities', [])
+        return_links = []
+        for link in links:
+            l = Link(link)
+            return_links.append(l)
+        return return_links
 

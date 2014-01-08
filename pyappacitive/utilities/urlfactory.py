@@ -254,6 +254,20 @@ def __update__password_url(user_id, identification_type='id'):
     return '%s/user/%s/changepassword?useridtype=%s' % (base_url, user_id,
                                                         identification_type)
 
+def __user_link_url(username):
+    return '{0}/user/{1}/link?useridtype=username'.format(base_url, username)
+
+def __user_delink_url(username, name):
+    return '{0}/user/{1}/{2}/delink?useridtype=username'.format(base_url, username, name)
+
+
+def __user_get_link_url(username, link_name):
+    return '{0}/user/{1}/linkedaccounts/{2}?useridtype=username'.format(base_url, username, link_name)
+
+
+def __user_get_all_links_url(username):
+    return '{0}/user/{1}/linkedaccounts?useridtype=username'.format(base_url, username)
+
 #endregion
 
 #region MISC URLS
@@ -311,7 +325,11 @@ user_urls = {
     "send_reset_password_email": __user_send_reset_password_email_url,
     "validate_session": __user_validate_session_url,
     "invalidate_session": __user_invalidate_session_url,
-    "checkin": __user_checkin_url
+    "checkin": __user_checkin_url,
+    "link": __user_link_url,
+    "delink": __user_delink_url,
+    "get_link": __user_get_link_url,
+    "get_all_links": __user_get_all_links_url
 }
 
 device_urls = {
