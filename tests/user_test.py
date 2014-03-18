@@ -224,7 +224,7 @@ def link_fb_account_test():
     user = get_random_user()
     user.create()
     user.authenticate('test123!@#')
-    user.link_facebook_account('''CAACEdEose0cBAHxcnVYpXHllURnLRZB92Duo8LYGJI9xSUPmJIN4Hs0MnFM46SBKnqIbfva0iRd8UjwZAW202qlcKmoLMe8eMb29NLdEyKWRKUZBEVwTrGdllnfy1N9ZB9kPHuXskERzr1Vlcmxa84XcuAFOMCu9ZAUaSH83kXIpY4IX0ZBJnK9skVmOE4aVYlUikZBE2288AZDZD''')
+    user.link_facebook_account('''CAACEdEose0cBAEJfp0FSR94yUbh4NACAi1ZA6XBZAE7pNS0TtOPQGIRFLFNTPqk3aMlhT2EZA89dWM3wf9Nww3ZB24dOqSGmO2vy3z6LPs2Uho1b4QeBwiS8bjb4MkGLpJRT7TXXm4924cNnqq9BSWw91QxET3EnkPlZBfglelkmcybCKNGjnPw9nZCoskUxoZCWzCsukaM5wZDZD''')
     link = user.get_linked_account('facebook')
     assert link.username == 'sushant.athley'
     user.delete()
@@ -244,7 +244,7 @@ def get_all_links_test():
     user = get_random_user()
     user.create()
     user.authenticate('test123!@#')
-    user.link_facebook_account('''CAACEdEose0cBAHxcnVYpXHllURnLRZB92Duo8LYGJI9xSUPmJIN4Hs0MnFM46SBKnqIbfva0iRd8UjwZAW202qlcKmoLMe8eMb29NLdEyKWRKUZBEVwTrGdllnfy1N9ZB9kPHuXskERzr1Vlcmxa84XcuAFOMCu9ZAUaSH83kXIpY4IX0ZBJnK9skVmOE4aVYlUikZBE2288AZDZD''')
+    user.link_facebook_account('''CAACEdEose0cBAEJfp0FSR94yUbh4NACAi1ZA6XBZAE7pNS0TtOPQGIRFLFNTPqk3aMlhT2EZA89dWM3wf9Nww3ZB24dOqSGmO2vy3z6LPs2Uho1b4QeBwiS8bjb4MkGLpJRT7TXXm4924cNnqq9BSWw91QxET3EnkPlZBfglelkmcybCKNGjnPw9nZCoskUxoZCWzCsukaM5wZDZD''')
     user.link_twitter_account('431607023-yb8pICZ1WKdu3qFqCDo5gWbRHwHs9Rg7FoV1PZt9', 'PIEx8WA5iQ4xicHzttMuq83ZZqOoEBUdQR4g1e4JAA', 'MRlvKD2KZaSnJzecYNK2RA', 'Pn0tKisq7EfIOkzUF568yGmHdc9bMTM9OPoT6a5wmRc')
     links = user.get_all_linked_accounts()
     assert len(links) == 2
@@ -255,7 +255,7 @@ def delink_account_test():
     user = get_random_user()
     user.create()
     user.authenticate('test123!@#')
-    user.link_facebook_account('''CAACEdEose0cBAHxcnVYpXHllURnLRZB92Duo8LYGJI9xSUPmJIN4Hs0MnFM46SBKnqIbfva0iRd8UjwZAW202qlcKmoLMe8eMb29NLdEyKWRKUZBEVwTrGdllnfy1N9ZB9kPHuXskERzr1Vlcmxa84XcuAFOMCu9ZAUaSH83kXIpY4IX0ZBJnK9skVmOE4aVYlUikZBE2288AZDZD''')
+    user.link_facebook_account('''CAACEdEose0cBAEJfp0FSR94yUbh4NACAi1ZA6XBZAE7pNS0TtOPQGIRFLFNTPqk3aMlhT2EZA89dWM3wf9Nww3ZB24dOqSGmO2vy3z6LPs2Uho1b4QeBwiS8bjb4MkGLpJRT7TXXm4924cNnqq9BSWw91QxET3EnkPlZBfglelkmcybCKNGjnPw9nZCoskUxoZCWzCsukaM5wZDZD''')
     user.delink_account('facebook')
     links = user.get_all_linked_accounts()
     assert len(links) == 0
